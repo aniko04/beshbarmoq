@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 4 - Hunarlar</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq4.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Hunarlarni mosini qo'yib belgilang?</h1>
+
+    <div class="quiz-card mashq4-card">
+        <!-- Progress -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 11</div>
+
+        <div class="circle-layout">
+            <!-- SVG chiziqlar -->
+            <svg class="circle-lines" viewBox="0 0 800 800">
+                <line x1="400" y1="400" x2="400" y2="96" />
+                <line x1="400" y1="400" x2="564" y2="144" />
+                <line x1="400" y1="400" x2="676" y2="274" />
+                <line x1="400" y1="400" x2="700" y2="443" />
+                <line x1="400" y1="400" x2="630" y2="599" />
+                <line x1="400" y1="400" x2="486" y2="692" />
+                <line x1="400" y1="400" x2="314" y2="692" />
+                <line x1="400" y1="400" x2="170" y2="599" />
+                <line x1="400" y1="400" x2="100" y2="443" />
+                <line x1="400" y1="400" x2="124" y2="274" />
+                <line x1="400" y1="400" x2="236" y2="144" />
+            </svg>
+
+            <!-- Markaziy doira — so'z shu yerda paydo bo'ladi -->
+            <div class="center-circle" id="center-circle">
+                <div class="drag-word" id="drag-word" draggable="true"></div>
+            </div>
+
+            <!-- 11 ta rasm (drop zone) -->
+            <div class="hunar-item drop-target" data-answer="seamstress" data-id="1">
+                <img src="media/hunarlar/Picture1.png" alt="1">
+            </div>
+            <div class="hunar-item drop-target" data-answer="carpenter" data-id="2">
+                <img src="media/hunarlar/Picture2.png" alt="2">
+            </div>
+            <div class="hunar-item drop-target" data-answer="embroiderer" data-id="3">
+                <img src="media/hunarlar/Picture3.png" alt="3">
+            </div>
+            <div class="hunar-item drop-target" data-answer="chef cook" data-id="4">
+                <img src="media/hunarlar/Picture4.png" alt="4">
+            </div>
+            <div class="hunar-item drop-target" data-answer="painter" data-id="5">
+                <img src="media/hunarlar/Picture5.png" alt="5">
+            </div>
+            <div class="hunar-item drop-target" data-answer="potter" data-id="6">
+                <img src="media/hunarlar/Picture6.png" alt="6">
+            </div>
+            <div class="hunar-item drop-target" data-answer="cobbler" data-id="7">
+                <img src="media/hunarlar/Picture7.png" alt="7">
+            </div>
+            <div class="hunar-item drop-target" data-answer="carpet weaver" data-id="8">
+                <img src="media/hunarlar/Picture8.png" alt="8">
+            </div>
+            <div class="hunar-item drop-target" data-answer="baker" data-id="9">
+                <img src="media/hunarlar/Picture9.png" alt="9">
+            </div>
+            <div class="hunar-item drop-target" data-answer="weaver" data-id="10">
+                <img src="media/hunarlar/Picture10.png" alt="10">
+            </div>
+            <div class="hunar-item drop-target" data-answer="auto mechanic" data-id="11">
+                <img src="media/hunarlar/Picture11.png" alt="11">
+            </div>
+        </div>
+
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq4.js"></script>
+</body>
+</html>
