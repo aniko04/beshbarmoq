@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 3 - Kasblar</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq3.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+
+    <div class="quiz-card mashq3-card">
+        <!-- Kartochkalar gridi -->
+        <div class="jobs-grid">
+            <div class="job-card" data-num="1">
+                <img src="media/jobs/Picture1.png" alt="Tikuvchi">
+                <span class="job-num">1</span>
+            </div>
+            <div class="job-card" data-num="2">
+                <img src="media/jobs/Picture2.png" alt="Shifokor">
+                <span class="job-num">2</span>
+            </div>
+            <div class="job-card" data-num="3">
+                <img src="media/jobs/Picture3.png" alt="Bog'bon">
+                <span class="job-num">3</span>
+            </div>
+            <div class="job-card" data-num="4">
+                <img src="media/jobs/Picture4.png" alt="Sartarosh">
+                <span class="job-num">4</span>
+            </div>
+            <div class="job-card" data-num="5">
+                <img src="media/jobs/Picture5.png" alt="O't o'chiruvchi">
+                <span class="job-num">5</span>
+            </div>
+            <div class="job-card" data-num="6">
+                <img src="media/jobs/Picture6.png" alt="Politsiyachi">
+                <span class="job-num">6</span>
+            </div>
+            <div class="job-card" data-num="7">
+                <img src="media/jobs/Picture7.png" alt="Qurilishchi">
+                <span class="job-num">7</span>
+            </div>
+            <div class="job-card" data-num="8">
+                <img src="media/jobs/Picture8.png" alt="Sotuvchi">
+                <span class="job-num">8</span>
+            </div>
+            <div class="job-card" data-num="9">
+                <img src="media/jobs/Picture9.png" alt="Novvoy">
+                <span class="job-num">9</span>
+            </div>
+            <div class="job-card" data-num="10">
+                <img src="media/jobs/Picture10.png" alt="O'qituvchi">
+                <span class="job-num">10</span>
+            </div>
+            <div class="job-card" data-num="11">
+                <img src="media/jobs/Picture11.png" alt="Uchuvchi">
+                <span class="job-num">11</span>
+            </div>
+            <div class="job-card" data-num="12">
+                <img src="media/jobs/Picture12.png" alt="Tikuvchi">
+                <span class="job-num">12</span>
+            </div>
+        </div>
+
+        <!-- Savol banneri -->
+        <div class="question-banner">
+            <p>Qaysi kasb egasi bo'lishni xohlaysiz?</p>
+            <p>Raqam tanlang va topishmoqqa javob bering!</p>
+        </div>
+    </div>
+
+    <!-- Topishmoq modali -->
+    <div class="riddle-modal" id="riddle-modal">
+        <div class="riddle-content">
+            <button class="riddle-close" onclick="closeRiddle()">&times;</button>
+            <div class="riddle-header">
+                <span class="riddle-badge">#<span id="riddle-num"></span></span>
+                <span>Topishmoq</span>
+            </div>
+            <pre class="riddle-text" id="riddle-text"></pre>
+            <div class="riddle-answer-area">
+                <input type="text" id="riddle-input" class="riddle-input" placeholder="Javobni yozing..." autocomplete="off">
+                <button class="check-btn riddle-check-btn" onclick="checkRiddle()">Tekshirish</button>
+            </div>
+            <div class="riddle-result" id="riddle-result"></div>
+        </div>
+    </div>
+
+    <script src="static/js/mashq3.js"></script>
+</body>
+</html>
