@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 2 - Origami shakllari</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq2.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Origami o'yinchoqlarni to'rtburchak yoki kvadrat shaklga ajrating.</h1>
+
+    <div class="quiz-card">
+        <!-- Drop zonalar -->
+        <div class="drop-zones">
+            <div class="drop-zone" id="zone-tortburchak" data-zone="tortburchak">
+                <div class="zone-header zone-red">
+                    <div class="zone-shape shape-rect"></div>
+                    <span>To'rtburchak</span>
+                </div>
+                <p class="zone-desc">Qarama-qarshi tomonlari teng</p>
+                <div class="zone-items" id="items-tortburchak"></div>
+            </div>
+
+            <div class="drop-zone" id="zone-kvadrat" data-zone="kvadrat">
+                <div class="zone-header zone-blue">
+                    <div class="zone-shape shape-square"></div>
+                    <span>Kvadrat</span>
+                </div>
+                <p class="zone-desc">Barcha 4 tomoni teng</p>
+                <div class="zone-items" id="items-kvadrat"></div>
+            </div>
+        </div>
+
+        <!-- Drag qilinadigan kartochkalar -->
+        <div class="drag-area" id="drag-area">
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red1.png" alt="Kema"><span class="drag-name">Kema</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue1.png" alt="Baqa"><span class="drag-name">Baqa</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red2.png" alt="Qush"><span class="drag-name">Qush</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue2.png" alt="Oqqush"><span class="drag-name">Oqqush</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red3.png" alt="Qushcha"><span class="drag-name">Qushcha</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue3.png" alt="Kuchukcha"><span class="drag-name">Kuchukcha</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red4.png" alt="Ko'ylak"><span class="drag-name">Ko'ylak</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue4.png" alt="Tulki"><span class="drag-name">Tulki</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red5.png" alt="Kuchuk"><span class="drag-name">Kuchuk</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue5.png" alt="Libos"><span class="drag-name">Libos</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red6.png" alt="Mushuk"><span class="drag-name">Mushuk</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue6.png" alt="Kit"><span class="drag-name">Kit</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red7.png" alt="Xonqiz"><span class="drag-name">Xonqiz</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="kvadrat">
+                <img src="media/origami/blue/blue7.png" alt="Samolyot"><span class="drag-name">Samolyot</span>
+            </div>
+            <div class="drag-item" draggable="true" data-correct="tortburchak">
+                <img src="media/origami/red/red8.png" alt="Qisqichbaqa"><span class="drag-name">Qisqichbaqa</span>
+            </div>
+        </div>
+
+        <div class="btn-area">
+            <button class="check-btn" onclick="checkAnswers2()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="resetQuiz2()">Qayta urinish</button>
+        </div>
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq2.js"></script>
+</body>
+</html>
