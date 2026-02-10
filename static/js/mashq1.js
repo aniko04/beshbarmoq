@@ -1,4 +1,4 @@
-const correctAnswers = ['badiiy', 'mazmunli', 'dekorativ'];
+const correctAnswers = ['badiiy', 'geometrik-shaklli', 'mazmunli', 'geometrik-predmetli', 'dekorativ'];
 
 function toggle(btn) {
     btn.classList.toggle('checked');
