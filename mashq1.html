@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 1 - Applikatsiya turlari</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Applikatsiya turlarini ajratib ko'rsating.</h1>
+
+    <div class="quiz-card">
+        <div class="quiz-area">
+            <!-- Chap taraf -->
+            <div class="options-column options-left">
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="badiiy" onclick="toggle(this)"></button>
+                    <span class="option-label">Badiiy</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="geometrik-shaklli" onclick="toggle(this)"></button>
+                    <span class="option-label">Geometrik shaklli</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="mozaika" onclick="toggle(this)"></button>
+                    <span class="option-label">Mozaika</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="origami" onclick="toggle(this)"></button>
+                    <span class="option-label">Origami</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="mazmunli" onclick="toggle(this)"></button>
+                    <span class="option-label">Mazmunli</span>
+                </div>
+            </div>
+
+            <!-- Markaziy rasm -->
+            <div class="center-image">
+                <img src="media/bolalar.png" alt="Bolalar">
+            </div>
+
+            <!-- O'ng taraf -->
+            <div class="options-column options-right">
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="geometrik-predmetli" onclick="toggle(this)"></button>
+                    <span class="option-label">Geometrik predmetli</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="hajmli" onclick="toggle(this)"></button>
+                    <span class="option-label">Hajmli</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="kvilling" onclick="toggle(this)"></button>
+                    <span class="option-label">Kvilling</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="dekorativ" onclick="toggle(this)"></button>
+                    <span class="option-label">Dekorativ</span>
+                </div>
+                <div class="option-row">
+                    <button class="checkbox-btn" data-answer="papye-mashe" onclick="toggle(this)"></button>
+                    <span class="option-label">Papye-mashe</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-area">
+            <button class="check-btn" onclick="checkAnswers()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="resetQuiz()">Qayta urinish</button>
+        </div>
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq1.js"></script>
+</body>
+</html>
