@@ -7,8 +7,8 @@ const questions = [
     },
     {
         question: "Applikatsiya qanday manoni anglatadi?",
-        options: ["Qirqish", "Joylashtirish", "Bo'yash", "Chizish"],
-        correctAnswer: "Qirqish"
+        options: ["Qirqib yopishtirish", "Joylashtirish", "Bo'yash", "Chizish"],
+        correctAnswer: "Qirqib yopishtirish"
     },
     {
         question: "Applikatsiya mashg'uloti bolalarda qanday ahamiyatga ega?",
@@ -23,17 +23,17 @@ const questions = [
     {
         question: "Applikatsiya necha guruhga bo'linadi?",
         options: ["4 ta", "5 ta", "3 ta", "2 ta"],
-        correctAnswer: "4 ta"
+        correctAnswer: "5 ta"
     },
     {
         question: "Applikatsiya qanday paydo bo'lgan?",
         options: [
-            "Applikatsiya 2500 yil muqadam ko'chmanchi xalqlarda paydo bo'lgan va kiyim-bosh, turar joylar bezatilgan",
-            "Applikatsiya 2000 yil muqadam paydo bo'lgan va kiyim-bosh bezatilgan",
-            "Applikatsiya turar joylar bezatilgan, qachon paydo bo'lgani noma'lum",
+            "Applikatsiya 2500 yil muqadam ko'chmanchi xalqlarda paydo bo'lgan va kiyim bosh turar joylar bezatilgan",
+            "Applikatsiya 2000 yil muqadam paydo bo'lgan va kiyim bosh bezatilgan",
+            "Applikatsiya turar joylar bezatilgan qachon paydo bo'lgani noma'lum",
             "Applikatsiya 2000 yil muqadam paydo bo'lib, narsalar bezatishda ishlatiladi"
         ],
-        correctAnswer: "Applikatsiya 2500 yil muqadam ko'chmanchi xalqlarda paydo bo'lgan va kiyim-bosh, turar joylar bezatilgan"
+        correctAnswer: "Applikatsiya 2500 yil muqadam ko'chmanchi xalqlarda paydo bo'lgan va kiyim bosh turar joylar bezatilgan"
     }
 ];
 
