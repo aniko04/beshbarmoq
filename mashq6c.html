@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 6 - Krossvord</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq6.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Krossvordni yeching!</h1>
+
+    <div class="quiz-card mashq6-card mashq6c-card">
+        <div class="crossword-wrap">
+            <div class="crossword-grid" id="crossword"></div>
+        </div>
+
+        <div class="clues-wrap">
+            <div class="clues-col">
+                <h3>Eniga &rarr;</h3>
+                <div id="clues-across"></div>
+            </div>
+            <div class="clues-col">
+                <h3>Bo'yiga &darr;</h3>
+                <div id="clues-down"></div>
+            </div>
+        </div>
+
+        <div class="btn-area">
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="retry()">Qayta urinish</button>
+        </div>
+
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq6c.js"></script>
+</body>
+</html>
