@@ -1,0 +1,245 @@
+/* ===== MASHQ 5 — ISH QUROLLARI ===== */
+.mashq5-card {
+    max-width: 1200px;
+    padding: 24px 28px;
+}
+
+/* Kasblar qatori */
+.professions {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.profession-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 200px;
+    flex: 1;
+    max-width: 340px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px dashed rgba(255, 255, 255, 0.12);
+    transition: all 0.3s ease;
+}
+
+.profession-group.drag-hover {
+    border-color: #00b4d8;
+    background: rgba(0, 180, 216, 0.08);
+    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2), 0 10px 30px rgba(0, 180, 216, 0.15);
+    transform: scale(1.02);
+}
+
+.profession-card {
+    width: 130px;
+    height: 130px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 4px solid #ff1744;
+    box-shadow: 0 6px 24px rgba(255, 23, 68, 0.3);
+    background: #fff;
+    flex-shrink: 0;
+}
+
+.profession-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.profession-name {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Joylashtirilgan qurollar */
+.tool-slots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    min-height: 60px;
+    width: 100%;
+}
+
+.tool-slots .tool-matched {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 3px solid #00c853;
+    box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);
+    animation: toolPop 0.4s ease;
+}
+
+.tool-slots .tool-matched img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@keyframes toolPop {
+    0% { opacity: 0; transform: scale(0.3); }
+    60% { transform: scale(1.15); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* Ish qurollari pool */
+.tools-pool {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tool-item {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid #00b4d8;
+    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.25);
+    background: #fff;
+    cursor: grab;
+    transition: all 0.25s ease;
+    touch-action: none;
+    user-select: none;
+}
+
+.tool-item:hover {
+    transform: scale(1.12);
+    border-color: #8338ec;
+    box-shadow: 0 8px 24px rgba(131, 56, 236, 0.35);
+    z-index: 10;
+}
+
+.tool-item.dragging {
+    opacity: 0.35;
+    cursor: grabbing;
+}
+
+.tool-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
+/* Tekshirish natijalari — to'g'ri */
+.tool-item.tool-correct {
+    border-color: #00c853;
+    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.4), 0 4px 14px rgba(0, 200, 83, 0.3);
+}
+
+/* Tekshirish natijalari — noto'g'ri */
+.tool-item.tool-wrong {
+    border-color: #ff1744;
+    box-shadow: 0 0 0 2px rgba(255, 23, 68, 0.4), 0 4px 14px rgba(255, 23, 68, 0.3);
+    animation: wrongShake5 0.5s ease;
+}
+
+@keyframes wrongShake5 {
+    0%, 100% { transform: none; }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+/* Kasb guruhi — hammasi to'g'ri */
+.profession-group.group-correct {
+    border-color: #00c853;
+    border-style: solid;
+    background: rgba(0, 200, 83, 0.08);
+    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.25), 0 8px 24px rgba(0, 200, 83, 0.15);
+}
+
+/* Pool drag-hover */
+.tools-pool.drag-hover {
+    border-color: #8338ec;
+    background: rgba(131, 56, 236, 0.08);
+    box-shadow: 0 0 0 3px rgba(131, 56, 236, 0.2);
+}
+
+/* Slotdagi qurollar kichikroq */
+.tool-slots .tool-item {
+    width: 60px;
+    height: 60px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+    .mashq5-card {
+        padding: 16px 12px;
+    }
+
+    .professions {
+        gap: 16px;
+    }
+
+    .profession-group {
+        min-width: 160px;
+        padding: 12px;
+    }
+
+    .profession-card {
+        width: 100px;
+        height: 100px;
+    }
+
+    .tool-item {
+        width: 64px;
+        height: 64px;
+    }
+
+    .tool-slots .tool-matched {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 500px) {
+    .professions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profession-group {
+        width: 100%;
+        max-width: 300px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .profession-card {
+        width: 80px;
+        height: 80px;
+    }
+
+    .tool-item {
+        width: 56px;
+        height: 56px;
+        border-width: 2px;
+    }
+
+    .tool-slots .tool-matched {
+        width: 40px;
+        height: 40px;
+    }
+}

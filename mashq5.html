@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 5 - Ish qurollari</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq5.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Kasb egalarini va ularning ish qurollarini to'g'ri tanlang?</h1>
+
+    <div class="quiz-card mashq5-card">
+        <!-- Progress -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 16</div>
+
+        <!-- Kasblar (drop zone) -->
+        <div class="professions">
+            <div class="profession-group" data-profession="duradgor">
+                <div class="profession-card">
+                    <img src="media/ishqurollari/kasblar/Picture1.png" alt="Duradgor">
+                </div>
+                <div class="profession-name">Duradgor</div>
+                <div class="tool-slots" id="slots-duradgor"></div>
+            </div>
+
+            <div class="profession-group" data-profession="tikuvchi">
+                <div class="profession-card">
+                    <img src="media/ishqurollari/kasblar/Picture2.png" alt="Tikuvchi">
+                </div>
+                <div class="profession-name">Tikuvchi</div>
+                <div class="tool-slots" id="slots-tikuvchi"></div>
+            </div>
+
+            <div class="profession-group" data-profession="oshpaz">
+                <div class="profession-card">
+                    <img src="media/ishqurollari/kasblar/Picture3.png" alt="Oshpaz">
+                </div>
+                <div class="profession-name">Oshpaz</div>
+                <div class="tool-slots" id="slots-oshpaz"></div>
+            </div>
+        </div>
+
+        <!-- Ish qurollari (drag pool) -->
+        <div class="tools-pool" id="tools-pool"></div>
+
+        <div class="btn-area">
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="retry()">Qayta urinish</button>
+        </div>
+
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq5.js"></script>
+</body>
+</html>
