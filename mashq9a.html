@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 9 - Video (1-qism)</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq6.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Videoni diqqat bilan tomosha qiling (1-qism)</h1>
+
+    <div class="quiz-card mashq6-card">
+        <div class="video-wrapper">
+            <video id="video" controls playsinline>
+                <source src="media/Video4.mp4" type="video/mp4">
+                Brauzeringiz video formatini qo'llab-quvvatlamaydi.
+            </video>
+        </div>
+
+        <div class="btn-area">
+            <button class="check-btn" id="next-btn" onclick="goNext()">
+                Videoni ko'rib bo'ldim &rarr;
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+
+        video.addEventListener('ended', function () {
+            goNext();
+        });
+
+        function goNext() {
+            window.location.href = 'mashq9a2.html';
+        }
+    </script>
+</body>
+</html>

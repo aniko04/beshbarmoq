@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 7 - Krossvord</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq6.css">
+    <style>
+        .mashq7c-card{max-width:100%;width:100%;padding:36px}
+        .main-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:start}
+        .crossword-center{display:flex;flex-direction:column;align-items:center}
+        .crossword-grid{display:grid;grid-template-columns:repeat(12,42px);grid-template-rows:repeat(15,42px);gap:2px;width:fit-content}
+        .cell{width:42px;height:42px;position:relative}
+        .cell.black{background:transparent;pointer-events:none}
+        .cell input{width:100%;height:100%;border:2px solid rgba(255,255,255,.15);border-radius:6px;text-align:center;font-size:18px;font-weight:700;font-family:'Nunito',sans-serif;text-transform:uppercase;outline:none;background:rgba(255,255,255,.1);color:#fff;transition:.2s}
+        .cell input:focus{border-color:#8338ec;background:rgba(131,56,236,.2);transform:scale(1.06)}
+        .cell input.hl{background:rgba(131,56,236,.12);border-color:rgba(131,56,236,.3)}
+        .cell input.correct{background:rgba(0,200,83,.25)!important;border-color:#00c853!important;color:#69f0ae!important}
+        .cell input.incorrect{background:rgba(255,23,68,.2)!important;border-color:#ff1744!important;color:#ff5252!important}
+        .cell input.key-cell{border-color:rgba(234,76,137,.5);background:rgba(234,76,137,.12)}
+        .cell input.key-cell:focus{border-color:#ea4c89;background:rgba(234,76,137,.25)}
+        .num-badge{position:absolute;top:1px;left:2px;font-size:10px;font-weight:800;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;line-height:1}
+        .clues-col{flex:1}
+        .clues-col h3{font-weight:800;color:#fff;margin-bottom:14px;font-size:1.2em;text-align:center}
+        .clue-item{margin-bottom:10px;padding:12px 14px;background:rgba(255,255,255,.06);border-radius:10px;border-left:4px solid #8338ec;font-size:.88rem;color:rgba(255,255,255,.8);line-height:1.45}
+        .clue-item b{color:#fff}
+        .clues-col.clues-right .clue-item{border-left:none;border-right:4px solid #ea4c89}
+        @media(max-width:1100px){
+            .main-layout{grid-template-columns:1fr;justify-items:center}
+            .crossword-center{order:0}
+            .clues-col.clues-left{order:1}
+            .clues-col.clues-right{order:2}
+            .clues-col{max-width:600px;width:100%}
+        }
+        @media(max-width:700px){
+            .crossword-grid{grid-template-columns:repeat(12,30px);grid-template-rows:repeat(15,30px)}
+            .cell{width:30px;height:30px}.cell input{font-size:13px}
+            .num-badge{font-size:8px;width:14px;height:14px}
+            .mashq7c-card{padding:16px 8px}
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Krossvordni yeching!</h1>
+    <div class="quiz-card mashq6-card mashq7c-card">
+        <div class="main-layout">
+            <div class="clues-col clues-left">
+                <h3>Bo'yiga &darr;</h3>
+                <div id="clues-left"></div>
+            </div>
+            <div class="crossword-center">
+                <div class="crossword-grid" id="grid"></div>
+                <div class="btn-area">
+                    <button class="check-btn" id="check-btn" onclick="checkAnswers()">Tekshirish</button>
+                    <button class="retry-btn" id="retry-btn" onclick="retry()">Qayta urinish</button>
+                </div>
+                <div class="result-msg" id="result"></div>
+            </div>
+            <div class="clues-col clues-right">
+                <h3>Bo'yiga &darr;</h3>
+                <div id="clues-right"></div>
+            </div>
+        </div>
+    </div>
+<script>
+const ROWS=15,COLS=12;
+let dir='v';
+let focusedCell=null;
+
+const answers={
+'0-0':'U','0-10':'F',
+'1-0':'S','1-4':'K','1-10':'A',
+'2-0':'T','2-4':'U','2-10':'Z',
+'3-0':'A','3-3':'O','3-4':'S','3-6':'Q','3-8':'A','3-10':'O','3-11':'K',
+'4-1':'M','4-3':'R','4-4':'U','4-7':'Y','4-8':'K','4-10':'V','4-11':'L',
+'5-0':'V','5-1':'U','5-2':'X','5-3':'I','5-4':'D','5-7':'A','5-8':'I','5-10':'I','5-11':'A',
+'6-0':'O','6-1':'R','6-2':'I','6-3':'G','6-4':'A','6-5':'M','6-6':'I','6-7':'P','6-8':'R','6-10':'Y','6-11':'S',
+'7-0':'D','7-1':'A','7-2':'T','7-3':'A','7-4':'M','7-5':'O','7-6':'M','7-7':'O','7-8':'A','7-11':'S',
+'8-0':'I','8-1':'K','8-2':'O','8-3':'M','8-4':'A','8-5':'D','8-6':'G','8-7':'N','8-9':'B','8-11':'I',
+'9-0':'Y','9-1':'K','9-2':'Y','9-3':'I','9-5':'U','9-6':'I','9-9':'U','9-11':'K',
+'10-1':'A','10-5':'L','10-9':'K',
+'11-1':'B','11-5':'L','11-9':'L',
+'12-5':'I','12-9':'A',
+'13-9':'S',
+'14-9':'H'
+};
+
+const keyCells=new Set(['6-0','6-1','6-2','6-3','6-4','6-5','6-6']);
+
+const nums={
+'0-0':{n:'1',c:'#e53935'},
+'4-1':{n:'2',c:'#1b8a2f'},
+'8-9':{n:'3',c:'#1b8a2f'},
+'3-8':{n:'4',c:'#e6a817'},
+'5-2':{n:'5',c:'#1e88e5'},
+'1-4':{n:'6',c:'#7b2ff7'},
+'0-10':{n:'7',c:'#1e88e5'},
+'3-3':{n:'8',c:'#1b8a2f'},
+'4-7':{n:'9',c:'#e6a817'},
+'6-5':{n:'10',c:'#e53935'},
+'3-6':{n:'11',c:'#e6a817'},
+'3-11':{n:'12',c:'#7b2ff7'},
+'5-0':{n:'13',c:'#e53935'}
+};
+
+const hRanges=[];
+const vRanges=[
+[0,0,3],[1,4,11],[9,8,14],[8,3,7],[2,5,9],
+[4,1,8],[10,0,6],[3,3,9],[7,4,8],[5,6,12],
+[6,3,9],[11,3,9],[0,5,9]
+];
+
+const hSet=new Set(), vSet=new Set();
+hRanges.forEach(function(w){ for(var c=w[1];c<=w[2];c++) hSet.add(w[0]+'-'+c); });
+vRanges.forEach(function(w){ for(var r=w[1];r<=w[2];r++) vSet.add(r+'-'+w[0]); });
+
+function has(r,c){ return (r+'-'+c) in answers; }
+function getInp(r,c){ return document.querySelector('input[data-row="'+r+'"][data-col="'+c+'"]'); }
+
+function autoDir(r,c){
+    var k=r+'-'+c;
+    var isH=hSet.has(k), isV=vSet.has(k);
+    if(isH&&!isV) return 'h';
+    if(isV&&!isH) return 'v';
+    return dir;
+}
+
+function highlightWord(r,c){
+    document.querySelectorAll('.cell input.hl').forEach(function(i){ i.classList.remove('hl'); });
+    var k=r+'-'+c;
+    var i,w;
+    if(dir==='h'){
+        for(i=0;i<hRanges.length;i++){
+            w=hRanges[i];
+            if(w[0]===r && c>=w[1] && c<=w[2]){
+                for(var nc=w[1];nc<=w[2];nc++){ var el=getInp(w[0],nc); if(el) el.classList.add('hl'); }
+                return;
+            }
+        }
+    }
+    if(dir==='v'){
+        for(i=0;i<vRanges.length;i++){
+            w=vRanges[i];
+            if(w[0]===c && r>=w[1] && r<=w[2]){
+                for(var nr=w[1];nr<=w[2];nr++){ var el2=getInp(nr,w[0]); if(el2) el2.classList.add('hl'); }
+                return;
+            }
+        }
+    }
+}
+
+var g=document.getElementById('grid');
+for(var r=0;r<ROWS;r++){
+    for(var c=0;c<COLS;c++){
+        var cell=document.createElement('div');
+        cell.className='cell';
+        var key=r+'-'+c;
+        if(!(key in answers)){
+            cell.classList.add('black');
+        }else{
+            var inp=document.createElement('input');
+            inp.type='text'; inp.maxLength=1;
+            inp.dataset.row=r; inp.dataset.col=c;
+            if(keyCells.has(key)) inp.classList.add('key-cell');
+            if(nums[key]){
+                var badge=document.createElement('div');
+                badge.className='num-badge';
+                badge.textContent=nums[key].n;
+                badge.style.background=nums[key].c;
+                cell.appendChild(badge);
+            }
+            inp.addEventListener('mousedown',(function(inp){
+                return function(){
+                    var r2=+inp.dataset.row, c2=+inp.dataset.col;
+                    var k=r2+'-'+c2;
+                    if(focusedCell===inp && hSet.has(k) && vSet.has(k)){
+                        dir=(dir==='h'?'v':'h');
+                        highlightWord(r2,c2);
+                    }else{
+                        dir=autoDir(r2,c2);
+                    }
+                };
+            })(inp));
+            inp.addEventListener('focus',(function(inp){
+                return function(){
+                    focusedCell=inp;
+                    highlightWord(+inp.dataset.row,+inp.dataset.col);
+                };
+            })(inp));
+            inp.addEventListener('input',(function(inp){
+                return function(){
+                    inp.value=inp.value.toUpperCase();
+                    if(inp.value){
+                        var r2=+inp.dataset.row, c2=+inp.dataset.col;
+                        if(dir==='h'){
+                            if(has(r2,c2+1)) getInp(r2,c2+1).focus();
+                        }else{
+                            if(has(r2+1,c2)) getInp(r2+1,c2).focus();
+                        }
+                    }
+                };
+            })(inp));
+            inp.addEventListener('keydown',(function(inp){
+                return function(e){
+                    var r2=+inp.dataset.row, c2=+inp.dataset.col;
+                    if(e.key==='Backspace'&&!inp.value){
+                        e.preventDefault();
+                        if(dir==='h'){
+                            if(has(r2,c2-1)) getInp(r2,c2-1).focus();
+                        }else{
+                            if(has(r2-1,c2)) getInp(r2-1,c2).focus();
+                        }
+                    }
+                    if(e.key==='ArrowRight'){ e.preventDefault(); dir='h'; if(has(r2,c2+1)) getInp(r2,c2+1).focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowLeft'){ e.preventDefault(); dir='h'; if(has(r2,c2-1)) getInp(r2,c2-1).focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowDown'){ e.preventDefault(); dir='v'; if(has(r2+1,c2)) getInp(r2+1,c2).focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowUp'){ e.preventDefault(); dir='v'; if(has(r2-1,c2)) getInp(r2-1,c2).focus(); else highlightWord(r2,c2); }
+                };
+            })(inp));
+            cell.appendChild(inp);
+        }
+        g.appendChild(cell);
+    }
+}
+
+function checkAnswers(){
+    var inputs=document.querySelectorAll('.cell input');
+    var total=0,correct=0;
+    inputs.forEach(function(inp){
+        total++;
+        var key=inp.dataset.row+'-'+inp.dataset.col;
+        var ok=inp.value.toUpperCase()===answers[key];
+        inp.classList.remove('correct','incorrect','hl');
+        inp.classList.add(ok?'correct':'incorrect');
+        if(ok) correct++;
+        inp.disabled=true;
+    });
+    var res=document.getElementById('result');
+    if(correct===total){
+        res.textContent="Barakalla! Krossvord to'liq to'g'ri yechildi! Kalit so'z: ORIGAMI";
+        res.className='result-msg success';
+    }else{
+        res.textContent=correct+' / '+total+" ta harf to'g'ri. Qayta urinib ko'ring!";
+        res.className='result-msg fail';
+    }
+    document.getElementById('check-btn').style.display='none';
+    document.getElementById('retry-btn').style.display='inline-block';
+}
+
+function retry(){
+    document.querySelectorAll('.cell input').forEach(function(inp){
+        inp.value='';inp.disabled=false;
+        inp.classList.remove('correct','incorrect','hl');
+    });
+    document.getElementById('result').textContent='';
+    document.getElementById('result').className='result-msg';
+    document.getElementById('check-btn').style.display='inline-block';
+    document.getElementById('retry-btn').style.display='none';
+    focusedCell=null;
+}
+
+document.getElementById('clues-left').innerHTML=
+'<div class="clue-item"><b>1.</b> Origami ishqibozlari nima deb atalgan?</div>'+
+'<div class="clue-item"><b>2.</b> Buklash usullaridan biri.</div>'+
+'<div class="clue-item"><b>3.</b> Buklash usullaridan biri.</div>'+
+'<div class="clue-item"><b>4.</b> U faqat 20-asrning o\'rtalarida mashhur yapon origami ustasi ... tomonidan ixtiro qilingan va origami butun dunyoga tarqalishiga imkon bergan.</div>'+
+'<div class="clue-item"><b>5.</b> Origami birinchi bo\'lib qayerda paydo bo\'lgan?</div>'+
+'<div class="clue-item"><b>6.</b> Modulli origami eng keng tarqalgan ob\'ektlardan biri ... uch o\'lchamli sharsimon jismdir.</div>'+
+'<div class="clue-item"><b>7.</b> Origami san\'at turi qo\'lda epchillikni, ... tasavvurni va ijodiy fikrlashni rivojlantiradi.</div>';
+
+document.getElementById('clues-right').innerHTML=
+'<div class="clue-item"><b>8.</b> Qog\'oz shakllarini yig\'ishning qadimiy san\'ati.</div>'+
+'<div class="clue-item"><b>9.</b> Origami qaysi tildan olingan?</div>'+
+'<div class="clue-item"><b>10.</b> Origami turlaridan biri.</div>'+
+'<div class="clue-item"><b>11.</b> Tasvir varag\'ni chiroyli tarzda buklash qobiliyati uzoqda ... davrda paydo bo\'ldi.</div>'+
+'<div class="clue-item"><b>12.</b> Origami turlaridan biri.</div>'+
+'<div class="clue-item"><b>13.</b> Texnikaning o\'ziga xosligi shundaki, ish jarayonida faqat qatlamali "tog\'" va ... va yana qanday uslub ishlatiladi.</div>';
+
+document.getElementById('retry-btn').style.display='none';
+</script>
+</body>
+</html>

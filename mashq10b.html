@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 10 - Test</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="static/css/mashq6.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Test savollariga javob bering</h1>
+
+    <div class="quiz-card mashq6-card">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 6</div>
+
+        <div class="test-questions" id="test-questions"></div>
+
+        <div class="btn-area">
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="retry()">Qayta urinish</button>
+            <a href="index.html" class="next-btn" id="next-btn">Keyingi topshiriq &rarr;</a>
+        </div>
+
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script src="static/js/mashq10b.js"></script>
+</body>
+</html>
