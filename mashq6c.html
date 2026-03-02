@@ -8,25 +8,27 @@
     <link rel="stylesheet" href="static/css/mashq6.css">
     <style>
         .mashq6c-card{max-width:100%;width:100%;padding:36px}
-        .main-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:start}
-        .crossword-center{display:flex;flex-direction:column;align-items:center}
-        .crossword-grid{display:grid;grid-template-columns:repeat(12,42px);grid-template-rows:repeat(13,42px);gap:2px;width:fit-content}
-        .cell{width:42px;height:42px;position:relative}
+        .main-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start}
+        .crossword-center{display:flex;flex-direction:column;align-items:center;overflow-x:auto;max-width:100%}
+        .crossword-grid{display:grid;grid-template-columns:repeat(15,38px);grid-template-rows:repeat(16,38px);gap:2px;width:fit-content}
+        .cell{width:38px;height:38px;position:relative}
         .cell.black{background:transparent;pointer-events:none}
-        .cell input{width:100%;height:100%;border:2px solid rgba(255,255,255,.15);border-radius:6px;text-align:center;font-size:18px;font-weight:700;font-family:'Nunito',sans-serif;text-transform:uppercase;outline:none;background:rgba(255,255,255,.1);color:#fff;transition:.2s}
+        .cell input{width:100%;height:100%;border:2px solid rgba(255,255,255,.15);border-radius:6px;text-align:center;font-size:16px;font-weight:700;font-family:'Nunito',sans-serif;text-transform:uppercase;outline:none;background:rgba(255,255,255,.1);color:#fff;transition:.2s;padding:0}
+        .cell input.digraph{font-size:12px;letter-spacing:-0.5px}
         .cell input:focus{border-color:#8338ec;background:rgba(131,56,236,.2);transform:scale(1.06)}
         .cell input.hl{background:rgba(131,56,236,.12);border-color:rgba(131,56,236,.3)}
         .cell input.correct{background:rgba(0,200,83,.25)!important;border-color:#00c853!important;color:#69f0ae!important}
         .cell input.incorrect{background:rgba(255,23,68,.2)!important;border-color:#ff1744!important;color:#ff5252!important}
         .cell input.key-cell{border-color:rgba(234,76,137,.5);background:rgba(234,76,137,.12)}
         .cell input.key-cell:focus{border-color:#ea4c89;background:rgba(234,76,137,.25)}
-        .num-badge{position:absolute;top:1px;left:2px;font-size:10px;font-weight:800;color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;line-height:1}
-        .clues-col{flex:1}
-        .clues-col h3{font-weight:800;color:#fff;margin-bottom:14px;font-size:1.2em;text-align:center}
-        .clue-item{margin-bottom:10px;padding:12px 14px;background:rgba(255,255,255,.06);border-radius:10px;border-left:4px solid #8338ec;font-size:.88rem;color:rgba(255,255,255,.8);line-height:1.45}
+        .cell input.prefilled{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.9);pointer-events:none}
+        .num-badge{position:absolute;top:1px;left:2px;font-size:9px;font-weight:800;color:#fff;min-width:14px;height:14px;padding:0 2px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;line-height:1}
+        .num-badge.second{left:auto;right:2px}
+        .clues-col h3{font-weight:800;color:#fff;margin-bottom:14px;font-size:1.15em;text-align:center}
+        .clue-item{margin-bottom:8px;padding:10px 12px;background:rgba(255,255,255,.06);border-radius:10px;border-left:4px solid #8338ec;font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.4}
         .clue-item b{color:#fff}
         .clues-col.clues-right .clue-item{border-left:none;border-right:4px solid #ea4c89}
-        @media(max-width:1100px){
+        @media(max-width:1200px){
             .main-layout{grid-template-columns:1fr;justify-items:center}
             .crossword-center{order:0}
             .clues-col.clues-left{order:1}
@@ -34,15 +36,15 @@
             .clues-col{max-width:600px;width:100%}
         }
         @media(max-width:700px){
-            .crossword-grid{grid-template-columns:repeat(12,30px);grid-template-rows:repeat(13,30px)}
-            .cell{width:30px;height:30px}.cell input{font-size:13px}
-            .num-badge{font-size:8px;width:14px;height:14px}
+            .crossword-grid{grid-template-columns:repeat(15,30px);grid-template-rows:repeat(16,30px)}
+            .cell{width:30px;height:30px}.cell input{font-size:12px}.cell input.digraph{font-size:9px}
+            .num-badge{font-size:7px;min-width:12px;height:12px}
             .mashq6c-card{padding:16px 8px}
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <a href="mashq6b.html" class="back-link">&larr; Orqaga</a>
     <h1 class="mashq-title">Krossvordni yeching!</h1>
     <div class="quiz-card mashq6-card mashq6c-card">
         <div class="main-layout">
@@ -65,48 +67,70 @@
         </div>
     </div>
 <script>
-const ROWS=13,COLS=12;
-let dir='h';
-let focusedCell=null;
+var ROWS=16, COLS=15;
+var dir='h';
+var focusedCell=null;
 
-const answers={
-'0-0':'D','0-1':'E','0-2':'K','0-3':'O','0-4':'R','0-5':'A','0-6':'T','0-7':'I','0-8':'V','0-11':'G',
-'1-5':'P','1-11':'A',
-'2-5':'P','2-11':'R',
-'3-1':'S','3-3':'K','3-5':'L','3-11':'M',
-'4-1':'I','4-2':'L','4-3':'O','4-4':'T','4-5':'I','4-6':'N','4-7':'C','4-8':'H','4-9':'A','4-11':'O',
-'5-0':'Q','5-1':'M','5-3':'C','5-5':'K','5-11':'N',
-'6-0':'O','6-1':'M','6-2':'Y','6-3':'H','6-4':'M','6-5':'A','6-6':'Z','6-7':'M','6-8':'U','6-9':'N','6-10':'L','6-11':'I',
-'7-0':'G','7-1':'E','7-2':'O','7-3':'M','7-4':'E','7-5':'T','7-6':'R','7-7':'I','7-8':'K','7-11':'K',
-'8-0':'O','8-1':'T','8-2':'P','8-3':'A','8-5':'S','8-11':'A',
-'9-0':'Z','9-1':'R','9-2':'I','9-3':'N','9-5':'I',
-'10-1':'I','10-2':'S','10-3':'C','10-4':'S','10-5':'Y','10-6':'U','10-7':'J','10-8':'E','10-9':'T','10-10':'L','10-11':'I',
-'11-1':'K','11-2':'H','11-3':'H','11-5':'A',
-'12-3':'I'
+// Javoblar (col indekslari 1 ga siljigan: original col-1)
+var answers={
+// Row 0: KO'CHMANCHI
+'0-2':'K','0-3':"O'",'0-4':'CH','0-5':'M','0-6':'A','0-7':'N','0-8':'CH','0-9':'I',
+// Row 1
+'1-6':'P',
+// Row 2
+'2-6':'P','2-9':'M','2-11':'O',
+// Row 3: MAZMUNLI
+'3-0':'M','3-1':'A','3-2':'Z','3-3':'M','3-4':'U','3-5':'N','3-6':'L','3-7':'I','3-9':'U','3-11':'D',
+// Row 4
+'4-0':'A','4-6':'I','4-9':'R','4-11':'D',
+// Row 5: DEKORATIV
+'5-0':'T','5-4':'D','5-5':'E','5-6':'K','5-7':'O','5-8':'R','5-9':'A','5-10':'T','5-11':'I','5-12':'V',
+// Row 6
+'6-0':'O','6-3':'Y','6-6':'A','6-9':'K','6-11':'Y',
+// Row 7: GEOMETRIK
+'7-1':'G','7-2':'E','7-3':'O','7-4':'M','7-5':'E','7-6':'T','7-7':'R','7-8':'I','7-9':'K',
+// Row 8
+'8-3':'P','8-6':'S','8-9':'A',
+// Row 9: BADIIY
+'9-3':'I','9-6':'I','9-9':'B','9-10':'A','9-11':'D','9-12':'I','9-13':'I','9-14':'Y',
+// Row 10
+'10-3':'SH','10-6':'Y',
+// Row 11: QAYCHI
+'11-3':'T','11-5':'Q','11-6':'A','11-7':'Y','11-8':'CH','11-9':'I',
+// Row 12
+'12-3':'I',
+// Row 13
+'13-3':'R',
+// Row 14: LOTINCHA
+'14-0':'L','14-1':'O','14-2':'T','14-3':'I','14-4':'N','14-5':'CH','14-6':'A',
+// Row 15
+'15-3':'SH'
 };
 
-const keyCells=new Set(['0-5','1-5','2-5','3-5','4-5','5-5','6-5','7-5','8-5','9-5','10-5','11-5']);
+// Kalit ustun (APPLIKATSIYA) - col 6
+var keyCells=new Set(['0-6','1-6','2-6','3-6','4-6','5-6','6-6','7-6','8-6','9-6','10-6','11-6']);
 
-const nums={
-'6-4':{n:'1',c:'#1b8a2f'},
-'10-4':{n:'2',c:'#7b2ff7'},
-'0-0':{n:'3',c:'#e6a817'},
-'7-0':{n:'4',c:'#e53935'},
-'4-2':{n:'5',c:'#1e88e5'},
-'5-0':{n:'6',c:'#1b8a2f'},
-'6-2':{n:'7',c:'#1b8a2f'},
-'0-11':{n:'8',c:'#1b8a2f'},
-'3-3':{n:'9',c:'#e6a817'},
-'3-1':{n:'10',c:'#7b2ff7'}
+// Raqam badge'lari
+var nums={
+'0-2':[{n:'1',c:'#1b8a2f'}],
+'3-0':[{n:'2',c:'#7b2ff7'},{n:'8',c:'#e6a817',second:true}],
+'5-4':[{n:'3',c:'#e53935'}],
+'6-3':[{n:'9',c:'#e6a817'}],
+'7-1':[{n:'4',c:'#1e88e5'}],
+'9-9':[{n:'5',c:'#1b8a2f'}],
+'2-9':[{n:'10',c:'#e53935'}],
+'2-11':[{n:'11',c:'#1e88e5'}],
+'11-5':[{n:'6',c:'#f97316'}],
+'14-0':[{n:'7',c:'#7b2ff7'}]
 };
 
-// So'z chegaralari: gorizontal [row, startCol, endCol], vertikal [col, startRow, endRow]
-const hRanges=[[0,0,8],[4,2,9],[6,4,11],[7,0,8],[10,4,11]];
-const vRanges=[[5,0,11],[0,5,9],[1,3,11],[2,6,11],[3,3,12],[11,0,8]];
+// So'z chegaralari
+var hRanges=[[0,2,9],[3,0,7],[5,4,12],[7,1,9],[9,9,14],[11,5,9],[14,0,6]];
+var vRanges=[[6,0,11],[0,3,6],[3,6,15],[9,2,9],[11,2,6]];
 
-const hSet=new Set(), vSet=new Set();
-hRanges.forEach(function(w){ for(let c=w[1];c<=w[2];c++) hSet.add(w[0]+'-'+c); });
-vRanges.forEach(function(w){ for(let r=w[1];r<=w[2];r++) vSet.add(r+'-'+w[0]); });
+var hSet=new Set(), vSet=new Set();
+hRanges.forEach(function(w){ for(var c=w[1];c<=w[2];c++) hSet.add(w[0]+'-'+c); });
+vRanges.forEach(function(w){ for(var r=w[1];r<=w[2];r++) vSet.add(r+'-'+w[0]); });
 
 function has(r,c){ return (r+'-'+c) in answers; }
 function getInp(r,c){ return document.querySelector('input[data-row="'+r+'"][data-col="'+c+'"]'); }
@@ -121,7 +145,6 @@ function autoDir(r,c){
 
 function highlightWord(r,c){
     document.querySelectorAll('.cell input.hl').forEach(function(i){ i.classList.remove('hl'); });
-    var k=r+'-'+c;
     var i,w;
     if(dir==='h'){
         for(i=0;i<hRanges.length;i++){
@@ -143,6 +166,18 @@ function highlightWord(r,c){
     }
 }
 
+// Keyingi/oldingi katakchani topish
+function nextCell(r,c){
+    if(dir==='h'){ for(var nc=c+1;nc<COLS;nc++) if(has(r,nc)) return getInp(r,nc); }
+    else { for(var nr=r+1;nr<ROWS;nr++) if(has(nr,c)) return getInp(nr,c); }
+    return null;
+}
+function prevCell(r,c){
+    if(dir==='h'){ for(var nc=c-1;nc>=0;nc--) if(has(r,nc)) return getInp(r,nc); }
+    else { for(var nr=r-1;nr>=0;nr--) if(has(nr,c)) return getInp(nr,c); }
+    return null;
+}
+
 // Grid yaratish
 var g=document.getElementById('grid');
 for(var r=0;r<ROWS;r++){
@@ -153,16 +188,21 @@ for(var r=0;r<ROWS;r++){
         if(!(key in answers)){
             cell.classList.add('black');
         }else{
+            var ans=answers[key];
             var inp=document.createElement('input');
-            inp.type='text'; inp.maxLength=1;
+            inp.type='text';
+            inp.maxLength=ans.length;
             inp.dataset.row=r; inp.dataset.col=c;
+            if(ans.length>1) inp.classList.add('digraph');
             if(keyCells.has(key)) inp.classList.add('key-cell');
             if(nums[key]){
-                var badge=document.createElement('div');
-                badge.className='num-badge';
-                badge.textContent=nums[key].n;
-                badge.style.background=nums[key].c;
-                cell.appendChild(badge);
+                nums[key].forEach(function(b){
+                    var badge=document.createElement('div');
+                    badge.className='num-badge'+(b.second?' second':'');
+                    badge.textContent=b.n;
+                    badge.style.background=b.c;
+                    cell.appendChild(badge);
+                });
             }
             inp.addEventListener('mousedown',(function(inp){
                 return function(){
@@ -185,13 +225,10 @@ for(var r=0;r<ROWS;r++){
             inp.addEventListener('input',(function(inp){
                 return function(){
                     inp.value=inp.value.toUpperCase();
-                    if(inp.value){
+                    if(inp.value.length>=inp.maxLength){
                         var r2=+inp.dataset.row, c2=+inp.dataset.col;
-                        if(dir==='h'){
-                            if(has(r2,c2+1)) getInp(r2,c2+1).focus();
-                        }else{
-                            if(has(r2+1,c2)) getInp(r2+1,c2).focus();
-                        }
+                        var nx=nextCell(r2,c2);
+                        if(nx) nx.focus();
                     }
                 };
             })(inp));
@@ -200,16 +237,13 @@ for(var r=0;r<ROWS;r++){
                     var r2=+inp.dataset.row, c2=+inp.dataset.col;
                     if(e.key==='Backspace'&&!inp.value){
                         e.preventDefault();
-                        if(dir==='h'){
-                            if(has(r2,c2-1)) getInp(r2,c2-1).focus();
-                        }else{
-                            if(has(r2-1,c2)) getInp(r2-1,c2).focus();
-                        }
+                        var pv=prevCell(r2,c2);
+                        if(pv) pv.focus();
                     }
-                    if(e.key==='ArrowRight'){ e.preventDefault(); dir='h'; if(has(r2,c2+1)) getInp(r2,c2+1).focus(); else highlightWord(r2,c2); }
-                    if(e.key==='ArrowLeft'){ e.preventDefault(); dir='h'; if(has(r2,c2-1)) getInp(r2,c2-1).focus(); else highlightWord(r2,c2); }
-                    if(e.key==='ArrowDown'){ e.preventDefault(); dir='v'; if(has(r2+1,c2)) getInp(r2+1,c2).focus(); else highlightWord(r2,c2); }
-                    if(e.key==='ArrowUp'){ e.preventDefault(); dir='v'; if(has(r2-1,c2)) getInp(r2-1,c2).focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowRight'){ e.preventDefault(); dir='h'; var nx=nextCell(r2,c2); if(nx) nx.focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowLeft'){ e.preventDefault(); dir='h'; var pv2=prevCell(r2,c2); if(pv2) pv2.focus(); else highlightWord(r2,c2); }
+                    if(e.key==='ArrowDown'){ e.preventDefault(); dir='v'; if(has(r2+1,c2)){ getInp(r2+1,c2).focus(); } else highlightWord(r2,c2); }
+                    if(e.key==='ArrowUp'){ e.preventDefault(); dir='v'; if(has(r2-1,c2)){ getInp(r2-1,c2).focus(); } else highlightWord(r2,c2); }
                 };
             })(inp));
             cell.appendChild(inp);
@@ -218,10 +252,19 @@ for(var r=0;r<ROWS;r++){
     }
 }
 
+// APPLIKATSIYA kalit so'zini oldindan to'ldirish (col 6)
+var prefillCells={'0-6':'A','1-6':'P','2-6':'P','3-6':'L','4-6':'I','5-6':'K','6-6':'A','7-6':'T','8-6':'S','9-6':'I','10-6':'Y','11-6':'A'};
+Object.keys(prefillCells).forEach(function(k){
+    var parts=k.split('-');
+    var inp=getInp(+parts[0],+parts[1]);
+    if(inp){ inp.value=prefillCells[k]; inp.disabled=true; inp.classList.add('prefilled'); }
+});
+
 function checkAnswers(){
     var inputs=document.querySelectorAll('.cell input');
     var total=0,correct=0;
     inputs.forEach(function(inp){
+        if(inp.classList.contains('prefilled')) return;
         total++;
         var key=inp.dataset.row+'-'+inp.dataset.col;
         var ok=inp.value.toUpperCase()===answers[key];
@@ -244,6 +287,7 @@ function checkAnswers(){
 
 function retry(){
     document.querySelectorAll('.cell input').forEach(function(inp){
+        if(inp.classList.contains('prefilled')) return;
         inp.value='';inp.disabled=false;
         inp.classList.remove('correct','incorrect','hl');
     });
@@ -256,18 +300,19 @@ function retry(){
 
 // Savollar
 document.getElementById('clues-h').innerHTML=
-'<div class="clue-item"><b>1.</b> Bu applikatsiyada mazmunli ishlarni yaratish faqat mehnatni emas, balki badiiy tayyorgarlikni ham talab qiladi.</div>'+
-'<div class="clue-item"><b>2.</b> Bu applikatsiya kompozitsiyaga ko\'ra oddiy va murakkab bo\'lishi mumkin. Murakkab mazmunli applikatsiya ertaklar, hikoyalar va shu kabilarga illyustrasiya sifatida yasaladi.</div>'+
-'<div class="clue-item"><b>3.</b> Bu naqsh gullardan iborat bo\'ladi, u alohida-alohida tasvirlardan tarkib topuvchi predmetli hodisa, harakatlar uyg\'unligini aks ettiruvchi syujetdan iborat bo\'lishi mumkin.</div>'+
-'<div class="clue-item"><b>4.</b> Bu applikatsiya bajarilish texnologiyasiga ko\'ra applikatsiyaning eng oddiy turlaridan biri. Geometrik shakllar haqidagi bilimlarni mustahkamlaydi.</div>'+
-'<div class="clue-item"><b>5.</b> Applikatsiya qaysi so\'zdan olingan?</div>';
+'<div class="clue-item"><b>1.</b> Applikatsiya bundan 2500 yil muqaddam qanday xalqlarda paydo bo\'lgan?</div>'+
+'<div class="clue-item"><b>2.</b> Bu applikatsiyada ... ishlarni yaratish faqat mehnatni emas, balki badiiy tayyorgarlikni ham talab qiladi.</div>'+
+'<div class="clue-item"><b>3.</b> Bu applikatsiya turi naqsh, gullar va bezak maqsadida ishlatilib, buyumlarni bezashda qo\'llaniladi.</div>'+
+'<div class="clue-item"><b>4.</b> Bu applikatsiya bajarilish texnologiyasiga ko\'ra eng oddiy turlaridan biri bo\'lib, ... shakllar haqidagi bilimlarni mustahkamlaydi.</div>'+
+'<div class="clue-item"><b>5.</b> Bu applikatsiya turida mazmunli va ijodiy ishlar yaratiladi, ... tayyorgarlikni ham talab qiladi.</div>'+
+'<div class="clue-item"><b>6.</b> Applikatsiya yasashda qog\'ozni qirqish uchun ishlatiladigan asbob.</div>'+
+'<div class="clue-item"><b>7.</b> "Applikatsiya" so\'zi qaysi tildan olingan?</div>';
 
 document.getElementById('clues-v').innerHTML=
-'<div class="clue-item"><b>6.</b> Applikatsiya usulda qanday materiallardan foydalanib har xil ishlarni bajarish mumkin?</div>'+
-'<div class="clue-item"><b>7.</b> Applikatsiya so\'zining ma\'nosi, qirqib olib ....... demakdir.</div>'+
-'<div class="clue-item"><b>8.</b> Qog\'ozni 5\u20146 qavat qilib buklab turib qirqishga qanday usuli deyiladi? Bu usulda 1 ta shakl 5\u20146 martaga ko\'payib chiqadi.</div>'+
-'<div class="clue-item"><b>9.</b> Applikatsiya bundan 2500 yil muqaddam qaysi xalqlarda paydo bo\'lgan?</div>'+
-'<div class="clue-item"><b>10.</b> .......qirqish usuli bilan yaxlit shakl hosil qilinadi va qirqilgan shakl teng va tekis qirqiladi.</div>';
+'<div class="clue-item"><b>8.</b> Applikatsiya yasashda qog\'oz, teri va ... dan foydalaniladi.</div>'+
+'<div class="clue-item"><b>9.</b> Applikatsiya so\'zining ma\'nosi — qirqib olib ... demakdir.</div>'+
+'<div class="clue-item"><b>10.</b> Applikatsiya kompozitsiyaga ko\'ra oddiy va ... bo\'lishi mumkin.</div>'+
+'<div class="clue-item"><b>11.</b> Geometrik applikatsiya bajarilish texnologiyasiga ko\'ra applikatsiyaning eng ... turlaridan biri.</div>';
 
 document.getElementById('retry-btn').style.display='none';
 </script>

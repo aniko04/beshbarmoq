@@ -8,5 +8,7 @@
         "**/*.sass",
         "**/*.ts"
     ],
-    "liveServer.settings.port": 5500
+    "liveServer.settings.port": 8000
+    
+
 }

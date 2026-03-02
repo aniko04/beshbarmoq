@@ -3,55 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beshbarmoq - Mashqlar</title>
+    <title>INKORPORATSION AMALIY TOPSHIRIQLAR</title>
     <link rel="stylesheet" href="static/css/style.css">
+    <style>
+        /* ===== FULL PAGE LAYOUT ===== */
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ===== HEADER ===== */
+        .site-header {
+            text-align: center;
+            padding: 20px 20px 10px;
+            flex-shrink: 0;
+        }
+
+        .site-header h1 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #c084fc 60%, #ea4c89 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        /* ===== CARDS GRID ===== */
+        .cards-grid {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            padding: 10px 24px 20px;
+            flex: 1;
+            align-content: center;
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            padding: 18px 18px 14px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardIn 0.5s ease forwards;
+        }
+
+        .card:nth-child(1)  { animation-delay: 0.05s; }
+        .card:nth-child(2)  { animation-delay: 0.1s; }
+        .card:nth-child(3)  { animation-delay: 0.15s; }
+        .card:nth-child(4)  { animation-delay: 0.2s; }
+        .card:nth-child(5)  { animation-delay: 0.25s; }
+        .card:nth-child(6)  { animation-delay: 0.3s; }
+        .card:nth-child(7)  { animation-delay: 0.35s; }
+        .card:nth-child(8)  { animation-delay: 0.4s; }
+        .card:nth-child(9)  { animation-delay: 0.45s; }
+        .card:nth-child(10) { animation-delay: 0.5s; }
+
+        @keyframes cardIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 20px 20px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.3), 0 0 30px var(--glow);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 15px var(--glow);
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .card-num {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.06);
+            line-height: 1;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .card-desc {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        .card-arrow {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .card-arrow svg {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover .card-arrow {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .card:hover .card-arrow svg {
+            transform: translateX(4px);
+        }
+
+        /* ===== COLOR THEMES ===== */
+        .card.purple   { --accent: linear-gradient(135deg, #8338ec, #a855f7); --glow: rgba(131, 56, 236, 0.25); }
+        .card.pink     { --accent: linear-gradient(135deg, #ea4c89, #f472b6); --glow: rgba(234, 76, 137, 0.25); }
+        .card.blue     { --accent: linear-gradient(135deg, #3b82f6, #60a5fa); --glow: rgba(59, 130, 246, 0.25); }
+        .card.teal     { --accent: linear-gradient(135deg, #14b8a6, #2dd4bf); --glow: rgba(20, 184, 166, 0.25); }
+        .card.orange   { --accent: linear-gradient(135deg, #f97316, #fb923c); --glow: rgba(249, 115, 22, 0.25); }
+        .card.rose     { --accent: linear-gradient(135deg, #f43f5e, #fb7185); --glow: rgba(244, 63, 94, 0.25); }
+        .card.emerald  { --accent: linear-gradient(135deg, #10b981, #34d399); --glow: rgba(16, 185, 129, 0.25); }
+        .card.amber    { --accent: linear-gradient(135deg, #f59e0b, #fbbf24); --glow: rgba(245, 158, 11, 0.25); }
+        .card.indigo   { --accent: linear-gradient(135deg, #6366f1, #818cf8); --glow: rgba(99, 102, 241, 0.25); }
+        .card.cyan     { --accent: linear-gradient(135deg, #06b6d4, #22d3ee); --glow: rgba(6, 182, 212, 0.25); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1100px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .page-wrapper {
+                height: auto;
+                min-height: 100vh;
+                overflow: auto;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                padding: 10px 12px 20px;
+            }
+            .card {
+                padding: 16px 14px 12px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="index-header">
-        <h1>Mashqlar</h1>
-        <p>Bilimingizni sinab ko'ring</p>
+    <div class="page-wrapper">
+    <div class="site-header">
+        <h1>INKORPORATSION AMALIY TOPSHIRIQLAR</h1>
     </div>
-    <div class="mashqlar">
-        <a href="mashq1.html">
-            <span class="num">1</span>
-            Mashq 1 — Applikatsiya turlari
+    <div class="cards-grid">
+        <a href="mashq1.html" class="card purple">
+            <div class="card-top">
+                <div class="card-icon">&#x2702;&#xFE0F;</div>
+                <div class="card-num">01</div>
+            </div>
+            <div class="card-title">Applikatsiya turlari</div>
+            <div class="card-desc">Applikatsiya turlarini ajratib ko'rsating</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq2.html">
-            <span class="num">2</span>
-            Mashq 2 — Origami shakllari
+
+        <a href="mashq2.html" class="card pink">
+            <div class="card-top">
+                <div class="card-icon">&#x1F4DC;</div>
+                <div class="card-num">02</div>
+            </div>
+            <div class="card-title">Origami shakllari</div>
+            <div class="card-desc">Origami o'yinchoqlarni to'rtburchak yoki kvadrat shaklga ajrating</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq3.html">
-            <span class="num">3</span>
-            Mashq 3 — Kasblar
+
+        <a href="mashq3.html" class="card blue">
+            <div class="card-top">
+                <div class="card-icon">&#x1F477;</div>
+                <div class="card-num">03</div>
+            </div>
+            <div class="card-title">Kasblar</div>
+            <div class="card-desc">Rasmdagi kasb egalarini aniqlang</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq4.html">
-            <span class="num">4</span>
-            Mashq 4 — Hunarlar
+
+        <a href="mashq4.html" class="card teal">
+            <div class="card-top">
+                <div class="card-icon">&#x1F9F5;</div>
+                <div class="card-num">04</div>
+            </div>
+            <div class="card-title">Hunarlar</div>
+            <div class="card-desc">Hunarlarni mosini qo'yib belgilang</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq5.html">
-            <span class="num">5</span>
-            Mashq 5 — Ish qurollari
+
+        <a href="mashq5.html" class="card orange">
+            <div class="card-top">
+                <div class="card-icon">&#x1F527;</div>
+                <div class="card-num">05</div>
+            </div>
+            <div class="card-title">Ish qurollari</div>
+            <div class="card-desc">Kasb egalarini va ularning ish qurollarini to'g'ri tanlang</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq6a.html">
-            <span class="num">6</span>
-            Mashq 6 — Video mashq
+
+        <a href="mashq6a.html" class="card rose">
+            <div class="card-top">
+                <div class="card-icon">&#x1F3AC;</div>
+                <div class="card-num">06</div>
+            </div>
+            <div class="card-title">Applikatsiya</div>
+            <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq7a.html">
-            <span class="num">7</span>
-            Mashq 7 — Video mashq
+
+        <a href="mashq7a.html" class="card emerald">
+            <div class="card-top">
+                <div class="card-icon">&#x1F3A5;</div>
+                <div class="card-num">07</div>
+            </div>
+            <div class="card-title">Origami</div>
+            <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq8a.html">
-            <span class="num">8</span>
-            Mashq 8 — Fetr bilan ishlash
+
+        <a href="mashq8a.html" class="card amber">
+            <div class="card-top">
+                <div class="card-icon">&#x1F9F6;</div>
+                <div class="card-num">08</div>
+            </div>
+            <div class="card-title">Fetr bilan ishlash</div>
+            <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq9a.html">
-            <span class="num">9</span>
-            Mashq 9 — Kvilling
+
+        <a href="mashq9a.html" class="card indigo">
+            <div class="card-top">
+                <div class="card-icon">&#x1F338;</div>
+                <div class="card-num">09</div>
+            </div>
+            <div class="card-title">Kvilling</div>
+            <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
-        <a href="mashq10a.html">
-            <span class="num">10</span>
-            Mashq 10 — Loy va plastilin
+
+        <a href="mashq10a.html" class="card cyan">
+            <div class="card-top">
+                <div class="card-icon">&#x1F3A8;</div>
+                <div class="card-num">10</div>
+            </div>
+            <div class="card-title">Loy va plastilin</div>
+            <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
+            <div class="card-arrow">
+                Boshlash
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
         </a>
+    </div>
     </div>
 </body>
 </html>

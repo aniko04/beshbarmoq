@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mashq 7 - Krossvord</title>
+    <title>Mashq 9 - Krossvord</title>
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="static/css/mashq6.css">
     <style>
-        .mashq7c-card{max-width:100%;width:100%;padding:36px}
+        .mashq9c-card{max-width:100%;width:100%;padding:36px}
         .main-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start}
         .crossword-center{display:flex;flex-direction:column;align-items:center;overflow-x:auto;max-width:100%}
-        .crossword-grid{display:grid;grid-template-columns:repeat(19,36px);grid-template-rows:repeat(17,36px);gap:2px;width:fit-content}
-        .cell{width:36px;height:36px;position:relative}
+        .crossword-grid{display:grid;grid-template-columns:repeat(16,38px);grid-template-rows:repeat(8,38px);gap:2px;width:fit-content}
+        .cell{width:38px;height:38px;position:relative}
         .cell.black{background:transparent;pointer-events:none}
-        .cell input{width:100%;height:100%;border:2px solid rgba(255,255,255,.15);border-radius:6px;text-align:center;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;text-transform:uppercase;outline:none;background:rgba(255,255,255,.1);color:#fff;transition:.2s;padding:0}
-        .cell input.digraph{font-size:11px;letter-spacing:-0.5px}
+        .cell input{width:100%;height:100%;border:2px solid rgba(255,255,255,.15);border-radius:6px;text-align:center;font-size:16px;font-weight:700;font-family:'Nunito',sans-serif;text-transform:uppercase;outline:none;background:rgba(255,255,255,.1);color:#fff;transition:.2s;padding:0}
+        .cell input.digraph{font-size:12px;letter-spacing:-0.5px}
         .cell input:focus{border-color:#8338ec;background:rgba(131,56,236,.2);transform:scale(1.06)}
         .cell input.hl{background:rgba(131,56,236,.12);border-color:rgba(131,56,236,.3)}
         .cell input.correct{background:rgba(0,200,83,.25)!important;border-color:#00c853!important;color:#69f0ae!important}
@@ -23,6 +23,7 @@
         .cell input.key-cell:focus{border-color:#ea4c89;background:rgba(234,76,137,.25)}
         .cell input.prefilled{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.9);pointer-events:none}
         .num-badge{position:absolute;top:1px;left:2px;font-size:9px;font-weight:800;color:#fff;min-width:14px;height:14px;padding:0 2px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;pointer-events:none;line-height:1}
+        .num-badge.second{left:auto;right:2px}
         .clues-col h3{font-weight:800;color:#fff;margin-bottom:14px;font-size:1.15em;text-align:center}
         .clue-item{margin-bottom:8px;padding:10px 12px;background:rgba(255,255,255,.06);border-radius:10px;border-left:4px solid #8338ec;font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.4}
         .clue-item b{color:#fff}
@@ -35,17 +36,17 @@
             .clues-col{max-width:600px;width:100%}
         }
         @media(max-width:700px){
-            .crossword-grid{grid-template-columns:repeat(19,26px);grid-template-rows:repeat(17,26px)}
-            .cell{width:26px;height:26px}.cell input{font-size:11px}.cell input.digraph{font-size:9px}
+            .crossword-grid{grid-template-columns:repeat(16,30px);grid-template-rows:repeat(8,30px)}
+            .cell{width:30px;height:30px}.cell input{font-size:12px}.cell input.digraph{font-size:9px}
             .num-badge{font-size:7px;min-width:12px;height:12px}
-            .mashq7c-card{padding:16px 8px}
+            .mashq9c-card{padding:16px 8px}
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">&larr; Orqaga</a>
+    <a href="mashq9b.html" class="back-link">&larr; Orqaga</a>
     <h1 class="mashq-title">Krossvordni yeching!</h1>
-    <div class="quiz-card mashq6-card mashq7c-card">
+    <div class="quiz-card mashq6-card mashq9c-card">
         <div class="main-layout">
             <div class="clues-col clues-left">
                 <h3>Eniga &rarr;</h3>
@@ -66,53 +67,49 @@
         </div>
     </div>
 <script>
-var ROWS=17, COLS=19;
+var ROWS=8, COLS=16;
 var dir='h';
 var focusedCell=null;
 
 var answers={
-'0-0':'Y','0-4':'M',
-'1-0':'A','1-4':'U',
-'2-0':'P','2-4':'R',
-'3-0':'O','3-1':'R','3-2':'I','3-3':'G','3-4':'A','3-5':'M','3-6':'I','3-7':'S','3-8':'T',
-'4-0':'N','4-4':'K',
-'5-0':'I','5-4':'K','5-15':'M','5-17':'M',
-'6-0':'Y','6-4':'A','6-14':'Y','6-15':'A','6-16':'P','6-17':'O','6-18':'N',
-'7-0':'A','7-4':'B','7-5':'U','7-6':'K','7-7':'L','7-8':'A','7-9':'SH','7-11':'A','7-15':'N','7-17':'D',
-'8-6':'L','8-11':'K','8-15':'T','8-17':'U',
-'9-4':'B','9-6':'A','9-9':'O','9-10':'R','9-11':'I','9-12':'G','9-13':'A','9-14':'M','9-15':'I','9-17':'L',
-'10-4':'U','10-6':'S','10-11':'R','10-13':'N','10-15':'Q','10-17':'L',
-'11-4':'K','11-5':'U','11-6':'S','11-7':'U','11-8':'D','11-9':'A','11-10':'M','11-11':'A','11-13':'A','11-15':'I','11-17':'I',
-'12-4':'L','12-6':'I','12-13':'N','12-15':'Y',
-'13-4':'A','13-6':'K','13-13':'A',
-'14-4':'SH','14-13':'V','14-14':'O','14-15':'D','14-16':'I','14-17':'Y',
-'15-7':'Q','15-8':'A','15-9':'D','15-10':'I','15-11':'M','15-12':'G','15-13':'I',
-'16-13':'Y'
+// Row 0
+'0-2':'Y','0-7':'R',
+// Row 1: TAYOQCHA (cols 6-12)
+'1-0':'SH','1-2':'E','1-6':'T','1-7':'A','1-8':'Y','1-9':'O','1-10':'Q','1-11':'CH','1-12':'A',
+// Row 2
+'2-0':'A','2-2':'L','2-7':'N','2-10':'O',
+// Row 3: KVILLING (cols 0-7)
+'3-0':'K','3-1':'V','3-2':'I','3-3':'L','3-4':'L','3-5':'I','3-6':'N','3-7':'G','3-10':"G'",'3-13':'T',
+// Row 4
+'4-0':'L','4-2':'M','4-5':'J','4-9':'D','4-10':'O','4-11':'I','4-12':'R','4-13':'A',
+// Row 5
+'5-5':'O','5-10':'Z','5-13':'S',
+// Row 6
+'6-5':'D','6-13':'M',
+// Row 7: SABR (cols 12-15)
+'7-12':'S','7-13':'A','7-14':'B','7-15':'R'
 };
 
-var keyCells=new Set([
-'0-4','1-4','2-4','3-4','4-4','5-4','6-4','7-4',
-'9-4','10-4','11-4','12-4','13-4','14-4'
-]);
+// Kalit so'z yo'q — oddiy krossvord
+var keyCells=new Set();
 
+// Raqam badge'lari (namuna tartibida)
 var nums={
-'0-0':[{n:'1',c:'#1b8a2f'}],
-'3-0':[{n:'7',c:'#e53935'}],
-'5-15':[{n:'5',c:'#7b2ff7'}],
-'5-17':[{n:'6',c:'#1e88e5'}],
-'6-14':[{n:'8',c:'#e6a817'}],
-'7-4':[{n:'9',c:'#f97316'}],
-'7-6':[{n:'2',c:'#1b8a2f'}],
-'7-11':[{n:'4',c:'#e53935'}],
-'9-9':[{n:'10',c:'#1e88e5'}],
-'9-13':[{n:'3',c:'#e6a817'}],
-'11-4':[{n:'11',c:'#7b2ff7'}],
-'14-13':[{n:'12',c:'#f97316'}],
-'15-7':[{n:'15',c:'#1b8a2f'}]
+'1-0':[{n:'1',c:'#1b8a2f'}],           // SHAKL ↓
+'0-2':[{n:'2',c:'#7b2ff7'}],           // YELIM ↓
+'3-5':[{n:'3',c:'#e53935'}],           // IJOD ↓
+'0-7':[{n:'4',c:'#e6a817'}],           // RANG ↓
+'1-10':[{n:'5',c:'#1e88e5'}],          // QOG'OZ ↓
+'3-13':[{n:'6',c:'#f97316'}],          // TASMA ↓
+'1-6':[{n:'7',c:'#7b2ff7'}],           // TAYOQCHA →
+'3-0':[{n:'8',c:'#1b8a2f'}],           // KVILLING →
+'4-9':[{n:'9',c:'#e53935'}],           // DOIRA →
+'7-12':[{n:'10',c:'#f97316'}]          // SABR →
 };
 
-var hRanges=[[3,0,8],[6,14,18],[7,4,9],[9,9,15],[11,4,11],[14,13,17],[15,7,13]];
-var vRanges=[[0,0,7],[4,0,7],[4,9,14],[6,7,13],[11,7,11],[13,9,16],[15,5,12],[17,5,11]];
+// So'z chegaralari
+var hRanges=[[1,6,12],[3,0,7],[4,9,13],[7,12,15]];
+var vRanges=[[0,1,4],[2,0,4],[5,3,6],[7,0,3],[10,1,5],[13,3,7]];
 
 var hSet=new Set(), vSet=new Set();
 hRanges.forEach(function(w){ for(var c=w[1];c<=w[2];c++) hSet.add(w[0]+'-'+c); });
@@ -163,6 +160,7 @@ function prevCell(r,c){
     return null;
 }
 
+// Grid yaratish
 var g=document.getElementById('grid');
 for(var r=0;r<ROWS;r++){
     for(var c=0;c<COLS;c++){
@@ -182,7 +180,7 @@ for(var r=0;r<ROWS;r++){
             if(nums[key]){
                 nums[key].forEach(function(b){
                     var badge=document.createElement('div');
-                    badge.className='num-badge';
+                    badge.className='num-badge'+(b.second?' second':'');
                     badge.textContent=b.n;
                     badge.style.background=b.c;
                     cell.appendChild(badge);
@@ -236,8 +234,8 @@ for(var r=0;r<ROWS;r++){
     }
 }
 
-// MURAKKAB BUKLASH kalit so'zini oldindan to'ldirish (col 4)
-var prefillCells={'0-4':'M','1-4':'U','2-4':'R','3-4':'A','4-4':'K','5-4':'K','6-4':'A','7-4':'B','9-4':'B','10-4':'U','11-4':'K','12-4':'L','13-4':'A','14-4':'SH'};
+// KVILLING so'zini oldindan to'ldirish (row 3, cols 0-7)
+var prefillCells={'3-0':'K','3-1':'V','3-2':'I','3-3':'L','3-4':'L','3-5':'I','3-6':'N','3-7':'G'};
 Object.keys(prefillCells).forEach(function(k){
     var parts=k.split('-');
     var inp=getInp(+parts[0],+parts[1]);
@@ -259,7 +257,7 @@ function checkAnswers(){
     });
     var res=document.getElementById('result');
     if(correct===total){
-        res.textContent="Barakalla! Krossvord to'liq to'g'ri yechildi! Kalit so'z: MURAKKAB BUKLASH";
+        res.textContent="Barakalla! Krossvord to'liq to'g'ri yechildi!";
         res.className='result-msg success';
     }else{
         res.textContent=correct+' / '+total+" ta harf to'g'ri. Qayta urinib ko'ring!";
@@ -282,22 +280,20 @@ function retry(){
     focusedCell=null;
 }
 
+// Savollar
 document.getElementById('clues-h').innerHTML=
-'<div class="clue-item"><b>7.</b> Origami ishqibozlari nima deb atalgan?</div>'+
-'<div class="clue-item"><b>8.</b> Origami qaysi tildan olingan?</div>'+
-'<div class="clue-item"><b>9.</b> Qog\'ozni bir necha marta buklab shakl berish jarayoni.</div>'+
-'<div class="clue-item"><b>10.</b> Qog\'oz shakllarini yig\'ishning qadimiy san\'ati.</div>'+
-'<div class="clue-item"><b>11.</b> Modulli origami eng keng tarqalgan ob\'ektlardan biri ... uch o\'lchamli sharsimon jismdir.</div>'+
-'<div class="clue-item"><b>12.</b> Texnikaning o\'ziga xosligi shundaki, ish jarayonida faqat qatlamali "tog\'" va ... uslubi ishlatiladi.</div>'+
-'<div class="clue-item"><b>15.</b> Buklash qobiliyati uzoq ... davrda paydo bo\'ldi.</div>';
+'<div class="clue-item"><b>7.</b> Qog\'ozni o\'rash uchun ishlatiladigan maxsus asbob.</div>'+
+'<div class="clue-item"><b>8.</b> Qog\'ozni o\'rash san\'ati nomi.</div>'+
+'<div class="clue-item"><b>9.</b> Kvillingda ishlatiladigan eng oddiy shakl.</div>'+
+'<div class="clue-item"><b>10.</b> Kvilling mashg\'ulotida o\'quvchilarni tarbiyalaydigan muhim fazilat.</div>';
 
 document.getElementById('clues-v').innerHTML=
-'<div class="clue-item"><b>1.</b> Origami birinchi bo\'lib qayerda paydo bo\'lgan?</div>'+
-'<div class="clue-item"><b>2.</b> Bitta qog\'ozdan buklanadigan origami turi.</div>'+
-'<div class="clue-item"><b>3.</b> Origamining eng qadimiy uslubi.</div>'+
-'<div class="clue-item"><b>4.</b> 20-asrning o\'rtalarida mashhur yapon origami ustasi.</div>'+
-'<div class="clue-item"><b>5.</b> Origami san\'at turi qo\'lda epchillikni, ... tasavvurni va ijodiy fikrlashni rivojlantiradi.</div>'+
-'<div class="clue-item"><b>6.</b> Bir nechta bir xil qismlardan yig\'iladigan origami turi.</div>';
+'<div class="clue-item"><b>1.</b> Qog\'oz tasmasidan turli \u2026 yasaymiz.</div>'+
+'<div class="clue-item"><b>2.</b> Qog\'oz shakllarini yopishtirish uchun kerakli vosita.</div>'+
+'<div class="clue-item"><b>3.</b> Kvilling mashg\'uloti o\'quvchilarda \u2026 va chiroyli ishlashni rivojlantiradi.</div>'+
+'<div class="clue-item"><b>4.</b> Kvillingda ishlatiladigan qog\'ozlar odatda turli \u2026da bo\'ladi.</div>'+
+'<div class="clue-item"><b>5.</b> Kvillingda ishlatiladigan asosiy material \u2014 rangli \u2026</div>'+
+'<div class="clue-item"><b>6.</b> Kvillingda qog\'oz qanday shaklda bo\'ladi?</div>';
 
 document.getElementById('retry-btn').style.display='none';
 </script>
