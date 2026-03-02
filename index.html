@@ -20,12 +20,13 @@
         /* ===== HEADER ===== */
         .site-header {
             text-align: center;
-            padding: 20px 20px 10px;
+            padding: 60px 20px 10px;
             flex-shrink: 0;
+            position: relative;
         }
 
         .site-header h1 {
-            font-size: 1.6rem;
+            font-size: 3.8rem;
             font-weight: 900;
             background: linear-gradient(135deg, #fff 0%, #c084fc 60%, #ea4c89 100%);
             -webkit-background-clip: text;
@@ -225,9 +226,17 @@
     <div class="page-wrapper">
     <div class="site-header">
         <h1>INKORPORATSION AMALIY TOPSHIRIQLAR</h1>
+        <div style="position:absolute;top:18px;right:24px;z-index:10;">
+            {% if user.is_authenticated %}
+                <span style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-right:10px;">{{ user.first_name|default:user.username }}</span>
+                <a href="/logout" style="padding:8px 20px;border-radius:10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:background 0.2s;">Chiqish</a>
+            {% else %}
+                <a href="/login" style="padding:8px 20px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;text-decoration:none;font-size:0.85rem;font-weight:700;transition:transform 0.2s;display:inline-block;">Kirish</a>
+            {% endif %}
+        </div>
     </div>
     <div class="cards-grid">
-        <a href="mashq1.html" class="card purple">
+        <a href="/m1" class="card purple">
             <div class="card-top">
                 <div class="card-icon">&#x2702;&#xFE0F;</div>
                 <div class="card-num">01</div>
@@ -240,7 +249,7 @@
             </div>
         </a>
 
-        <a href="mashq2.html" class="card pink">
+        <a href="/m2" class="card pink">
             <div class="card-top">
                 <div class="card-icon">&#x1F4DC;</div>
                 <div class="card-num">02</div>
@@ -253,7 +262,7 @@
             </div>
         </a>
 
-        <a href="mashq3.html" class="card blue">
+        <a href="/m3" class="card blue">
             <div class="card-top">
                 <div class="card-icon">&#x1F477;</div>
                 <div class="card-num">03</div>
@@ -266,7 +275,7 @@
             </div>
         </a>
 
-        <a href="mashq4.html" class="card teal">
+        <a href="/m4" class="card teal">
             <div class="card-top">
                 <div class="card-icon">&#x1F9F5;</div>
                 <div class="card-num">04</div>
@@ -279,7 +288,7 @@
             </div>
         </a>
 
-        <a href="mashq5.html" class="card orange">
+        <a href="/m5" class="card orange">
             <div class="card-top">
                 <div class="card-icon">&#x1F527;</div>
                 <div class="card-num">05</div>
@@ -292,12 +301,12 @@
             </div>
         </a>
 
-        <a href="mashq6a.html" class="card rose">
+        <a href="/m6a" class="card rose">
             <div class="card-top">
                 <div class="card-icon">&#x1F3AC;</div>
                 <div class="card-num">06</div>
             </div>
-            <div class="card-title">Applikatsiya</div>
+            <div class="card-title">Applikatsiya bilan ishlash</div>
             <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
             <div class="card-arrow">
                 Boshlash
@@ -305,12 +314,12 @@
             </div>
         </a>
 
-        <a href="mashq7a.html" class="card emerald">
+        <a href="/m7a" class="card emerald">
             <div class="card-top">
                 <div class="card-icon">&#x1F3A5;</div>
                 <div class="card-num">07</div>
             </div>
-            <div class="card-title">Origami</div>
+            <div class="card-title">Origami bilan ishlash</div>
             <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
             <div class="card-arrow">
                 Boshlash
@@ -318,7 +327,7 @@
             </div>
         </a>
 
-        <a href="mashq8a.html" class="card amber">
+        <a href="/m8a" class="card amber">
             <div class="card-top">
                 <div class="card-icon">&#x1F9F6;</div>
                 <div class="card-num">08</div>
@@ -331,12 +340,12 @@
             </div>
         </a>
 
-        <a href="mashq9a.html" class="card indigo">
+        <a href="/m9a" class="card indigo">
             <div class="card-top">
                 <div class="card-icon">&#x1F338;</div>
                 <div class="card-num">09</div>
             </div>
-            <div class="card-title">Kvilling</div>
+            <div class="card-title">Kvilling bilan ishlash</div>
             <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
             <div class="card-arrow">
                 Boshlash
@@ -344,12 +353,12 @@
             </div>
         </a>
 
-        <a href="mashq10a.html" class="card cyan">
+        <a href="/m10a" class="card cyan">
             <div class="card-top">
                 <div class="card-icon">&#x1F3A8;</div>
                 <div class="card-num">10</div>
             </div>
-            <div class="card-title">Loy va plastilin</div>
+            <div class="card-title">Loy va plastilin bilan ishlash</div>
             <div class="card-desc">Videoni tomosha qiling va savollarga javob bering</div>
             <div class="card-arrow">
                 Boshlash
