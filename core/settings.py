@@ -25,9 +25,9 @@ SECRET_KEY = 'django-insecure-6&t5)j1p3*f8rgkt0_8l&^!i2@t_#xd065y3#my6^9&4ksy)bb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["aniko.uz", "www.aniko.uz","texnoedu.uz", "www.texnoedu.uz", "vibe-coder.uz", "www.vibe-coder.uz", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["aniko.uz", "www.aniko.uz","texnoedu.uz", "www.texnoedu.uz", "vibe-coder.uz", "www.vibe-coder.uz", "verbatum.xyz", "www.verbatum.xyz", "localhost", "127.0.0.1"]
 
-CSRF_TRUSTED_ORIGINS = ['https://aniko.uz', 'https://www.aniko.uz', 'https://texnoedu.uz', 'https://www.texnoedu.uz', 'https://vibe-coder.uz', 'https://www.vibe-coder.uz', 'http://aniko.uz', 'http://www.aniko.uz', 'http://texnoedu.uz', 'http://www.texnoedu.uz', 'http://vibe-coder.uz', 'http://www.vibe-coder.uz']
+CSRF_TRUSTED_ORIGINS = ['https://aniko.uz', 'https://www.aniko.uz', 'https://texnoedu.uz', 'https://www.texnoedu.uz', 'https://vibe-coder.uz', 'https://www.vibe-coder.uz', 'https://verbatum.xyz', 'https://www.verbatum.xyz', 'http://aniko.uz', 'http://www.aniko.uz', 'http://texnoedu.uz', 'http://www.texnoedu.uz', 'http://vibe-coder.uz', 'http://www.vibe-coder.uz', 'http://verbatum.xyz', 'http://www.verbatum.xyz']
 
 
 # Application definition

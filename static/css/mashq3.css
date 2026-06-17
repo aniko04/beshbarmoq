@@ -19,11 +19,11 @@
 /* ===== START SCREEN ===== */
 .m3-start-box {
     text-align: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 32px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--r-xl);
     padding: 50px 40px;
-    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-card);
     max-width: 560px;
     margin: 40px auto;
     animation: m3-fadeIn 0.6s ease;
@@ -36,10 +36,10 @@
 }
 
 .m3-title {
+    font-family: var(--font-display);
     font-size: 2.8rem;
-    font-weight: 900;
-    font-style: italic;
-    background: linear-gradient(135deg, #8338ec, #ea4c89, #3b82f6);
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--grape), var(--berry), var(--sky));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -47,9 +47,9 @@
 }
 
 .m3-subtitle {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--ink-2);
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 32px;
 }
 
@@ -65,23 +65,27 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    color: rgba(255, 255, 255, 0.85);
+    color: #fff;
     font-size: 1.05rem;
-    font-weight: 600;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 14px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--r-md);
     padding: 14px 18px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .m3-rule-num {
     width: 32px;
     height: 32px;
     min-width: 32px;
-    background: linear-gradient(135deg, #8338ec, #ea4c89);
+    background: linear-gradient(135deg, var(--grape), var(--berry));
     color: #fff;
-    font-size: 0.9rem;
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,26 +93,27 @@
 }
 
 .m3-start-btn {
-    background: linear-gradient(135deg, #8338ec, #ea4c89);
+    background: linear-gradient(135deg, var(--grape), var(--berry));
     color: #fff;
     border: none;
-    padding: 18px 60px;
-    font-family: 'Nunito', Arial, sans-serif;
+    padding: 17px 56px;
+    font-family: var(--font-display);
     font-size: 1.3rem;
-    font-weight: 800;
-    border-radius: 18px;
+    font-weight: 700;
+    border-radius: var(--r-md);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 30px rgba(131, 56, 236, 0.4);
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: 0 6px 0 var(--grape-d), 0 12px 26px rgba(124, 58, 237, 0.3);
 }
 
 .m3-start-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 40px rgba(131, 56, 236, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 var(--grape-d), 0 16px 32px rgba(124, 58, 237, 0.36);
 }
 
 .m3-start-btn:active {
-    transform: translateY(0);
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 var(--grape-d), 0 8px 16px rgba(124, 58, 237, 0.3);
 }
 
 /* ===== HUD ===== */
@@ -117,12 +122,12 @@
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--r-md);
     padding: 14px 24px;
     margin-bottom: 20px;
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-soft);
 }
 
 .m3-hud-lives {
@@ -148,9 +153,9 @@
 }
 
 .m3-round-text {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     display: block;
     margin-bottom: 6px;
 }
@@ -158,8 +163,8 @@
 .m3-progress {
     width: 100%;
     max-width: 200px;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
+    height: 10px;
+    background: var(--line-2);
     border-radius: 10px;
     overflow: hidden;
     margin: 0 auto;
@@ -168,7 +173,7 @@
 .m3-progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #8338ec, #ea4c89);
+    background: linear-gradient(90deg, var(--grape), var(--berry));
     border-radius: 10px;
     transition: width 0.4s ease;
 }
@@ -180,14 +185,14 @@
 }
 
 .m3-score {
-    color: #ffd600;
-    font-size: 1.4rem;
-    font-weight: 900;
-    text-shadow: 0 2px 8px rgba(255, 214, 0, 0.3);
+    color: var(--sun);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 800;
 }
 
 .m3-streak {
-    background: linear-gradient(135deg, #ff6d00, #ff1744);
+    background: linear-gradient(135deg, var(--tangerine), var(--tomato));
     color: #fff;
     font-size: 0.85rem;
     font-weight: 800;
@@ -208,58 +213,63 @@
 .m3-riddle-panel {
     width: 40%;
     min-width: 280px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--r-lg);
     padding: 28px 24px;
-    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-card);
 }
 
 .m3-riddle-badge {
     display: inline-block;
-    background: linear-gradient(135deg, #8338ec, #ea4c89);
+    background: linear-gradient(135deg, var(--grape), var(--berry));
     color: #fff;
     padding: 6px 16px;
     border-radius: 12px;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 800;
+    font-weight: 700;
     margin-bottom: 18px;
 }
 
 .m3-riddle-text {
-    color: rgba(255, 255, 255, 0.88);
+    color: #fff;
     font-size: 1.05rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.85;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-radius: var(--r-md);
     padding: 20px;
     min-height: 120px;
     margin-bottom: 16px;
     white-space: pre-wrap;
     word-wrap: break-word;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
 .m3-riddle-text .m3-cursor {
     display: inline-block;
     width: 2px;
     height: 1.1em;
-    background: #ea4c89;
+    background: var(--berry);
     margin-left: 2px;
     vertical-align: text-bottom;
     animation: m3-blink 0.6s infinite;
 }
 
 .m3-hint-area {
-    background: rgba(255, 214, 0, 0.08);
-    border: 1px solid rgba(255, 214, 0, 0.2);
+    background: linear-gradient(135deg, #fde68a, #fbbf24);
+    border: none;
     border-radius: 12px;
     padding: 12px 16px;
     margin-bottom: 14px;
-    color: #ffd600;
+    color: #7c4a03;
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(245, 158, 11, 0.35);
     animation: m3-fadeIn 0.3s ease;
 }
 
@@ -270,20 +280,21 @@
 }
 
 .m3-hint-btn {
-    background: rgba(255, 214, 0, 0.12);
-    border: 1px solid rgba(255, 214, 0, 0.25);
-    color: #ffd600;
+    background: #fff7e6;
+    border: 2px solid #fcd34d;
+    color: #b45309;
     padding: 12px 20px;
-    font-family: 'Nunito', Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 0.95rem;
-    font-weight: 700;
+    font-weight: 800;
     border-radius: 14px;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .m3-hint-btn:hover {
-    background: rgba(255, 214, 0, 0.2);
+    background: #fef3c7;
+    transform: translateY(-1px);
 }
 
 .m3-hint-btn:disabled {
@@ -293,23 +304,23 @@
 
 .m3-discover-btn {
     flex: 1;
-    background: linear-gradient(135deg, #3b82f6, #8338ec);
+    background: linear-gradient(135deg, var(--sky), var(--grape));
     border: none;
     color: #fff;
     padding: 14px 24px;
-    font-family: 'Nunito', Arial, sans-serif;
+    font-family: var(--font-display);
     font-size: 1.05rem;
-    font-weight: 800;
+    font-weight: 700;
     border-radius: 14px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
     animation: m3-pulse 1.5s ease infinite;
 }
 
 .m3-discover-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 8px 28px rgba(14, 165, 233, 0.4);
 }
 
 /* ===== ARENA ===== */
@@ -327,10 +338,10 @@
 
 .arena-card {
     position: relative;
-    border-radius: 16px;
+    border-radius: var(--r-md);
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.06);
-    border: 3px solid rgba(255, 255, 255, 0.08);
+    background: var(--paper-soft);
+    border: 3px solid var(--line);
     cursor: pointer;
     transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     animation: m3-cardIn 0.4s ease both;
@@ -342,15 +353,15 @@
     display: block;
 }
 
-/* Fog overlay */
+/* Fog overlay — light "covered tile" look */
 .arena-card::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 25% 40%, rgba(131, 56, 236, 0.25), transparent 55%),
-        radial-gradient(ellipse at 75% 60%, rgba(59, 130, 246, 0.2), transparent 55%),
-        rgba(15, 12, 41, 0.96);
+        radial-gradient(ellipse at 28% 30%, rgba(124, 58, 237, 0.14), transparent 60%),
+        radial-gradient(ellipse at 72% 70%, rgba(14, 165, 233, 0.12), transparent 60%),
+        #efe7f8;
     opacity: var(--fog-opacity, 1);
     border-radius: 13px;
     pointer-events: none;
@@ -365,9 +376,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.2);
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: rgba(124, 58, 237, 0.45);
     z-index: 3;
     pointer-events: none;
     opacity: var(--fog-opacity, 1);
@@ -382,14 +394,14 @@
 
 /* Card states */
 .arena-card.selected {
-    border-color: #ea4c89;
-    box-shadow: 0 0 0 3px rgba(234, 76, 137, 0.4), 0 8px 24px rgba(234, 76, 137, 0.3);
+    border-color: var(--berry);
+    box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.4), 0 8px 24px rgba(236, 72, 153, 0.3);
     transform: translateY(-4px);
 }
 
 .arena-card.correct-reveal {
-    border-color: #00c853;
-    box-shadow: 0 0 0 4px rgba(0, 200, 83, 0.5), 0 8px 30px rgba(0, 200, 83, 0.3);
+    border-color: var(--ok-d);
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.5), 0 8px 30px rgba(34, 197, 94, 0.3);
     --fog-opacity: 0 !important;
 }
 
@@ -398,8 +410,8 @@
 }
 
 .arena-card.wrong-reveal {
-    border-color: #ff1744;
-    box-shadow: 0 0 0 3px rgba(255, 23, 68, 0.4);
+    border-color: var(--bad-d);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.4);
     animation: m3-shake 0.4s ease;
 }
 
@@ -413,52 +425,59 @@
     width: 280px;
     height: 280px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 255, 200, 0.12) 0%, rgba(131, 56, 236, 0.06) 35%, transparent 65%);
+    background: radial-gradient(circle, rgba(255, 236, 150, 0.5) 0%, rgba(124, 58, 237, 0.08) 35%, transparent 65%);
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 5;
+    mix-blend-mode: multiply;
 }
 
 /* ===== CONFIRM BUTTON ===== */
 .m3-confirm-btn {
     display: block;
     margin: 20px auto 0;
-    background: linear-gradient(135deg, #00c853, #69f0ae);
+    background: linear-gradient(135deg, var(--grass-d), var(--grass));
     border: none;
     color: #fff;
     padding: 16px 48px;
-    font-family: 'Nunito', Arial, sans-serif;
+    font-family: var(--font-display);
     font-size: 1.15rem;
-    font-weight: 800;
-    border-radius: 16px;
+    font-weight: 700;
+    border-radius: var(--r-md);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 28px rgba(0, 200, 83, 0.3);
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: 0 6px 0 var(--grass-d), 0 10px 26px rgba(34, 197, 94, 0.3);
     animation: m3-pop 0.3s ease;
 }
 
 .m3-confirm-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 34px rgba(0, 200, 83, 0.4);
+    box-shadow: 0 8px 0 var(--grass-d), 0 14px 32px rgba(34, 197, 94, 0.36);
+}
+
+.m3-confirm-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 var(--grass-d), 0 8px 16px rgba(34, 197, 94, 0.3);
 }
 
 /* ===== SUMMARY SCREEN ===== */
 .m3-summary-box {
     text-align: center;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 32px;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--r-xl);
     padding: 50px 40px;
-    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-card);
     max-width: 520px;
     margin: 40px auto;
     animation: m3-fadeIn 0.6s ease;
 }
 
 .m3-summary-title {
+    font-family: var(--font-display);
     font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
+    font-weight: 800;
+    color: var(--ink);
     margin-bottom: 24px;
 }
 
@@ -476,12 +495,12 @@
 }
 
 .m3-star.filled {
-    color: #ffd600;
-    text-shadow: 0 4px 16px rgba(255, 214, 0, 0.5);
+    color: var(--sun);
+    text-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
 }
 
 .m3-star.empty {
-    color: rgba(255, 255, 255, 0.15);
+    color: var(--line-2);
 }
 
 .m3-summary-score {
@@ -490,17 +509,17 @@
 
 .m3-summary-label {
     display: block;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--ink-2);
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 6px;
 }
 
 .m3-summary-value {
+    font-family: var(--font-display);
     font-size: 3rem;
-    font-weight: 900;
-    color: #ffd600;
-    text-shadow: 0 4px 16px rgba(255, 214, 0, 0.4);
+    font-weight: 800;
+    color: var(--sun);
 }
 
 .m3-summary-stats {
@@ -515,9 +534,11 @@
     flex-direction: column;
     align-items: center;
     gap: 4px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--r-md);
     padding: 16px 24px;
     min-width: 90px;
 }
@@ -527,15 +548,18 @@
 }
 
 .m3-stat-val {
+    font-family: var(--font-display);
     font-size: 1.6rem;
-    font-weight: 900;
+    font-weight: 800;
     color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .m3-stat-label {
     font-size: 0.8rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .m3-summary-actions {
@@ -546,41 +570,45 @@
 }
 
 .m3-replay-btn {
-    background: linear-gradient(135deg, #8338ec, #ea4c89);
+    background: linear-gradient(135deg, var(--grape), var(--berry));
     color: #fff;
     border: none;
     padding: 16px 36px;
-    font-family: 'Nunito', Arial, sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 800;
-    border-radius: 16px;
+    font-weight: 700;
+    border-radius: var(--r-md);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 28px rgba(131, 56, 236, 0.3);
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: 0 6px 0 var(--grape-d), 0 10px 26px rgba(124, 58, 237, 0.3);
 }
 
 .m3-replay-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 34px rgba(131, 56, 236, 0.4);
+    box-shadow: 0 8px 0 var(--grape-d), 0 14px 32px rgba(124, 58, 237, 0.36);
 }
 
 .m3-home-btn {
     display: inline-flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.5);
     color: #fff;
     padding: 16px 36px;
-    font-family: 'Nunito', Arial, sans-serif;
+    font-family: var(--font-display);
     font-size: 1.1rem;
     font-weight: 700;
-    border-radius: 16px;
+    border-radius: var(--r-md);
     text-decoration: none;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
 }
 
 .m3-home-btn:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.32);
+    transform: translateY(-2px);
 }
 
 /* ===== EFFECTS ===== */
@@ -588,13 +616,14 @@
 /* Score pop */
 .m3-score-pop {
     position: fixed;
-    color: #ffd600;
+    color: var(--sun);
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 900;
+    font-weight: 800;
     pointer-events: none;
     z-index: 9999;
     transform: translateX(-50%);
-    text-shadow: 0 2px 8px rgba(255, 214, 0, 0.5);
+    text-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
     animation: m3-scorePop 0.9s ease-out forwards;
 }
 
@@ -621,8 +650,8 @@
 }
 
 @keyframes m3-pulse {
-    0%, 100% { box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3); }
-    50% { box-shadow: 0 6px 30px rgba(59, 130, 246, 0.5); }
+    0%, 100% { box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3); }
+    50% { box-shadow: 0 6px 30px rgba(14, 165, 233, 0.5); }
 }
 
 @keyframes m3-blink {
@@ -807,4 +836,35 @@
         justify-content: center;
         text-align: center;
     }
+}
+
+/* ===== Topshiriqqa biriktirilgan rang (vivid, body .t-* dan) ===== */
+.m3-start-box,
+.m3-hud,
+.m3-riddle-panel,
+.m3-summary-box {
+    background: var(--card-accent, var(--paper));
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 24px 54px var(--card-glow, rgba(61, 52, 80, 0.12)),
+        inset 0 1.5px 0 rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+/* Panel ustidagi to'g'ridan-to'g'ri matnlar oq bo'lsin */
+.m3-title {
+    background: none;
+    -webkit-text-fill-color: #fff;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.m3-subtitle,
+.m3-round-text,
+.m3-score,
+.m3-summary-title,
+.m3-summary-label,
+.m3-summary-value {
+    color: #fff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }

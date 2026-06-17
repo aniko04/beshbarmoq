@@ -22,26 +22,26 @@
     flex: 1;
     max-width: 340px;
     padding: 16px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 2px dashed rgba(255, 255, 255, 0.12);
+    border-radius: var(--r-lg);
+    background: var(--paper-soft);
+    border: 2px dashed var(--line-2);
     transition: all 0.3s ease;
 }
 
 .profession-group.drag-hover {
-    border-color: #00b4d8;
-    background: rgba(0, 180, 216, 0.08);
-    box-shadow: 0 0 0 3px rgba(0, 180, 216, 0.2), 0 10px 30px rgba(0, 180, 216, 0.15);
+    border-color: var(--sky);
+    background: #eff9ff;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2), 0 10px 30px rgba(14, 165, 233, 0.15);
     transform: scale(1.02);
 }
 
 .profession-card {
     width: 130px;
     height: 130px;
-    border-radius: 18px;
+    border-radius: var(--r-md);
     overflow: hidden;
-    border: 4px solid #ff1744;
-    box-shadow: 0 6px 24px rgba(255, 23, 68, 0.3);
+    border: 4px solid var(--tomato);
+    box-shadow: 0 6px 0 rgba(220, 38, 38, 0.25);
     background: #fff;
     flex-shrink: 0;
 }
@@ -54,11 +54,11 @@
 }
 
 .profession-name {
-    color: #fff;
+    color: var(--ink);
+    font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 800;
+    font-weight: 700;
     text-align: center;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Joylashtirilgan qurollar */
@@ -76,8 +76,8 @@
     height: 60px;
     border-radius: 10px;
     overflow: hidden;
-    border: 3px solid #00c853;
-    box-shadow: 0 4px 14px rgba(0, 200, 83, 0.35);
+    border: 3px solid var(--grass-d);
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
     animation: toolPop 0.4s ease;
 }
 
@@ -101,18 +101,18 @@
     justify-content: center;
     gap: 12px;
     padding: 20px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--r-lg);
+    background: var(--paper-soft);
+    border: 2px solid var(--line);
 }
 
 .tool-item {
     width: 80px;
     height: 80px;
-    border-radius: 12px;
+    border-radius: var(--r-sm);
     overflow: hidden;
-    border: 3px solid #00b4d8;
-    box-shadow: 0 4px 16px rgba(0, 180, 216, 0.25);
+    border: 3px solid var(--sky);
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.22);
     background: #fff;
     cursor: grab;
     transition: all 0.25s ease;
@@ -122,8 +122,8 @@
 
 .tool-item:hover {
     transform: scale(1.12);
-    border-color: #8338ec;
-    box-shadow: 0 8px 24px rgba(131, 56, 236, 0.35);
+    border-color: var(--grape);
+    box-shadow: 0 8px 24px rgba(124, 58, 237, 0.35);
     z-index: 10;
 }
 
@@ -142,14 +142,14 @@
 
 /* Tekshirish natijalari — to'g'ri */
 .tool-item.tool-correct {
-    border-color: #00c853;
-    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.4), 0 4px 14px rgba(0, 200, 83, 0.3);
+    border-color: var(--grass-d);
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.4), 0 4px 14px rgba(34, 197, 94, 0.3);
 }
 
 /* Tekshirish natijalari — noto'g'ri */
 .tool-item.tool-wrong {
-    border-color: #ff1744;
-    box-shadow: 0 0 0 2px rgba(255, 23, 68, 0.4), 0 4px 14px rgba(255, 23, 68, 0.3);
+    border-color: var(--bad);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4), 0 4px 14px rgba(239, 68, 68, 0.3);
     animation: wrongShake5 0.5s ease;
 }
 
@@ -163,17 +163,17 @@
 
 /* Kasb guruhi — hammasi to'g'ri */
 .profession-group.group-correct {
-    border-color: #00c853;
+    border-color: var(--grass-d);
     border-style: solid;
-    background: rgba(0, 200, 83, 0.08);
-    box-shadow: 0 0 0 2px rgba(0, 200, 83, 0.25), 0 8px 24px rgba(0, 200, 83, 0.15);
+    background: #f0fdf4;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25), 0 8px 24px rgba(34, 197, 94, 0.15);
 }
 
 /* Pool drag-hover */
 .tools-pool.drag-hover {
-    border-color: #8338ec;
-    background: rgba(131, 56, 236, 0.08);
-    box-shadow: 0 0 0 3px rgba(131, 56, 236, 0.2);
+    border-color: var(--grape);
+    background: #f5f0ff;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 
 /* Slotdagi qurollar kichikroq */
