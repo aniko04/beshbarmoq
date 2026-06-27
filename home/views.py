@@ -129,6 +129,17 @@ def mashq5(request):
     return render(request, 'mashq5.html')
 
 
+# ===== O'quvchi uchun 6-mashq (talaba formati bilan bir xil; ochiq) =====
+def oquvchi_m6a(request):
+    return render(request, 'oquvchi/m6a.html')
+
+def oquvchi_m6b(request):
+    return render(request, 'oquvchi/m6b.html')
+
+def oquvchi_m6c(request):
+    return render(request, 'oquvchi/m6c.html')
+
+
 # ===== 6–10 mashqlar (hozircha faqat talaba uchun) =====
 @talaba_required
 def mashq6a(request):

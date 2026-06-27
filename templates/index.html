@@ -453,8 +453,7 @@
                 </div>
             </a>
 
-            {% if show_advanced %}
-            <a href="/m6a" class="card blue">
+            <a href="{% if show_advanced %}/m6a{% else %}/o6a{% endif %}" class="card blue">
                 <div class="card-top">
                     <div class="card-icon">&#x1F3AC;</div>
                     <div class="card-num">06</div>
@@ -467,6 +466,7 @@
                 </div>
             </a>
 
+            {% if show_advanced %}
             <a href="/m7a" class="card rose">
                 <div class="card-top">
                     <div class="card-icon">&#x1F3A5;</div>

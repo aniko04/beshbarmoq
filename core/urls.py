@@ -40,6 +40,12 @@ urlpatterns = [
     path('m6a', views.mashq6a, name='mashq6a'),
     path('m6b', views.mashq6b, name='mashq6b'),
     path('m6c', views.mashq6c, name='mashq6c'),
+
+    # O'quvchi uchun 6-mashq (talaba bilan bir xil format, alohida sahifalar)
+    path('o6a', views.oquvchi_m6a, name='oquvchi_m6a'),
+    path('o6b', views.oquvchi_m6b, name='oquvchi_m6b'),
+    path('o6c', views.oquvchi_m6c, name='oquvchi_m6c'),
+
     path('m7a', views.mashq7a, name='mashq7a'),
     path('m7b', views.mashq7b, name='mashq7b'),
     path('m7c', views.mashq7c, name='mashq7c'),

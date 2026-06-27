@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mashq 6 - Test</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/mashq6.css">
+</head>
+<body class="t-blue">
+    <a href="/" class="back-link">&larr; Orqaga</a>
+    <h1 class="mashq-title">Test savollariga javob bering</h1>
+
+    <div class="quiz-card mashq6-card">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0 / 8</div>
+
+        <div class="test-questions" id="test-questions"></div>
+
+        <div class="btn-area">
+            <button class="check-btn" id="check-btn" onclick="checkAnswers()">Tekshirish</button>
+            <button class="retry-btn" id="retry-btn" onclick="retry()">Qayta urinish</button>
+            <a href="/o6c" class="next-btn" id="next-btn">Keyingi bosqich &rarr;</a>
+        </div>
+
+        <div class="result-msg" id="result"></div>
+    </div>
+
+    <script>
+    // ===== Test savollari (namuna Word hujjatidan, shu sahifaning ichida) =====
+    const questions = [
+        {
+            question: "Applikatsiya so'zi qaysi ma'noni anglatadi?",
+            options: ["Chizish", "Yopishtirish", "Bo'yash", "Buklash"],
+            correctAnswer: "Yopishtirish"
+        },
+        {
+            question: "Qaysi materialdan applikatsiya yasash mumkin?",
+            options: ["Rangli qog'oz", "Barg", "Mato", "Barchasidan"],
+            correctAnswer: "Barchasidan"
+        },
+        {
+            question: "Applikatsiya nima?",
+            options: [
+                "Rasm chizish usuli",
+                "Turli materiallarni yopishtirib tasvir hosil qilish usuli",
+                "Buyumni bo'yash usuli",
+                "Haykaltaroshlik turi"
+            ],
+            correctAnswer: "Turli materiallarni yopishtirib tasvir hosil qilish usuli"
+        },
+        {
+            question: "Applikatsiya tayyorlashda eng ko'p qaysi material ishlatiladi?",
+            options: ["Temir", "Yog'och", "Rangli qog'oz", "Shisha"],
+            correctAnswer: "Rangli qog'oz"
+        },
+        {
+            question: "Qog'ozdan applikatsiya tayyorlash uchun qaysi asbob kerak bo'ladi?",
+            options: ["Bolg'a", "Qaychi", "Arra", "Tikuv mashinasi"],
+            correctAnswer: "Qaychi"
+        },
+        {
+            question: "Qog'ozni biriktirish uchun nima ishlatiladi?",
+            options: ["Yelim", "Bo'yoq", "Loy", "Qalam"],
+            correctAnswer: "Yelim"
+        },
+        {
+            question: "Barglardan applikatsiya tayyorlash qaysi material bilan ishlashga kiradi?",
+            options: [
+                "Tabiiy materiallar bilan ishlash",
+                "Gazlama bilan ishlash",
+                "Metall bilan ishlash",
+                "Plastmassa bilan ishlash"
+            ],
+            correctAnswer: "Tabiiy materiallar bilan ishlash"
+        },
+        {
+            question: "Applikatsiya orqali nimalarni tasvirlash mumkin?",
+            options: ["Hayvonlar", "Gullar", "Manzaralar", "Barchasini"],
+            correctAnswer: "Barchasini"
+        }
+    ];
+
+    const TOTAL = questions.length;
+    let selected = {}; // { questionIndex: selectedOptionText }
+    let checked = false;
+
+    function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    function updateProgress() {
+        const answered = Object.keys(selected).length;
+        document.getElementById('progress-text').textContent = answered + ' / ' + TOTAL;
+        document.getElementById('progress-fill').style.width = (answered / TOTAL * 100) + '%';
+    }
+
+    function renderQuestions() {
+        const container = document.getElementById('test-questions');
+        container.innerHTML = '';
+
+        questions.forEach((q, qIndex) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'test-question';
+            qDiv.dataset.index = qIndex;
+
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.textContent = (qIndex + 1) + '. ' + q.question;
+            qDiv.appendChild(title);
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = 'question-options';
+
+            const shuffled = shuffle(q.options);
+            const letters = ['A', 'B', 'C', 'D'];
+
+            shuffled.forEach((opt, oIndex) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.dataset.question = qIndex;
+                btn.dataset.value = opt;
+
+                const letter = document.createElement('span');
+                letter.className = 'option-letter';
+                letter.textContent = letters[oIndex];
+
+                const text = document.createElement('span');
+                text.className = 'option-text';
+                text.textContent = opt;
+
+                btn.appendChild(letter);
+                btn.appendChild(text);
+
+                btn.addEventListener('click', function () {
+                    if (checked) return;
+                    selectOption(qIndex, opt);
+                });
+
+                optionsDiv.appendChild(btn);
+            });
+
+            qDiv.appendChild(optionsDiv);
+            container.appendChild(qDiv);
+        });
+    }
+
+    function selectOption(qIndex, value) {
+        selected[qIndex] = value;
+
+        const btns = document.querySelectorAll('.option-btn[data-question="' + qIndex + '"]');
+        btns.forEach(btn => {
+            if (btn.dataset.value === value) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        });
+
+        updateProgress();
+    }
+
+    function checkAnswers() {
+        if (Object.keys(selected).length < TOTAL) {
+            const qoldi = TOTAL - Object.keys(selected).length;
+            document.getElementById('result').textContent =
+                'Avval barcha savollarga javob bering! (' + qoldi + ' ta qoldi)';
+            document.getElementById('result').className = 'result-msg fail';
+            return;
+        }
+
+        checked = true;
+        let correct = 0;
+
+        questions.forEach((q, qIndex) => {
+            const btns = document.querySelectorAll('.option-btn[data-question="' + qIndex + '"]');
+            const userAnswer = selected[qIndex];
+
+            btns.forEach(btn => {
+                btn.classList.add('disabled');
+
+                if (btn.dataset.value === q.correctAnswer) {
+                    btn.classList.add('correct');
+                }
+
+                if (btn.dataset.value === userAnswer && userAnswer !== q.correctAnswer) {
+                    btn.classList.add('wrong');
+                }
+            });
+
+            if (userAnswer === q.correctAnswer) {
+                correct++;
+            }
+        });
+
+        if (correct === TOTAL) {
+            document.getElementById('result').textContent =
+                "Barakalla! Barcha javoblar to'g'ri! (" + correct + '/' + TOTAL + ')';
+            document.getElementById('result').className = 'result-msg success';
+        } else {
+            document.getElementById('result').textContent =
+                correct + ' / ' + TOTAL + " ta to'g'ri.";
+            document.getElementById('result').className = 'result-msg fail';
+        }
+
+        document.getElementById('check-btn').style.display = 'none';
+        document.getElementById('retry-btn').style.display = 'inline-block';
+        document.getElementById('next-btn').style.display = 'inline-block';
+
+        // Natijani serverga yuborish
+        fetch('/api/save-result', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken')},
+            body: JSON.stringify({mashq: 'm6b', score: correct, total: TOTAL, is_passed: correct === TOTAL})
+        }).catch(() => {});
+    }
+
+    function retry() {
+        selected = {};
+        checked = false;
+        document.getElementById('result').textContent = '';
+        document.getElementById('result').className = 'result-msg';
+        document.getElementById('check-btn').style.display = 'inline-block';
+        document.getElementById('retry-btn').style.display = 'none';
+        document.getElementById('next-btn').style.display = 'none';
+        renderQuestions();
+        updateProgress();
+    }
+
+    // CSRF token helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Boshlash
+    document.getElementById('retry-btn').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'none';
+    renderQuestions();
+    updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    
+    table {
+        border-collapse: collapse;
+        margin: auto;
+        margin-top: 3%;
+
+    }
+
+    td {
+        padding: 10px;
+        position: relative;
+        
+    }
+
+    td span {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        font-size: 15px;
+        border-radius: 50%;
+        text-decoration: solid;
+        position: absolute;
+        transform: translateX(-40%);
+        width: 12px;
+        height: 12px;
+        align-items: center;
+        background-color: rgb(12, 186, 38);
+        border: 2px solid rgb(6, 6, 6);
+        color: #fff;
+
+    }
+
+    span.gor {
+        top: 12px;
+        right: 42px;
+
+
+    }
+    span.ver {
+        top: -19px;
+        left: 15px;
+        
+    }
+
+</style>
+
+
+<body>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="gor">7</span><span class="ver">2</span>Q</td>
+            <td>O</td>
+            <td>G'</td> 
+            <td>O</td>
+            <td>Z</td>   
+            <td></td>
+            <td></td>
+            <td><span class="ver">5</span>D</td>
+        </tr>
+
+          <tr>
+            <td><span class="gor">6</span>SH</td>
+            <td>A</td>
+            <td>K</td>
+            <td><span class="ver">1</span>L</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>A</td>
+            <td></td>
+            <td></td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td></td>
+            <td>O</td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>O</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Y</td>
+            <td></td>
+            <td></td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td></td>
+            <td>I</td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>L</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>CH</td>
+            <td></td>
+            <td><span class="ver">3</span>Z</td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td></td>
+            <td>R</td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="gor">8</span>A</td>
+            <td>P</td>
+            <td>P</td>
+            <td>L</td>
+            <td>I</td>
+            <td>K</td>
+            <td>A</td> 
+            <td>T</td>
+            <td>S</td>   
+            <td>I</td>
+            <td><span class="ver">4</span>Y</td>
+            <td>A</td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>N</td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td>E</td>
+            <td></td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="gor">9</span>B</td>
+            <td>A</td>
+            <td>R</td>
+            <td>G</td> 
+            <td></td>
+            <td><span class="gor">10</span>G</td>   
+            <td>U</td>
+            <td>L</td>
+            <td></td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td>I</td>
+            <td></td>
+        </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td> 
+            <td></td>
+            <td></td>   
+            <td></td>
+            <td>M</td>
+            <td></td>
+        </tr>
+    </table>
+
+    <script>
+
+    document.querySelectorAll('td').forEach(text=> {
+        let h = text.textContent.replace(" ", "")
+        if (h.length > 0) {
+            text.style.border = "2px solid #000"
+        }
+    })
+
+</script>
+
+</body>
+</html>
