@@ -42,3 +42,36 @@ class Result(models.Model):
         if self.total == 0:
             return 0
         return round(self.score / self.total * 100)
+
+
+class Profile(models.Model):
+    """Foydalanuvchi roli — o'quvchi yoki talaba.
+
+    O'quvchi faqat 1–5 mashqlarni ko'radi; talaba 6–10 ni ham ko'radi.
+    """
+    ROLE_OQUVCHI = 'oquvchi'
+    ROLE_TALABA = 'talaba'
+    ROLE_CHOICES = [
+        (ROLE_OQUVCHI, "O'quvchi"),
+        (ROLE_TALABA, 'Talaba'),
+    ]
+
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='profile',
+        verbose_name="Foydalanuvchi",
+    )
+    role = models.CharField(
+        max_length=10, choices=ROLE_CHOICES, default=ROLE_OQUVCHI,
+        verbose_name="Rol",
+    )
+
+    class Meta:
+        verbose_name = "Profil"
+        verbose_name_plural = "Profillar"
+
+    def __str__(self):
+        return f"{self.user.username} — {self.get_role_display()}"
+
+    @property
+    def is_talaba(self):
+        return self.role == self.ROLE_TALABA

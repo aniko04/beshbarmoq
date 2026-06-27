@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from .models import Result
+from .models import Result, Profile
 
 
 @admin.register(Result)
@@ -31,3 +33,33 @@ class ResultAdmin(admin.ModelAdmin):
             return mark_safe('<span style="color:#22c55e;font-weight:bold;">✅ O\'tdi</span>')
         return mark_safe('<span style="color:#ef4444;font-weight:bold;">❌ O\'tmadi</span>')
     status_display.short_description = "Holat"
+
+
+# ===== Foydalanuvchi rolini boshqarish =====
+class ProfileInline(admin.StackedInline):
+    model = Profile
+    can_delete = False
+    verbose_name_plural = "Rol"
+
+
+class CustomUserAdmin(UserAdmin):
+    inlines = [ProfileInline]
+    list_display = ['username', 'first_name', 'last_name', 'role_display', 'is_staff']
+
+    def role_display(self, obj):
+        try:
+            return obj.profile.get_role_display()
+        except Profile.DoesNotExist:
+            return '—'
+    role_display.short_description = "Rol"
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'role']
+    list_filter = ['role']
+    search_fields = ['user__username', 'user__first_name', 'user__last_name']

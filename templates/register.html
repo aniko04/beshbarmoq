@@ -83,6 +83,40 @@
             color: var(--ink-3);
             font-weight: 600;
         }
+        .role-group {
+            display: flex;
+            gap: 12px;
+        }
+        .role-option {
+            flex: 1;
+            cursor: pointer;
+        }
+        .role-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .role-option span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 14px 10px;
+            border: 2px solid var(--line);
+            border-radius: 14px;
+            background: var(--paper-soft);
+            color: var(--ink-2);
+            font-size: 1rem;
+            font-weight: 800;
+            text-align: center;
+            transition: all 0.18s;
+        }
+        .role-option input:checked + span {
+            border-color: #7c3aed;
+            color: #6d28d9;
+            background: #f5f0ff;
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+        }
         .auth-btn {
             width: 100%;
             padding: 15px;
@@ -178,6 +212,19 @@
             <div class="form-group">
                 <label>Parolni tasdiqlang</label>
                 <input type="password" name="password2" placeholder="Parolni qayta kiriting" required>
+            </div>
+            <div class="form-group">
+                <label>Rolingiz</label>
+                <div class="role-group">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="oquvchi" {% if role != 'talaba' %}checked{% endif %}>
+                        <span>&#x1F9D2; O'quvchi</span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="talaba" {% if role == 'talaba' %}checked{% endif %}>
+                        <span>&#x1F393; Talaba</span>
+                    </label>
+                </div>
             </div>
             <button type="submit" class="auth-btn">Ro'yxatdan o'tish</button>
         </form>
