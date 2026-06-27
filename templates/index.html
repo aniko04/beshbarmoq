@@ -479,8 +479,7 @@
                 </div>
             </a>
 
-            {% if show_advanced %}
-            <a href="/m8a" class="card indigo">
+            <a href="{% if show_advanced %}/m8a{% else %}/o8a{% endif %}" class="card indigo">
                 <div class="card-top">
                     <div class="card-icon">&#x1F9F6;</div>
                     <div class="card-num">08</div>
@@ -493,7 +492,7 @@
                 </div>
             </a>
 
-            <a href="/m9a" class="card coral">
+            <a href="{% if show_advanced %}/m9a{% else %}/o9a{% endif %}" class="card coral">
                 <div class="card-top">
                     <div class="card-icon">&#x1F338;</div>
                     <div class="card-num">09</div>
@@ -506,7 +505,7 @@
                 </div>
             </a>
 
-            <a href="/m10a" class="card emerald">
+            <a href="{% if show_advanced %}/m10a{% else %}/o10a{% endif %}" class="card emerald">
                 <div class="card-top">
                     <div class="card-icon">&#x1F3A8;</div>
                     <div class="card-num">10</div>
@@ -518,7 +517,6 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </div>
             </a>
-            {% endif %}
         </div>
     </div>
 </body>

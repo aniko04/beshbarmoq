@@ -151,6 +151,36 @@ def oquvchi_m7c(request):
     return render(request, 'oquvchi/m7c.html')
 
 
+# ===== O'quvchi uchun 8-mashq (Fetr) — to'liq =====
+def oquvchi_m8a(request):
+    return render(request, 'oquvchi/m8a.html')
+
+def oquvchi_m8b(request):
+    return render(request, 'oquvchi/m8b.html')
+
+def oquvchi_m8c(request):
+    return render(request, 'oquvchi/m8c.html')
+
+
+# ===== O'quvchi uchun 9-mashq (Kvilling) — hozircha faqat video =====
+def oquvchi_m9a(request):
+    return render(request, 'oquvchi/m9a.html')
+
+def oquvchi_m9a2(request):
+    return render(request, 'oquvchi/m9a2.html')
+
+
+# ===== O'quvchi uchun 10-mashq (Loy/plastilin) — to'liq =====
+def oquvchi_m10a(request):
+    return render(request, 'oquvchi/m10a.html')
+
+def oquvchi_m10b(request):
+    return render(request, 'oquvchi/m10b.html')
+
+def oquvchi_m10c(request):
+    return render(request, 'oquvchi/m10c.html')
+
+
 # ===== 6–10 mashqlar (hozircha faqat talaba uchun) =====
 @talaba_required
 def mashq6a(request):
