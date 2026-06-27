@@ -45,6 +45,9 @@ urlpatterns = [
     path('o6a', views.oquvchi_m6a, name='oquvchi_m6a'),
     path('o6b', views.oquvchi_m6b, name='oquvchi_m6b'),
     path('o6c', views.oquvchi_m6c, name='oquvchi_m6c'),
+    path('o7a', views.oquvchi_m7a, name='oquvchi_m7a'),
+    path('o7b', views.oquvchi_m7b, name='oquvchi_m7b'),
+    path('o7c', views.oquvchi_m7c, name='oquvchi_m7c'),
 
     path('m7a', views.mashq7a, name='mashq7a'),
     path('m7b', views.mashq7b, name='mashq7b'),
