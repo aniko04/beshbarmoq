@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views.static import serve
 from home import views
 
 urlpatterns = [
@@ -78,6 +78,8 @@ urlpatterns = [
     path('mashq10c.html', views.mashq10c, name='mashq10c_html'),
 ]
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+# Statikni WhiteNoise (middleware) beradi — bu yerda URL kerak emas.
+# Media esa runtime'da yuklanadi, shuning uchun path() konverteri orqali beriladi.
+urlpatterns += [
+    path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+]
