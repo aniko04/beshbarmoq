@@ -137,33 +137,37 @@ body.pf {
     border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 }
 
-/* Navbar ikki qatorli: yuqorida brend + kirish, pastda yetti bo'lim.
-   Bitta qatorga sig'dirilganda yettita uzun o'zbekcha nom shriftni
-   0.85rem gacha siqishga majbur qilardi — ikkinchi qator o'sha cheklovni
-   olib tashlaydi va havolalarga to'liq o'lcham beradi. */
+/* Navbar bitta qatorda: brend + yetti bo'lim + kirish.
+   Yettita uzun o'zbekcha nom bir qatorga zo'rg'a sig'adi, shuning uchun
+   o'lchamlar brauzerda o'lchab tanlangan. Eng tor holat — tizimga KIRGAN
+   foydalanuvchi: ism va "Chiqish" tugmasi qo'shimcha ~130px oladi.
+   Shu sababli gamburgerga o'tish nuqtasi 1279px. Bu yerdagi shriftni yoki
+   to'ldirishni kattalashtirsangiz, o'sha nuqtani ham ko'tarish kerak. */
 .topbar .wrap {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0 24px;
-    padding-top: 12px;   /* birinchi qator (brend + kirish) uchun havo */
-    padding-bottom: 2px;
+    gap: 14px;
+    min-height: 74px;
+    /* Sahifa mazmuni 1200px, navbar esa biroz kengroq — aks holda tizimga
+       kirgan foydalanuvchida (ism + "Chiqish") yetti havola bir qatorga
+       sig'masdi. Katta ekranda brend matndan sal chaproqda turadi. */
+    max-width: 1340px;
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 10px;
     text-decoration: none;
     color: #fff;
     flex-shrink: 0;
     margin-right: auto;
 }
-.brand .motif { width: 40px; height: 40px; color: var(--zafaron); }
+.brand .motif { width: 32px; height: 32px; color: var(--zafaron); }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .brand-sub {
-    font-size: 0.7rem;
-    letter-spacing: 0.16em;
+    font-size: 0.63rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--zafaron);
     font-weight: 700;
@@ -171,28 +175,24 @@ body.pf {
 .brand-name {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: 1.08rem;
     letter-spacing: -0.015em;
     color: #fff;
 }
 
 .nav {
-    order: 3;
-    width: 100%;
     display: flex;
     align-items: center;
-    gap: 2px;
-    flex-wrap: wrap;
-    padding: 6px 0 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    gap: 1px;
+    flex-shrink: 0;
 }
 
 .nav a {
     position: relative;
     display: block;
-    padding: 10px 16px;
-    font-size: 1rem;
-    line-height: 1.3;
+    padding: 9px 9px;
+    font-size: 0.92rem;
+    line-height: 1.35;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.80);
     text-decoration: none;
@@ -206,9 +206,9 @@ body.pf {
 .nav a.is-active::after {
     content: '';
     position: absolute;
-    left: 16px;
-    right: 16px;
-    bottom: 3px;
+    left: 9px;
+    right: 9px;
+    bottom: 2px;
     height: 3px;
     border-radius: 3px;
     background: var(--zafaron);
@@ -217,23 +217,25 @@ body.pf {
 .nav-auth {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 8px;
     flex-shrink: 0;
+    padding-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
 }
 .nav-user {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.72);
-    max-width: 190px;
+    max-width: 84px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 .btn-nav {
     display: inline-block;
-    padding: 11px 24px;
+    padding: 9px 18px;
     border-radius: 999px;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 700;
     text-decoration: none;
     background: var(--zafaron);
@@ -750,6 +752,52 @@ body.pf {
 }
 .material-tag .motif { width: 26px; height: 26px; color: var(--firuza); }
 
+/* Kitob muqovasi — `muqova` maydoni to'ldirilgan materiallarda nishon o'rniga. */
+.material.has-muqova {
+    align-items: start;
+    /* Birinchi ustun ATAYLAB aniq o'lchamda. `auto` qoldirilsa rasm yuklanmagan
+       damda Chrome ustunni `alt` matnining kengligiga cho'zib, matn ustunini
+       nolga ezib qo'yardi (sarlavha bitta harfdan vertikal chiqardi). */
+    grid-template-columns: 124px minmax(0, 1fr) auto;
+}
+.material-muqova {
+    width: 124px;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+    background: var(--stone);
+    border: 1px solid var(--line);
+    /* Kitob qirrasi taassuroti: chapda ingichka soya */
+    box-shadow: var(--shadow-1), inset 6px 0 10px -8px rgba(20, 32, 58, 0.55);
+    line-height: 0;
+}
+.material-muqova img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1.41;   /* A4 nisbati — sahifalar bir tekis turadi */
+    object-fit: cover;
+    object-position: top center;
+}
+.material.has-muqova:hover .material-muqova { box-shadow: var(--shadow-2); }
+
+/* PDF ko'ruvchi — kartaning butun enini egallaydi */
+.material-koruvchi {
+    grid-column: 1 / -1;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+}
+.material-koruvchi[hidden] { display: none; }
+.material-koruvchi iframe {
+    display: block;
+    width: 100%;
+    height: min(76vh, 820px);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--stone-2);
+}
+button.btn-sm { font-family: inherit; cursor: pointer; }
+
 .material h3 { font-size: 1.12rem; margin-bottom: 6px; }
 .material .meta {
     font-size: 0.82rem;
@@ -779,6 +827,7 @@ body.pf {
 .btn-sm svg { width: 15px; height: 15px; }
 
 .material-body {
+    grid-column: 1 / -1;   /* aks holda 2-qatorning 1-ustuniga tiqilib qolardi */
     margin-top: 14px;
     padding-top: 14px;
     border-top: 1px dashed var(--line);
@@ -815,7 +864,7 @@ body.pf {
     overflow: hidden;
     box-shadow: var(--shadow-1);
     position: sticky;
-    top: 148px; /* ikki qatorli navbar balandligi + havo */
+    top: 98px; /* navbar balandligi + havo */
 }
 .muallif-foto {
     aspect-ratio: 4 / 5;
@@ -887,15 +936,18 @@ body.pf {
     .muallif-card { position: static; max-width: 320px; }
 }
 
-@media (max-width: 1060px) {
-    .topbar .wrap { padding-top: 10px; padding-bottom: 0; min-height: 68px; }
+@media (max-width: 1279px) {
+    .topbar .wrap { flex-wrap: wrap; min-height: 68px; }
     .nav-toggle { display: flex; }
     .nav {
         display: none;
+        order: 3;
+        width: 100%;
         flex-direction: column;
         align-items: stretch;
         gap: 0;
         padding: 8px 0 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
     }
     .nav.open { display: flex; }
     .nav a { padding: 14px 8px; font-size: 1.05rem; border-radius: 0; }
@@ -904,11 +956,15 @@ body.pf {
         order: 4;
         width: 100%;
         padding: 14px 0 16px;
+        padding-left: 0;
+        border-left: none;
         border-top: 1px solid rgba(255, 255, 255, 0.12);
     }
     .nav-auth.collapsed { display: none; }
     .nav-user { max-width: none; }
+}
 
+@media (max-width: 1060px) {
     .hero-inner { grid-template-columns: 1fr; padding: 54px 0 60px; }
     .hero-art { display: none; }
     .hero-strip .wrap { grid-template-columns: repeat(2, 1fr); gap: 22px; }
@@ -921,6 +977,10 @@ body.pf {
     body.pf { font-size: 1rem; }
     .wrap { padding: 0 20px; }
     .material { grid-template-columns: auto minmax(0, 1fr); }
+    /* `.material.has-muqova` ikki klassli — mobil qoidasi undan kuchsizroq,
+       shuning uchun bu yerda ham xuddi shunday aniqlik bilan qayta yozamiz. */
+    .material.has-muqova { grid-template-columns: 92px minmax(0, 1fr); }
+    .material-muqova { width: 92px; }
     .material .actions { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
     .material-body { grid-column: 1 / -1; }
     .hero-cta .btn { width: 100%; justify-content: center; }

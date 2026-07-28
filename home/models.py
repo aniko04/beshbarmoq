@@ -80,6 +80,13 @@ class Material(models.Model):
         upload_to='materiallar/', blank=True, null=True, verbose_name="Fayl",
         help_text="PDF, Word yoki taqdimot. Yuklansa, 'Yuklab olish' tugmasi chiqadi.",
     )
+    # ImageField emas, FileField: ImageField Pillow talab qiladi, u esa
+    # loyiha muhitiga o'rnatilmagan (o'rnatilsa `manage.py check` yiqiladi).
+    muqova = models.FileField(
+        upload_to='materiallar/muqova/', blank=True, null=True, verbose_name="Muqova rasmi",
+        help_text="Ixtiyoriy (JPG yoki PNG). Ro'yxatda kitob muqovasi bo'lib ko'rinadi. "
+                  "Bo'sh qoldirilsa, o'rniga fayl turi nishoni chiqadi.",
+    )
     link = models.URLField(
         blank=True, verbose_name="Havola",
         help_text="Ixtiyoriy: tashqi manba (masalan, jurnal sayti) havolasi.",
@@ -109,6 +116,11 @@ class Material(models.Model):
         if not self.file:
             return ''
         return self.file.name.rsplit('.', 1)[-1].upper() if '.' in self.file.name else ''
+
+    @property
+    def is_pdf(self):
+        """PDF bo'lsa sahifada ichki ko'ruvchi ochish mumkin."""
+        return self.file_ext == 'PDF'
 
 
 class Profile(models.Model):

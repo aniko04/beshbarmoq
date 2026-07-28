@@ -27,14 +27,25 @@
 
             <div class="material-list">
                 {% for m in materiallar %}
-                    <article class="material">
-                        <div class="material-tag">
-                            {% if m.file_ext %}
-                                {{ m.file_ext }}
-                            {% else %}
-                                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
-                            {% endif %}
-                        </div>
+                    <article class="material{% if m.muqova %} has-muqova{% endif %}">
+                        {% if m.muqova %}
+                            <div class="material-muqova">
+                                {% comment %}
+                                    Muqovalar sahifaning asosiy ko'rinishi va har biri ~20 KB,
+                                    shuning uchun `loading="lazy"` qo'yilmagan — scroll paytida
+                                    sakrab chiqmasin. Ro'yxat juda uzaysa qayta o'ylash mumkin.
+                                {% endcomment %}
+                                <img src="{{ m.muqova.url }}" alt="{{ m.title }} — muqova">
+                            </div>
+                        {% else %}
+                            <div class="material-tag">
+                                {% if m.file_ext %}
+                                    {{ m.file_ext }}
+                                {% else %}
+                                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                                {% endif %}
+                            </div>
+                        {% endif %}
 
                         <div>
                             <h3>{{ m.title }}</h3>
@@ -44,6 +55,14 @@
 
                         {% if m.file or m.link %}
                             <div class="actions">
+                                {% if m.is_pdf %}
+                                    <button type="button" class="btn-sm" data-pdf-tugma
+                                            data-manba="{{ m.file.url }}"
+                                            aria-expanded="false" aria-controls="koruvchi-{{ m.pk }}">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        <span data-yorliq>Ko'rish</span>
+                                    </button>
+                                {% endif %}
                                 {% if m.file %}
                                     <a class="btn-sm" href="{{ m.file.url }}" download>
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -62,6 +81,16 @@
                         {% if m.body %}
                             <div class="material-body">
                                 {{ m.body|linebreaks }}
+                            </div>
+                        {% endif %}
+
+                        {% if m.is_pdf %}
+                            {% comment %}
+                                Ko'ruvchi: iframe manzili faqat tugma bosilganda beriladi,
+                                shunda og'ir PDF sahifa ochilishida yuklanmaydi.
+                            {% endcomment %}
+                            <div class="material-koruvchi" id="koruvchi-{{ m.pk }}" hidden>
+                                <iframe title="{{ m.title }} — PDF ko'rinishi" src="about:blank"></iframe>
                             </div>
                         {% endif %}
                     </article>
@@ -87,4 +116,35 @@
         {% endif %}
     </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Har bir PDF materialining ichki ko'ruvchisi. Bitta tinglovchi hammasiga
+    // yetadi — kartalar soni admin orqali o'zgaraveradi.
+    (function () {
+        document.addEventListener('click', function (h) {
+            var tugma = h.target.closest('[data-pdf-tugma]');
+            if (!tugma) return;
+
+            var quti = document.getElementById(tugma.getAttribute('aria-controls'));
+            if (!quti) return;
+
+            var ramka = quti.querySelector('iframe');
+            var manba = tugma.getAttribute('data-manba');
+            var yorliq = tugma.querySelector('[data-yorliq]');
+            var ochiladi = quti.hasAttribute('hidden');
+
+            if (ochiladi) {
+                if (ramka.getAttribute('src') !== manba) ramka.setAttribute('src', manba);
+                quti.removeAttribute('hidden');
+                yorliq.textContent = 'Yopish';
+            } else {
+                quti.setAttribute('hidden', '');
+                yorliq.textContent = "Ko'rish";
+            }
+            tugma.setAttribute('aria-expanded', ochiladi ? 'true' : 'false');
+        });
+    })();
+</script>
 {% endblock %}
