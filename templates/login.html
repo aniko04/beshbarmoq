@@ -162,7 +162,7 @@
         </form>
 
         <div class="auth-link">
-            Hisobingiz yo'qmi? <a href="/register">Ro'yxatdan o'tish</a>
+            Hisobingiz yo'qmi? <a href="/register{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">Ro'yxatdan o'tish</a>
         </div>
         <a href="/" class="back-home">&larr; Bosh sahifaga</a>
     </div>

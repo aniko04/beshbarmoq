@@ -44,6 +44,73 @@ class Result(models.Model):
         return round(self.score / self.total * 100)
 
 
+class Material(models.Model):
+    """Bo'limlarga joylanadigan metodik material.
+
+    Metodika, maqola, topshiriq, instruksion xarita va dars ishlanmalari —
+    hammasi shu modelda saqlanadi; bo'lim `section` maydoni bilan ajratiladi.
+    Materialni admin panel orqali qo'shish/tahrirlash mumkin.
+    """
+    SECTION_METODIKA = 'metodika'
+    SECTION_MAQOLA = 'maqola'
+    SECTION_TOPSHIRIQ = 'topshiriq'
+    SECTION_XARITA = 'xarita'
+    SECTION_ISHLANMA = 'ishlanma'
+    SECTION_CHOICES = [
+        (SECTION_METODIKA, "Metodika"),
+        (SECTION_MAQOLA, "Maqola"),
+        (SECTION_TOPSHIRIQ, "Topshiriq"),
+        (SECTION_XARITA, "Instruksion texnologik xarita"),
+        (SECTION_ISHLANMA, "Dars ishlanmalar"),
+    ]
+
+    section = models.CharField(
+        max_length=20, choices=SECTION_CHOICES, verbose_name="Bo'lim",
+    )
+    title = models.CharField(max_length=250, verbose_name="Sarlavha")
+    summary = models.TextField(
+        blank=True, verbose_name="Qisqacha tavsif",
+        help_text="Ro'yxatda sarlavha ostida ko'rinadi. 1–3 gap yetarli.",
+    )
+    body = models.TextField(
+        blank=True, verbose_name="To'liq matn",
+        help_text="Ixtiyoriy. Har bir bo'sh qator yangi xatboshi bo'ladi.",
+    )
+    file = models.FileField(
+        upload_to='materiallar/', blank=True, null=True, verbose_name="Fayl",
+        help_text="PDF, Word yoki taqdimot. Yuklansa, 'Yuklab olish' tugmasi chiqadi.",
+    )
+    link = models.URLField(
+        blank=True, verbose_name="Havola",
+        help_text="Ixtiyoriy: tashqi manba (masalan, jurnal sayti) havolasi.",
+    )
+    manba = models.CharField(
+        max_length=250, blank=True, verbose_name="Manba",
+        help_text="Masalan: jurnal nomi, nashr yili, sinf yoki mavzu.",
+    )
+    order = models.IntegerField(
+        default=0, verbose_name="Tartib",
+        help_text="Kichik raqam yuqorida turadi.",
+    )
+    is_published = models.BooleanField(default=True, verbose_name="Chop etilgan")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Qo'shilgan sana")
+
+    class Meta:
+        verbose_name = "Material"
+        verbose_name_plural = "Materiallar"
+        ordering = ['order', '-created_at']
+
+    def __str__(self):
+        return f"{self.get_section_display()} — {self.title}"
+
+    @property
+    def file_ext(self):
+        """Fayl kengaytmasi — ro'yxatda nishon sifatida ko'rsatiladi."""
+        if not self.file:
+            return ''
+        return self.file.name.rsplit('.', 1)[-1].upper() if '.' in self.file.name else ''
+
+
 class Profile(models.Model):
     """Foydalanuvchi roli — o'quvchi yoki talaba.
 
@@ -53,7 +120,7 @@ class Profile(models.Model):
     ROLE_TALABA = 'talaba'
     ROLE_CHOICES = [
         (ROLE_OQUVCHI, "O'quvchi"),
-        (ROLE_TALABA, 'Talaba'),
+        (ROLE_TALABA, "O'qituvchi"),
     ]
 
     user = models.OneToOneField(

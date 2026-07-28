@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ bolim_nomi }} — Inkorporatsion topshiriqlar platformasi{% endblock %}
+{% block description %}{{ bolim_lede }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span> <span>{{ bolim_nomi }}</span>
+        </nav>
+        <h1>{{ bolim_nomi }}</h1>
+        <p class="page-lede">{{ bolim_lede }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="wrap">
+        {% if materiallar %}
+            <div class="section-head">
+                <span class="eyebrow ink">
+                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                    {{ materiallar|length }} ta material
+                </span>
+                <h2>{{ bolim_sarlavha }}</h2>
+            </div>
+
+            <div class="material-list">
+                {% for m in materiallar %}
+                    <article class="material">
+                        <div class="material-tag">
+                            {% if m.file_ext %}
+                                {{ m.file_ext }}
+                            {% else %}
+                                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <h3>{{ m.title }}</h3>
+                            {% if m.manba %}<div class="meta">{{ m.manba }}</div>{% endif %}
+                            {% if m.summary %}<p>{{ m.summary }}</p>{% endif %}
+                        </div>
+
+                        {% if m.file or m.link %}
+                            <div class="actions">
+                                {% if m.file %}
+                                    <a class="btn-sm" href="{{ m.file.url }}" download>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                                        Yuklab olish
+                                    </a>
+                                {% endif %}
+                                {% if m.link %}
+                                    <a class="btn-sm" href="{{ m.link }}" target="_blank" rel="noopener">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                                        Manbaga o'tish
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        {% if m.body %}
+                            <div class="material-body">
+                                {{ m.body|linebreaks }}
+                            </div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty">
+                <svg class="motif" aria-hidden="true"><use href="#orama"/></svg>
+                <h3>Bu bo'limga hali material qo'shilmagan</h3>
+                <p>
+                    {{ bolim_nomi }} bo'limi materiallari tayyorlanmoqda. Tez orada shu yerda
+                    matn, fayl va havolalar paydo bo'ladi.
+                </p>
+                {% if user.is_staff %}
+                    <a class="btn btn-solid" href="/admin/home/material/add/">
+                        Material qo'shish
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="17" height="17" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+                    </a>
+                {% else %}
+                    <a class="btn btn-solid" href="/">Bosh sahifaga qaytish</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

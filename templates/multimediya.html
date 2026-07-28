@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}Multimediya — interaktiv amaliy topshiriqlar{% endblock %}
+{% block description %}10 ta interaktiv topshiriq: video darslik, test va krossvord. Boshlang'ich sinf texnologiya fani uchun.{% endblock %}
+
+{% block head %}
+<style>
+    /* ===== MULTIMEDIYA — bolalar uchun jonli kartalar ===== */
+    .mm-section {
+        padding: 64px 0 86px;
+        background:
+            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(227, 160, 60, 0.16), transparent 70%),
+            var(--stone);
+    }
+
+    .mm-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
+        gap: 20px;
+    }
+
+    .mm-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 22px 20px 20px;
+        background: var(--accent);
+        border-radius: 22px;
+        text-decoration: none;
+        color: #fff;
+        overflow: hidden;
+        box-shadow: 0 14px 30px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+        transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.26s ease;
+    }
+    .mm-card::before {
+        content: '';
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 46%;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent);
+        pointer-events: none;
+    }
+    .mm-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 24px 46px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+    }
+
+    .mm-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 1;
+    }
+    .mm-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.26);
+        border: 1.5px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.45rem;
+        transition: transform 0.3s;
+    }
+    .mm-card:hover .mm-icon { transform: scale(1.1) rotate(-8deg); }
+    .mm-num {
+        font-family: var(--font-display);
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: #fff;
+        opacity: 0.42;
+        line-height: 1;
+    }
+
+    .mm-card h3 {
+        font-size: 1.06rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #fff;
+        position: relative;
+        z-index: 1;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.20);
+    }
+    .mm-card p {
+        font-size: 0.86rem;
+        line-height: 1.45;
+        color: rgba(255, 255, 255, 0.94);
+        margin: 0 0 16px;
+        flex-grow: 1;
+        position: relative;
+        z-index: 1;
+    }
+    .mm-go {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        align-self: flex-start;
+        padding: 8px 16px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.22);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #fff;
+        position: relative;
+        z-index: 1;
+        transition: background-color 0.26s;
+    }
+    .mm-go svg { width: 14px; height: 14px; transition: transform 0.26s; }
+    .mm-card:hover .mm-go { background: rgba(255, 255, 255, 0.34); }
+    .mm-card:hover .mm-go svg { transform: translateX(4px); }
+
+    /* Bosqichlar izohi */
+    .mm-steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 34px;
+    }
+    .mm-step {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 9px 18px;
+        border-radius: 999px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        font-size: 0.87rem;
+        font-weight: 600;
+        color: var(--ink-2);
+    }
+    .mm-step b {
+        font-family: var(--font-display);
+        color: var(--anor);
+        font-size: 0.78rem;
+    }
+
+    /* Ranglar — oq matn o'qilishi uchun to'yingan, to'qroq gradientlar */
+    .mm-1  { --accent: linear-gradient(135deg, #c2410c, #ea580c); --glow: rgba(234, 88, 12, 0.32); }
+    .mm-2  { --accent: linear-gradient(135deg, #6d28d9, #8b5cf6); --glow: rgba(124, 58, 237, 0.32); }
+    .mm-3  { --accent: linear-gradient(135deg, #be185d, #db2777); --glow: rgba(219, 39, 119, 0.32); }
+    .mm-4  { --accent: linear-gradient(135deg, #0f766e, #0d9488); --glow: rgba(13, 148, 136, 0.32); }
+    .mm-5  { --accent: linear-gradient(135deg, #b45309, #d97706); --glow: rgba(217, 119, 6, 0.32); }
+    .mm-6  { --accent: linear-gradient(135deg, #1d4ed8, #2563eb); --glow: rgba(37, 99, 235, 0.32); }
+    .mm-7  { --accent: linear-gradient(135deg, #be123c, #e11d48); --glow: rgba(225, 29, 72, 0.32); }
+    .mm-8  { --accent: linear-gradient(135deg, #4338ca, #4f46e5); --glow: rgba(79, 70, 229, 0.32); }
+    .mm-9  { --accent: linear-gradient(135deg, #b91c1c, #dc2626); --glow: rgba(220, 38, 38, 0.32); }
+    .mm-10 { --accent: linear-gradient(135deg, #047857, #059669); --glow: rgba(5, 150, 105, 0.32); }
+
+    @media (max-width: 660px) {
+        .mm-grid { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 14px; }
+        .mm-card { padding: 18px 16px 16px; }
+        .mm-num { font-size: 1.9rem; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span> <span>Multimediya</span>
+        </nav>
+        <h1>Multimediya: 10 ta interaktiv topshiriq</h1>
+        <p class="page-lede">
+            Har bir topshiriq amaliy mavzuga bag'ishlangan. 1&ndash;5-topshiriqlar &mdash; interaktiv
+            o'yinlar; 6&ndash;10-topshiriqlar video darslik, test va krossvorddan iborat uch bosqichli oqim.
+        </p>
+    </div>
+</section>
+
+<section class="mm-section">
+    <div class="wrap">
+        <div class="mm-steps">
+            <span class="mm-step"><b>01</b> Videoni tomosha qiling</span>
+            <span class="mm-step"><b>02</b> Testni yeching</span>
+            <span class="mm-step"><b>03</b> Krossvordni to'ldiring</span>
+            <span class="mm-step">Natija 100% bo'lsa topshiriq o'tilgan hisoblanadi</span>
+        </div>
+
+        <div class="mm-grid">
+            <a href="/m1" class="mm-card mm-1">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x2702;&#xFE0F;</span>
+                    <span class="mm-num">01</span>
+                </div>
+                <h3>Applikatsiya turlari</h3>
+                <p>Applikatsiya turlarini ajratib ko'rsating</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="/m2" class="mm-card mm-2">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F4DC;</span>
+                    <span class="mm-num">02</span>
+                </div>
+                <h3>Origami shakllari</h3>
+                <p>Origami o'yinchoqlarni to'rtburchak yoki kvadrat shaklga ajrating</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="/m3" class="mm-card mm-3">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F477;</span>
+                    <span class="mm-num">03</span>
+                </div>
+                <h3>Kasblar</h3>
+                <p>Rasmdagi kasb egalarini aniqlang</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="/m4" class="mm-card mm-4">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F9F5;</span>
+                    <span class="mm-num">04</span>
+                </div>
+                <h3>Hunarlar</h3>
+                <p>Hunarlarni mosini qo'yib belgilang</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="/m5" class="mm-card mm-5">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F527;</span>
+                    <span class="mm-num">05</span>
+                </div>
+                <h3>Ish qurollari</h3>
+                <p>Kasb egalarini va ularning ish qurollarini to'g'ri tanlang</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="{% if show_advanced %}/m6a{% else %}/o6a{% endif %}" class="mm-card mm-6">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F3AC;</span>
+                    <span class="mm-num">06</span>
+                </div>
+                <h3>Applikatsiya bilan ishlash</h3>
+                <p>Video &rarr; test &rarr; krossvord</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="{% if show_advanced %}/m7a{% else %}/o7a{% endif %}" class="mm-card mm-7">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F3A5;</span>
+                    <span class="mm-num">07</span>
+                </div>
+                <h3>Origami bilan ishlash</h3>
+                <p>Video &rarr; test &rarr; krossvord</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="{% if show_advanced %}/m8a{% else %}/o8a{% endif %}" class="mm-card mm-8">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F9F6;</span>
+                    <span class="mm-num">08</span>
+                </div>
+                <h3>Fetr bilan ishlash</h3>
+                <p>Video &rarr; test &rarr; krossvord</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="{% if show_advanced %}/m9a{% else %}/o9a{% endif %}" class="mm-card mm-9">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F338;</span>
+                    <span class="mm-num">09</span>
+                </div>
+                <h3>Kvilling bilan ishlash</h3>
+                <p>Video &rarr; test &rarr; krossvord</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+
+            <a href="{% if show_advanced %}/m10a{% else %}/o10a{% endif %}" class="mm-card mm-10">
+                <div class="mm-top">
+                    <span class="mm-icon">&#x1F3A8;</span>
+                    <span class="mm-num">10</span>
+                </div>
+                <h3>Loy va plastilin bilan ishlash</h3>
+                <p>Video &rarr; test &rarr; krossvord</p>
+                <span class="mm-go">Boshlash
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </span>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

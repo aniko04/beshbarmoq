@@ -24,7 +24,16 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('index.html', views.home, name='index'),
-    
+
+    # Platformaning yetti bo'limi (navbar)
+    path('haqida', views.haqida, name='haqida'),
+    path('metodika', views.metodika, name='metodika'),
+    path('maqola', views.maqola, name='maqola'),
+    path('multimediya', views.multimediya, name='multimediya'),
+    path('topshiriq', views.topshiriq, name='topshiriq'),
+    path('xarita', views.xarita, name='xarita'),
+    path('ishlanma', views.ishlanma, name='ishlanma'),
+
     # Auth
     path('login', views.login_view, name='login'),
     path('register', views.register_view, name='register'),
@@ -53,6 +62,8 @@ urlpatterns = [
     path('o8c', views.oquvchi_m8c, name='oquvchi_m8c'),
     path('o9a', views.oquvchi_m9a, name='oquvchi_m9a'),
     path('o9a2', views.oquvchi_m9a2, name='oquvchi_m9a2'),
+    path('o9b', views.oquvchi_m9b, name='oquvchi_m9b'),
+    path('o9c', views.oquvchi_m9c, name='oquvchi_m9c'),
     path('o10a', views.oquvchi_m10a, name='oquvchi_m10a'),
     path('o10b', views.oquvchi_m10b, name='oquvchi_m10b'),
     path('o10c', views.oquvchi_m10c, name='oquvchi_m10c'),

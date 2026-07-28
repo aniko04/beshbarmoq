@@ -222,7 +222,7 @@
                     </label>
                     <label class="role-option">
                         <input type="radio" name="role" value="talaba" {% if role == 'talaba' %}checked{% endif %}>
-                        <span>&#x1F393; Talaba</span>
+                        <span>&#x1F393; O'qituvchi</span>
                     </label>
                 </div>
             </div>
@@ -230,7 +230,7 @@
         </form>
 
         <div class="auth-link">
-            Hisobingiz bormi? <a href="/login">Kirish</a>
+            Hisobingiz bormi? <a href="/login{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">Kirish</a>
         </div>
         <a href="/" class="back-home">&larr; Bosh sahifaga</a>
     </div>

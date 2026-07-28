@@ -76,6 +76,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
+# Autentifikatsiya: login shart bo'lgan sahifalar (@login_required) shu manzilga
+# ?next=<sahifa> bilan yo'naltiradi; login/register keyin o'sha sahifaga qaytaradi.
+LOGIN_URL = '/login'
+
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

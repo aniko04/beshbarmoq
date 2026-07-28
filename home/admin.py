@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from .models import Result, Profile
+from .models import Result, Profile, Material
 
 
 @admin.register(Result)
@@ -63,3 +63,33 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'role']
     list_filter = ['role']
     search_fields = ['user__username', 'user__first_name', 'user__last_name']
+
+
+# ===== Bo'lim materiallari =====
+@admin.register(Material)
+class MaterialAdmin(admin.ModelAdmin):
+    list_display = ['title', 'section', 'fayl_display', 'order', 'is_published', 'created_at']
+    list_filter = ['section', 'is_published']
+    search_fields = ['title', 'summary', 'manba']
+    list_editable = ['order', 'is_published']
+    list_per_page = 30
+    fieldsets = (
+        ("Asosiy", {
+            'fields': ('section', 'title', 'summary'),
+        }),
+        ("Mazmun", {
+            'fields': ('body', 'file', 'link', 'manba'),
+            'description': "Matn, fayl yoki havola — kamida bittasini to'ldiring.",
+        }),
+        ("Ko'rsatish", {
+            'fields': ('order', 'is_published'),
+        }),
+    )
+
+    def fayl_display(self, obj):
+        if obj.file:
+            return mark_safe(f'<b>{obj.file_ext}</b>')
+        if obj.link:
+            return "Havola"
+        return '—'
+    fayl_display.short_description = "Fayl"

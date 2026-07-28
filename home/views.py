@@ -4,8 +4,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.conf import settings
 from functools import wraps
-from .models import Result, Profile
+from .models import Result, Profile, Material
 import json
 
 
@@ -20,33 +22,120 @@ def is_talaba(user):
 
 
 def talaba_required(view_func):
-    """6–10 mashq sahifalari faqat talaba uchun; aks holda bosh sahifaga qaytaradi."""
+    """6–10 mashq sahifalari faqat talaba uchun; aks holda Multimediya bo'limiga qaytaradi."""
     @wraps(view_func)
     def _wrapped(request, *args, **kwargs):
         if not is_talaba(request.user):
-            return redirect('/')
+            return redirect('/multimediya')
         return view_func(request, *args, **kwargs)
     return _wrapped
 
 
-# Create your views here.
+def _safe_next(request):
+    """Login/ro'yxatdan keyin qaytariladigan xavfsiz ichki URL (ochiq-redirectdan himoya)."""
+    nxt = request.GET.get('next', '')
+    if nxt and url_has_allowed_host_and_scheme(
+        nxt, allowed_hosts={request.get_host()}, require_https=request.is_secure()
+    ):
+        return nxt
+    return '/'
+
+
+# ===== Platforma bo'limlari =====
 def home(request):
-    """Platforma haqida sahifa."""
-    return render(request, 'index.html', {'show_advanced': is_talaba(request.user)})
+    """Bosh sahifa: platforma haqida va yetti bo'lim."""
+    return render(request, 'index.html', {'active': 'home'})
+
+
+def haqida(request):
+    """1-bo'lim — muallif va platforma haqida."""
+    muallif_foto = (settings.MEDIA_ROOT / 'muallif.jpg').exists()
+    return render(request, 'haqida.html', {
+        'active': 'haqida',
+        'muallif_foto': muallif_foto,
+    })
+
+
+def multimediya(request):
+    """4-bo'lim — 10 ta interaktiv topshiriq (avvalgi bosh sahifa)."""
+    return render(request, 'multimediya.html', {
+        'active': 'multimediya',
+        'show_advanced': is_talaba(request.user),
+    })
+
+
+def _bolim(request, section, nomi, lede, sarlavha):
+    """Admin orqali to'ldiriladigan material bo'limlarining umumiy ko'rinishi."""
+    return render(request, 'bolim.html', {
+        'active': section,
+        'bolim_nomi': nomi,
+        'bolim_lede': lede,
+        'bolim_sarlavha': sarlavha,
+        'materiallar': Material.objects.filter(section=section, is_published=True),
+    })
+
+
+def metodika(request):
+    """2-bo'lim — metodik tavsiyalar."""
+    return _bolim(
+        request, Material.SECTION_METODIKA, "Metodika",
+        "Inkorporatsion yondashuv, fanlararo integratsiya va interfaol metodlar bo'yicha "
+        "metodik tavsiyalar hamda zamonaviy pedagogik yondashuvlar.",
+        "Metodik tavsiyalar",
+    )
+
+
+def maqola(request):
+    """3-bo'lim — ilmiy maqolalar."""
+    return _bolim(
+        request, Material.SECTION_MAQOLA, "Maqola",
+        "Tadqiqot doirasida chop etilgan ilmiy va ilmiy-metodik maqolalar, "
+        "konferensiya tezislari va nashrlar.",
+        "Nashr etilgan maqolalar",
+    )
+
+
+def topshiriq(request):
+    """5-bo'lim — amaliy topshiriqlar."""
+    return _bolim(
+        request, Material.SECTION_TOPSHIRIQ, "Topshiriq",
+        "Sinfda va uyda bajarish uchun amaliy topshiriqlar to'plami hamda "
+        "ularni baholash mezonlari.",
+        "Amaliy topshiriqlar",
+    )
+
+
+def xarita(request):
+    """6-bo'lim — instruksion texnologik xaritalar."""
+    return _bolim(
+        request, Material.SECTION_XARITA, "Instruksion texnologik xarita",
+        "Amaliy mavzular bo'yicha bosqichma-bosqich texnologik xaritalar: "
+        "ish ketma-ketligi, kerakli jihozlar va xavfsizlik qoidalari.",
+        "Texnologik xaritalar",
+    )
+
+
+def ishlanma(request):
+    """7-bo'lim — namunaviy dars ishlanmalari."""
+    return _bolim(
+        request, Material.SECTION_ISHLANMA, "Dars ishlanmalar",
+        "Namunaviy dars ishlanmalari: dars maqsadi, kerakli jihozlar, dars bosqichlari "
+        "va kutilayotgan natijalar.",
+        "Namunaviy dars ishlanmalari",
+    )
 
 
 def login_view(request):
     """Login sahifasi."""
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect(_safe_next(request))
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            next_url = request.GET.get('next', '/')
-            return redirect(next_url)
+            return redirect(_safe_next(request))
         else:
             return render(request, 'login.html', {'error': "Login yoki parol noto'g'ri!"})
     return render(request, 'login.html')
@@ -55,7 +144,7 @@ def login_view(request):
 def register_view(request):
     """Ro'yxatdan o'tish sahifasi."""
     if request.user.is_authenticated:
-        return redirect('/')
+        return redirect(_safe_next(request))
     if request.method == 'POST':
         first_name = request.POST.get('first_name', '').strip()
         last_name = request.POST.get('last_name', '').strip()
@@ -81,7 +170,7 @@ def register_view(request):
         )
         Profile.objects.create(user=user, role=role)
         login(request, user)
-        return redirect('/')
+        return redirect(_safe_next(request))
     return render(request, 'register.html')
 
 
@@ -112,136 +201,179 @@ def save_result(request):
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 
-# ===== 1–5 mashqlar (barcha rollar uchun) =====
+# ===== 1–5 mashqlar (barcha rollar uchun; login shart) =====
+@login_required
 def mashq1(request):
     return render(request, 'mashq1.html')
 
+@login_required
 def mashq2(request):
     return render(request, 'mashq2.html')
 
+@login_required
 def mashq3(request):
     return render(request, 'mashq3.html')
 
+@login_required
 def mashq4(request):
     return render(request, 'mashq4.html')
 
+@login_required
 def mashq5(request):
     return render(request, 'mashq5.html')
 
 
-# ===== O'quvchi uchun 6-mashq (talaba formati bilan bir xil; ochiq) =====
+# ===== O'quvchi uchun 6-mashq (talaba formati bilan bir xil; login shart) =====
+@login_required
 def oquvchi_m6a(request):
     return render(request, 'oquvchi/m6a.html')
 
+@login_required
 def oquvchi_m6b(request):
     return render(request, 'oquvchi/m6b.html')
 
+@login_required
 def oquvchi_m6c(request):
     return render(request, 'oquvchi/m6c.html')
 
 
-# ===== O'quvchi uchun 7-mashq (talaba formati bilan bir xil; ochiq) =====
+# ===== O'quvchi uchun 7-mashq (Origami) =====
+@login_required
 def oquvchi_m7a(request):
     return render(request, 'oquvchi/m7a.html')
 
+@login_required
 def oquvchi_m7b(request):
     return render(request, 'oquvchi/m7b.html')
 
+@login_required
 def oquvchi_m7c(request):
     return render(request, 'oquvchi/m7c.html')
 
 
 # ===== O'quvchi uchun 8-mashq (Fetr) — to'liq =====
+@login_required
 def oquvchi_m8a(request):
     return render(request, 'oquvchi/m8a.html')
 
+@login_required
 def oquvchi_m8b(request):
     return render(request, 'oquvchi/m8b.html')
 
+@login_required
 def oquvchi_m8c(request):
     return render(request, 'oquvchi/m8c.html')
 
 
-# ===== O'quvchi uchun 9-mashq (Kvilling) — hozircha faqat video =====
+# ===== O'quvchi uchun 9-mashq (Kvilling) — to'liq =====
+@login_required
 def oquvchi_m9a(request):
     return render(request, 'oquvchi/m9a.html')
 
+@login_required
 def oquvchi_m9a2(request):
     return render(request, 'oquvchi/m9a2.html')
 
+@login_required
+def oquvchi_m9b(request):
+    return render(request, 'oquvchi/m9b.html')
+
+@login_required
+def oquvchi_m9c(request):
+    return render(request, 'oquvchi/m9c.html')
+
 
 # ===== O'quvchi uchun 10-mashq (Loy/plastilin) — to'liq =====
+@login_required
 def oquvchi_m10a(request):
     return render(request, 'oquvchi/m10a.html')
 
+@login_required
 def oquvchi_m10b(request):
     return render(request, 'oquvchi/m10b.html')
 
+@login_required
 def oquvchi_m10c(request):
     return render(request, 'oquvchi/m10c.html')
 
 
-# ===== 6–10 mashqlar (hozircha faqat talaba uchun) =====
+# ===== 6–10 mashqlar (faqat talaba; login ham shart) =====
+@login_required
 @talaba_required
 def mashq6a(request):
     return render(request, 'mashq6a.html')
 
+@login_required
 @talaba_required
 def mashq6b(request):
     return render(request, 'mashq6b.html')
 
+@login_required
 @talaba_required
 def mashq6c(request):
     return render(request, 'mashq6c.html')
 
+@login_required
 @talaba_required
 def mashq7a(request):
     return render(request, 'mashq7a.html')
 
+@login_required
 @talaba_required
 def mashq7b(request):
     return render(request, 'mashq7b.html')
 
+@login_required
 @talaba_required
 def mashq7c(request):
     return render(request, 'mashq7c.html')
 
+@login_required
 @talaba_required
 def mashq8a(request):
     return render(request, 'mashq8a.html')
 
+@login_required
 @talaba_required
 def mashq8b(request):
     return render(request, 'mashq8b.html')
 
+@login_required
 @talaba_required
 def mashq8c(request):
     return render(request, 'mashq8c.html')
 
+@login_required
 @talaba_required
 def mashq9a(request):
     return render(request, 'mashq9a.html')
 
+@login_required
 @talaba_required
 def mashq9a2(request):
     return render(request, 'mashq9a2.html')
 
+@login_required
 @talaba_required
 def mashq9b(request):
     return render(request, 'mashq9b.html')
 
+@login_required
 @talaba_required
 def mashq9c(request):
     return render(request, 'mashq9c.html')
 
+@login_required
 @talaba_required
 def mashq10a(request):
     return render(request, 'mashq10a.html')
 
+@login_required
 @talaba_required
 def mashq10b(request):
     return render(request, 'mashq10b.html')
 
+@login_required
 @talaba_required
 def mashq10c(request):
     return render(request, 'mashq10c.html')

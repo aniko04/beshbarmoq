@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}O'zim haqimda — Jo'rayeva Dilnoz Raxmidinovna{% endblock %}
+{% block description %}Jo'rayeva Dilnoz Raxmidinovna — Buxoro davlat pedagogika instituti Boshlang'ich ta'lim kafedrasi o'qituvchisi. Ilmiy-pedagogik faoliyat, nashrlar va platformaning yaratilish maqsadi.{% endblock %}
+
+{% block head %}
+<style>
+    /* ===== O'zim haqimda — ta'lim/faoliyat yo'li va nashrlar ro'yxati ===== */
+    .cv {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.6em;
+        border-left: 2px solid var(--line);
+    }
+    .cv li {
+        position: relative;
+        padding: 0 0 20px 26px;
+        color: var(--ink-2);
+        font-size: 1.02rem;
+        line-height: 1.6;
+    }
+    .cv li:last-child { padding-bottom: 0; }
+    .cv li::before {
+        content: '';
+        position: absolute;
+        left: -6px;
+        top: 0.55em;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--paper);
+        border: 2.5px solid var(--zafaron);
+    }
+    .cv .yil {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: var(--anor);
+        margin-bottom: 2px;
+    }
+
+    .nashrlar {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.6em;
+        display: grid;
+        gap: 12px;
+    }
+    .nashrlar li {
+        padding: 16px 18px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        font-size: 0.98rem;
+        line-height: 1.55;
+        color: var(--ink-2);
+    }
+    .nashrlar .turi {
+        display: block;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-3);
+        margin-bottom: 5px;
+    }
+    .nashrlar .nomi { color: var(--ink); font-weight: 600; }
+    .nashrlar .manba { display: block; font-size: 0.86rem; color: var(--ink-3); margin-top: 5px; }
+
+    /* Yon kartadagi havolalar `.prose` dan tashqarida — rangni shu yerda beramiz. */
+    .muallif-kontakt a {
+        color: var(--siyoh);
+        text-decoration: none;
+        border-bottom: 1px solid var(--line);
+    }
+    .muallif-kontakt a:hover { color: var(--anor); border-bottom-color: currentColor; }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span> <span>O'zim haqimda</span>
+        </nav>
+        <h1>O'zim haqimda</h1>
+        <p class="page-lede">
+            Platforma muallifi, ilmiy-pedagogik faoliyat yo'nalishi va &laquo;Inkorporatsion
+            topshiriqlar&raquo; platformasining yaratilish maqsadi haqida.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="wrap">
+        <div class="muallif">
+            {% comment %}
+                MUALLIF MA'LUMOTLARI — Buxoro davlat pedagogika instituti rasmiy sahifasidan
+                (buxdpi.uz) va ochiq nashrlar bazalaridan olingan. Yangilash kerak bo'lsa
+                shu bo'limdagi matnlarni to'g'ridan-to'g'ri tahrirlang.
+                Rasm: rasmni `media/muallif.jpg` nomi bilan saqlasangiz avtomatik
+                chiqadi; bo'lmasa uning o'rniga naqsh ko'rinadi.
+            {% endcomment %}
+            <div class="muallif-card">
+                <div class="muallif-foto">
+                    {% if muallif_foto %}
+                        <img src="/media/muallif.jpg" alt="Jo'rayeva Dilnoz Raxmidinovnaning surati">
+                    {% else %}
+                        <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                    {% endif %}
+                </div>
+                <div class="muallif-meta">
+                    <div class="nom">Jo'rayeva Dilnoz Raxmidinovna</div>
+                    <div class="lavozim">
+                        Buxoro davlat pedagogika instituti<br>
+                        Boshlang'ich ta'lim kafedrasi o'qituvchisi
+                    </div>
+                    <ul class="muallif-kontakt">
+                        <li><b>Ilmiy daraja</b>Magistr &mdash; Boshlang'ich ta'lim (2021)</li>
+                        <li><b>Yo'nalish</b>Boshlang'ich ta'limda texnologiya fanini o'qitish metodikasi</li>
+                        <li><b>O'qitadigan fan</b>Texnologiya va uni o'qitish metodikasi</li>
+                        <li><b>Telefon</b><a href="tel:+998914039844">+998 91 403 98 44</a></li>
+                        <li><b>Elektron pochta</b><a href="mailto:buxdpi@buxdpi.uz">buxdpi@buxdpi.uz</a></li>
+                        <li><b>ORCID</b><a href="https://orcid.org/0009-0007-4008-2521" target="_blank" rel="noopener">0009-0007-4008-2521</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="prose">
+                <span class="eyebrow ink">
+                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                    Ilmiy-pedagogik faoliyat
+                </span>
+                <h2 style="font-size:clamp(1.5rem,2.6vw,2rem);margin-bottom:20px;">
+                    Qisqacha ma'lumot
+                </h2>
+                <p class="lead">
+                    Jo'rayeva Dilnoz Raxmidinovna &mdash; Buxoro davlat pedagogika instituti
+                    Boshlang'ich ta'lim kafedrasi o'qituvchisi. Ilmiy izlanishlari boshlang'ich
+                    sinf texnologiya darslarini <strong>inkorporatsion yondashuv</strong> asosida
+                    tashkil etishga, fanlararo bog'liqlikni ta'minlashga va o'quvchilarda texnika
+                    ijodkorligi hamda kasbiy kompetensiyalarni shakllantirishga bag'ishlangan.
+                </p>
+                <p>
+                    1985-yilda Buxoro viloyati Vobkent tumanida tug'ilgan. Pedagogik faoliyatini
+                    2008-yilda Buxoro pedagogika kollejida metodist-o'qituvchi sifatida boshlagan;
+                    2023-yildan Buxoro davlat pedagogika instituti Boshlang'ich ta'lim kafedrasida
+                    faoliyat yuritmoqda. Institutda &laquo;Texnologiya va uni o'qitish metodikasi&raquo;
+                    fanidan dars beradi.
+                </p>
+                <p>
+                    Mazkur platforma ana shu ilmiy izlanish va ko'p yillik amaliy tajriba asosida,
+                    o'qituvchilar uchun yagona elektron metodik muhit sifatida ishlab chiqilgan.
+                </p>
+
+                <h3>Ta'lim</h3>
+                <ul class="cv">
+                    <li>
+                        <span class="yil">2001&ndash;2004</span>
+                        Buxoro pedagogika kolleji &mdash; &laquo;Boshlang'ich ta'lim&raquo; yo'nalishi
+                    </li>
+                    <li>
+                        <span class="yil">2004</span>
+                        Buxoro davlat universiteti, bakalavriat &mdash;
+                        &laquo;Boshlang'ich ta'lim va jismoniy tarbiya&raquo;
+                    </li>
+                    <li>
+                        <span class="yil">2021</span>
+                        Buxoro davlat universiteti, magistratura &mdash; &laquo;Boshlang'ich ta'lim&raquo;
+                    </li>
+                </ul>
+
+                <h3>Mehnat faoliyati</h3>
+                <ul class="cv">
+                    <li>
+                        <span class="yil">2008-yildan</span>
+                        Buxoro pedagogika kolleji &mdash; metodist-o'qituvchi
+                    </li>
+                    <li>
+                        <span class="yil">2023&ndash;2024</span>
+                        Buxoro davlat pedagogika instituti, Boshlang'ich ta'lim kafedrasi &mdash;
+                        stajyor-o'qituvchi
+                    </li>
+                    <li>
+                        <span class="yil">2025 &mdash; hozirgacha</span>
+                        Buxoro davlat pedagogika instituti, Boshlang'ich ta'lim kafedrasi &mdash;
+                        o'qituvchi
+                    </li>
+                </ul>
+
+                <h3>Ilmiy izlanish yo'nalishi</h3>
+                <p>
+                    Tadqiqot boshlang'ich sinf texnologiya ta'limida inkorporatsiya &mdash; ya'ni
+                    texnologiya fanini matematika, ona tili, tabiatshunoslik va tasviriy san'at kabi
+                    fanlar bilan uzviy bog'lash &mdash; masalasiga qaratilgan. Asosiy g'oya: kichik
+                    yoshdagi o'quvchi atrofdagi olamni alohida fanlarga bo'lingan holda emas, yaxlit
+                    tasavvur qiladi; shuning uchun amaliy mashg'ulot bir vaqtning o'zida bir necha
+                    fanning maqsadiga xizmat qilishi mumkin.
+                </p>
+
+                <h3>Ilmiy qiziqish yo'nalishlari</h3>
+                <ul>
+                    <li>Boshlang'ich sinf texnologiya fanini o'qitish metodikasi</li>
+                    <li>Inkorporatsion yondashuv va fanlararo integratsiya</li>
+                    <li>O'quvchilarda texnika ijodkorligi va kreativ ko'nikmalarni rivojlantirish</li>
+                    <li>Bo'lajak boshlang'ich sinf o'qituvchisining kasbiy kompetentligi</li>
+                    <li>Ta'lim jarayonida kasbiy yo'naltirish</li>
+                    <li>Ta'limda raqamli va multimedia resurslari</li>
+                </ul>
+
+                <h3>Nashrlar</h3>
+                <p>
+                    Ilmiy-metodik faoliyati doirasida 23 ta ilmiy maqola chop etilgan
+                    (shundan 2 tasi Scopus bazasida indekslangan), shuningdek darslik, o'quv qo'llanma,
+                    monografiya va elektron darslik tayyorlangan.
+                </p>
+                <ul class="nashrlar">
+                    <li>
+                        <span class="turi">Darslik</span>
+                        <span class="nomi">Texnologiya o'qitish metodikasi</span>
+                    </li>
+                    <li>
+                        <span class="turi">O'quv qo'llanma</span>
+                        <span class="nomi">Texnologiya o'qitish metodikasi</span>
+                    </li>
+                    <li>
+                        <span class="turi">Monografiya</span>
+                        <span class="nomi">Texnika ijodkorlik qobiliyati va kreativ ko'nikmalarini
+                        rivojlantirish</span>
+                        <span class="manba">1&ndash;4-sinf o'quvchilari uchun</span>
+                    </li>
+                    <li>
+                        <span class="turi">Elektron darslik</span>
+                        <span class="nomi">Inkorporatsion amaliy topshiriqlar</span>
+                        <span class="manba">Mazkur platformaning asosini tashkil etadi</span>
+                    </li>
+                </ul>
+
+                <h4 style="font-size:1.05rem;margin:1.8em 0 0.8em;">Tanlangan maqolalar</h4>
+                <ul class="nashrlar">
+                    <li>
+                        <span class="nomi">Development of Professional Competence of a Future Primary
+                        Teacher Through Incorporated Approaches</span>
+                        <span class="manba">
+                            Modern Science and Research, 2025, 4(3), 1341&ndash;1348 &middot;
+                            <a href="https://doi.org/10.71337/inlibrary.uz.science-research.73583" target="_blank" rel="noopener">DOI</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="nomi">The Goals and Objectives of Integrated Classes in Elementary
+                        School Technology Classes and the Importance of Interdisciplinary Communication</span>
+                        <span class="manba">
+                            European International Journal of Pedagogics, 2024, 4(11) &middot;
+                            <a href="https://doi.org/10.55640/eijp-04-11-12" target="_blank" rel="noopener">DOI</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="nomi">The Practical Significance of Forming Professional Competences
+                        in Technology Lessons of Primary Class Students</span>
+                        <span class="manba">
+                            European International Journal of Pedagogics, 2024, 4(11), 158&ndash;161 &middot;
+                            <a href="https://doi.org/10.71337/inlibrary.uz.eijp.47769" target="_blank" rel="noopener">DOI</a>
+                        </span>
+                    </li>
+                </ul>
+
+                <h3>Malaka sertifikatlari</h3>
+                <ul>
+                    <li>Pedagogik faoliyatda raqamli kompetensiyalar</li>
+                    <li>Pedagogik mahorat</li>
+                    <li>Ta'lim sohasining huquqiy asoslari</li>
+                </ul>
+
+                <h3>Platforma haqida</h3>
+                <p class="lead">
+                    &laquo;Inkorporatsion topshiriqlar&raquo; platformasi boshlang'ich sinf texnologiya
+                    fanini inkorporatsion yondashuv asosida o'qitishni metodik jihatdan qo'llab-quvvatlash
+                    maqsadida ishlab chiqilgan elektron ta'lim platformasidir.
+                </p>
+                <p>
+                    Platforma ilmiy tadqiqot doirasida yaratilgan bo'lib, boshlang'ich sinf
+                    o'quvchilarining amaliy faoliyatini rivojlantirishga xizmat qiluvchi ilmiy-metodik
+                    materiallarni yagona elektron muhitda jamlaydi.
+                </p>
+                <p>
+                    Platformaning asosiy maqsadi texnologiya darslarida fanlararo integratsiya, kasbiy
+                    yo'naltirish hamda amaliy faoliyatni o'zaro uyg'unlashtirish orqali o'quvchilarning
+                    amaliy kompetensiyalarini rivojlantirish, o'qituvchilarni zamonaviy metodik ta'minot
+                    bilan qo'llab-quvvatlash va ta'lim jarayonining samaradorligini oshirishdan iborat.
+                </p>
+                <p>
+                    Platforma mazmuni tadqiqot davomida ishlab chiqilgan metodik model asosida
+                    shakllantirilgan bo'lib, unda texnologiya fanining amaliy mavzulariga oid metodik
+                    tavsiyalar, zamonaviy pedagogik yondashuvlar, interfaol metodlar, multimedia
+                    resurslari, instruksion texnologik xaritalar, amaliy topshiriqlar hamda namunaviy
+                    dars ishlanmalari tizimli ravishda joylashtirilgan.
+                </p>
+
+                <blockquote class="pull">
+                    Platformadan foydalanish natijasida o'qituvchilar darslarni ilmiy-metodik asosda
+                    rejalashtirish, inkorporatsion yondashuvni amaliyotga tatbiq etish, fanlararo
+                    integratsiyani ta'minlash va kasbiy yo'naltirish elementlarini dars mazmuniga
+                    singdirish imkoniyatiga ega bo'ladilar.
+                </blockquote>
+
+                <p>
+                    O'quvchilar esa amaliy topshiriqlarni bosqichma-bosqich bajarish, multimedia
+                    materiallari orqali mustaqil o'rganish hamda o'z bilim va ko'nikmalarini interaktiv
+                    topshiriqlar yordamida mustahkamlash imkoniyatiga ega bo'ladilar.
+                </p>
+                <p>
+                    Mazkur platforma boshlang'ich ta'lim tizimida texnologiya fanini zamonaviy pedagogik
+                    yondashuvlar asosida tashkil etishga xizmat qiluvchi innovatsion elektron metodik
+                    resurs sifatida ishlab chiqilgan bo'lib, umumiy o'rta ta'lim maktablari o'qituvchilari,
+                    pedagogika yo'nalishida tahsil olayotgan talabalar, magistrantlar va ilmiy
+                    izlanuvchilar uchun ham foydali metodik manba hisoblanadi.
+                </p>
+
+                <p style="margin-top:2em;">
+                    <a href="/multimediya" class="btn btn-primary">
+                        Multimediya bo'limi
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="17" height="17" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
