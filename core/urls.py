@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.views.static import serve
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from home import views
 
 urlpatterns = [
@@ -108,6 +109,13 @@ urlpatterns = [
 
 # Statikni WhiteNoise (middleware) beradi — bu yerda URL kerak emas.
 # Media esa runtime'da yuklanadi, shuning uchun path() konverteri orqali beriladi.
+#
+# `xframe_options_sameorigin`: XFrameOptionsMiddleware standart holda har bir
+# javobga `X-Frame-Options: DENY` qo'yadi, shu sababli /haqida sahifasidagi PDF
+# ko'ruvchi (<iframe>) ochilmay, brauzer "refused to connect" deb yozardi.
+# Faqat media uchun SAMEORIGIN qilamiz — o'z saytimiz ramkaga sola oladi,
+# begona saytlar esa baribir sola olmaydi. Qolgan sahifalar DENY bo'lib qoladi.
 urlpatterns += [
-    path('media/<path:path>', serve, {'document_root': settings.MEDIA_ROOT}),
+    path('media/<path:path>', xframe_options_sameorigin(serve),
+         {'document_root': settings.MEDIA_ROOT}),
 ]

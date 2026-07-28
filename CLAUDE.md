@@ -49,7 +49,8 @@ Note: `DEBUG = False` even in development (`core/settings.py`). WhiteNoise serve
 
 - The landing page (`/`, `templates/index.html`) is the platform pitch: hero, the seven-section grid, the "Platforma haqida" article. It is **not** the exercise list any more.
 - **Sections 2, 3, 5, 6, 7 are admin-driven.** They all render `bolim.html` through the `_bolim()` helper in `home/views.py`; content comes from the `Material` model (`section`, `title`, `summary`, `body`, `file`, `link`, `manba`, `order`, `is_published`). To add a section, add a choice to `Material.SECTION_CHOICES` and a thin view calling `_bolim()`. Empty sections render a designed empty state, with an "add material" link for staff.
-- **Section 1 (`haqida.html`) is hand-written**, with author details as `[kvadrat qavs]` placeholders for the client to replace. The author photo is optional: drop a file at `media/muallif.jpg` and the view's existence check swaps the motif placeholder for the image.
+- **Section 1 (`haqida.html`) is hand-written** — author bio, ta'lim/faoliyat timeline and publications are filled in from the client's public BuxDPI profile. The author photo is optional: drop a file at `media/muallif.jpg` and the view's existence check swaps the motif placeholder for the image. The page ends with a `#portfolio` band holding a PDF from `media/hujjatlar/`; its inline viewer sets the `<iframe>` `src` only on first click, so the file isn't fetched on page load — keep that if you add more documents.
+  - Client PDFs are Canva exports, which store **photographs as PNG** and blow the file up ~7×. Recompress before serving: `doc.rewrite_images(dpi_threshold=170, dpi_target=150, quality=88)` in PyMuPDF took the portfolio from 57.7 MB to 7.9 MB with the lowest page PSNR at 41 dB (visually identical, QR codes still decode). Originals stay in `malumotlar/`.
 - Nav highlighting: each view passes `active` (e.g. `'maqola'`) and `base.html` compares it per link.
 
 ### Design system (`static/css/platform.css`)
@@ -87,6 +88,7 @@ Running `manage.py check` after route/view edits catches most mistakes.
 
 ## Conventions & gotchas
 
+- **Framing media needs `xframe_options_sameorigin`.** `XFrameOptionsMiddleware` stamps `X-Frame-Options: DENY` on *every* response, including `serve()`ing a PDF from `media/`. An `<iframe>` pointing at it then fails with Chrome's misleading "127.0.0.1 refused to connect" — which looks like a dead server, not a header. The media route in `core/urls.py` is wrapped in `xframe_options_sameorigin` for exactly this; everything else stays `DENY`.
 - **Static/media URLs are hardcoded absolute paths** (`/static/css/style.css`, `/media/Video1.mp4`) — the templates deliberately do **not** use `{% static %}`. Because of this WhiteNoise is configured to compress but not hash static files (`CompressedStaticFilesStorage`, see `core/settings.py`). Media is served at runtime via a `serve()` route at the bottom of `core/urls.py`.
 - **Per-exercise theming:** design tokens are CSS custom properties in `:root` and theme classes `.t-orange`, `.t-blue`, `.t-rose`, `.t-indigo`, `.t-coral`, `.t-emerald`, etc. in `static/css/style.css`. Each exercise page sets `<body class="t-...">` to recolor. Exercise→theme map: 6=`t-blue`, 7=`t-rose`, 8=`t-indigo`, 9=`t-coral`, 10=`t-emerald`. Design direction is a vivid, premium, full-color kids' aesthetic — avoid plain white.
 - **URL routing** in `core/urls.py` keeps three parallel schemes for each exercise: short (`/m6a`), legacy (`/mashq6a.html`), and pupil (`/o6a`). Keep them consistent when adding routes.

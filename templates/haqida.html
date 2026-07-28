@@ -75,6 +75,114 @@
         border-bottom: 1px solid var(--line);
     }
     .muallif-kontakt a:hover { color: var(--anor); border-bottom-color: currentColor; }
+
+    /* ===== Sahifa oxiri: metodik portfolio (PDF) ===== */
+    .hujjat-band { background: var(--stone); }
+
+    .hujjat {
+        display: grid;
+        grid-template-columns: 210px minmax(0, 1fr);
+        gap: 32px;
+        align-items: start;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 28px;
+        box-shadow: var(--shadow-1);
+    }
+
+    .hujjat-muqova {
+        position: relative;
+        aspect-ratio: 3 / 4;
+        border-radius: var(--r-md);
+        background: linear-gradient(160deg, var(--siyoh-3), var(--siyoh));
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        overflow: hidden;
+    }
+    .hujjat-muqova .motif {
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        color: var(--zafaron);
+        opacity: 0.16;
+        top: -34px;
+        right: -46px;
+    }
+    .hujjat-muqova .kengaytma {
+        position: relative;
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        padding: 7px 16px;
+        border: 2px solid var(--zafaron);
+        border-radius: var(--r-sm);
+        color: var(--zafaron);
+    }
+    .hujjat-muqova .varaq { position: relative; font-size: 0.86rem; color: rgba(255, 255, 255, 0.78); }
+
+    .hujjat-info h3 { font-size: 1.32rem; line-height: 1.35; margin: 0 0 12px; color: var(--ink); }
+    .hujjat-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        font-size: 0.9rem;
+        color: var(--ink-3);
+        margin-bottom: 16px;
+    }
+    .hujjat-info > p { font-size: 1rem; line-height: 1.7; color: var(--ink-2); margin: 0 0 18px; }
+
+    .hujjat-mundarija {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        list-style: none;
+        padding: 0;
+        margin: 0 0 22px;
+    }
+    .hujjat-mundarija li {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--ink-2);
+        background: var(--stone);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 14px;
+    }
+
+    .hujjat-amal { display: flex; flex-wrap: wrap; gap: 10px; }
+    /* `.btn-sm` <a> uchun yozilgan — <button> da shrift va kursorni tiklaymiz. */
+    button.btn-sm { font-family: inherit; cursor: pointer; }
+
+    /* Ko'ruvchi — PDF ni sahifa ochilishida bekorga yuklamaslik uchun
+       iframe manzili faqat tugma bosilganda beriladi. */
+    .hujjat-koruvchi { margin-top: 26px; }
+    .hujjat-koruvchi[hidden] { display: none; }
+    .hujjat-koruvchi iframe {
+        display: block;
+        width: 100%;
+        height: min(78vh, 860px);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        background: var(--stone-2);
+    }
+    .hujjat-yuklanmoqda {
+        font-size: 0.9rem;
+        color: var(--ink-3);
+        margin: 0 0 10px;
+    }
+
+    @media (max-width: 760px) {
+        .hujjat { grid-template-columns: 1fr; gap: 22px; padding: 20px; }
+        .hujjat-muqova { aspect-ratio: 16 / 9; }
+        .hujjat-muqova .motif { width: 150px; height: 150px; }
+        .hujjat-amal .btn-sm { flex: 1 1 100%; justify-content: center; }
+    }
 </style>
 {% endblock %}
 
@@ -327,4 +435,104 @@
         </div>
     </div>
 </section>
+
+<section class="section hujjat-band" id="portfolio">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="eyebrow ink">
+                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                Portfolio
+            </span>
+            <h2>Metodik portfolio</h2>
+            <p>
+                Kafedradagi o'quv-uslubiy ta'minot, ochiq darslar va raqamli ta'lim
+                resurslari bo'yicha tayyorlangan hisobot taqdimoti.
+            </p>
+        </div>
+
+        <article class="hujjat">
+            <div class="hujjat-muqova" aria-hidden="true">
+                <svg class="motif"><use href="#palak"/></svg>
+                <span class="kengaytma">PDF</span>
+                <span class="varaq">14 sahifa</span>
+            </div>
+
+            <div class="hujjat-info">
+                <h3>
+                    Texnologiya darslarida innovatsion hand-made texnologiyalar orqali
+                    talabalarning amaliy va kreativ kompetensiyalarini rivojlantirish
+                </h3>
+                <div class="hujjat-meta">
+                    <span>Buxoro davlat pedagogika instituti</span>
+                    <span>Buxoro, 2026</span>
+                    <span>PDF &middot; 8 MB</span>
+                </div>
+                <p>
+                    Taqdimotda texnologiya ta'limini STEAM yondashuvi va 5E modeli asosida
+                    tashkil etish, hand-made mashg'ulotlari orqali talabalarning amaliy,
+                    kreativ va estetik kompetensiyalarini rivojlantirish masalalari yoritilgan.
+                </p>
+                <ul class="hujjat-mundarija">
+                    <li>Kirish</li>
+                    <li>O'quv-uslubiy ta'minot</li>
+                    <li>Ochiq dars va metodik tadbirlar</li>
+                    <li>Raqamli va elektron ta'lim resurslari</li>
+                    <li>Xulosa</li>
+                </ul>
+
+                <div class="hujjat-amal">
+                    <button type="button" class="btn-sm" id="hujjat-ochish" aria-expanded="false" aria-controls="hujjat-koruvchi">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span data-yorliq>Shu yerda ko'rish</span>
+                    </button>
+                    <a class="btn-sm" href="/media/hujjatlar/hand-made-texnologiyalar-portfolio.pdf" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                        Yangi oynada ochish
+                    </a>
+                    <a class="btn-sm" href="/media/hujjatlar/hand-made-texnologiyalar-portfolio.pdf"
+                       download="Jo'rayeva D.R. — Metodik portfolio (2026).pdf">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        Yuklab olish
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <div class="hujjat-koruvchi" id="hujjat-koruvchi" hidden>
+            <p class="hujjat-yuklanmoqda">
+                Hujjat 8 MB &mdash; birinchi ochilishda bir necha soniya yuklanishi mumkin.
+            </p>
+            <iframe title="Metodik portfolio &mdash; PDF ko'rinishi" src="about:blank" loading="lazy"></iframe>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // PDF ko'ruvchi: manzil faqat birinchi bosishda beriladi, shunda fayl
+    // sahifa ochilishida bekorga yuklanmaydi.
+    (function () {
+        var tugma = document.getElementById('hujjat-ochish');
+        var quti = document.getElementById('hujjat-koruvchi');
+        if (!tugma || !quti) return;
+        var ramka = quti.querySelector('iframe');
+        var manba = '/media/hujjatlar/hand-made-texnologiyalar-portfolio.pdf';
+        var matn = tugma.querySelector('[data-yorliq]');
+
+        tugma.addEventListener('click', function () {
+            var ochiq = quti.hasAttribute('hidden');
+            if (ochiq) {
+                if (ramka.getAttribute('src') !== manba) ramka.setAttribute('src', manba);
+                quti.removeAttribute('hidden');
+                matn.textContent = "Ko'ruvchini yopish";
+                quti.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                quti.setAttribute('hidden', '');
+                matn.textContent = "Shu yerda ko'rish";
+            }
+            tugma.setAttribute('aria-expanded', ochiq ? 'true' : 'false');
+        });
+    })();
+</script>
 {% endblock %}
