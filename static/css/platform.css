@@ -171,6 +171,10 @@ body.pf {
     margin-right: auto;
 }
 .brand .motif { width: 32px; height: 32px; color: var(--zafaron); }
+/* Logotip — bo'yalgan emblema, shuning uchun rang berilmaydi. Navbar eni
+   millimetrgacha hisoblangan (yuqoridagi izohga qarang): bu o'lchamni
+   kattalashtirsangiz, bo'limlar bir qatorga sig'masligi mumkin. */
+.brand-logo { width: 42px; height: 42px; flex-shrink: 0; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .brand-sub {
     font-size: 0.63rem;
@@ -922,6 +926,7 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
 .footer ul a:hover { color: var(--zafaron); }
 .footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .footer-brand .motif { width: 32px; height: 32px; color: var(--zafaron); }
+.footer-brand .brand-logo { width: 40px; height: 40px; }
 .footer-brand span { font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 1.02rem; }
 .footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.12);

@@ -58,6 +58,8 @@ Note: `DEBUG = False` even in development (`core/settings.py`). WhiteNoise serve
 
 ### Design system (`static/css/platform.css`)
 
+The **logo** is the client's circular craft emblem, kept in `logo/` as the original JPG and published as `static/img/logo.png` (256px, white background flood-filled to alpha, PNG-8 ≈ 34 KB). It is the brand mark in the navbar and footer (`.brand-logo`) and the source of the favicons (`favicon.ico` 16/32/48, `favicon-32.png`, `apple-touch-icon.png` — all three linked from every template's `<head>`, including the standalone exercise pages, which do not extend `base.html`). Regenerating: Pillow is **not** in `env/` — run image scripts on system Python (`py -3.11`), same as PyMuPDF. `#palak` is still the decorative motif everywhere else; it is just no longer the logo.
+
 Palette is drawn from Uzbek textile dyes rather than generic UI blue: `--siyoh` (indigo, the dominant chrome), `--anor` (pomegranate), `--zafaron` (saffron), `--firuza` (turquoise), over white/`--stone` surfaces. Type is **Bitter** (slab serif, display) + **Karla** (body). The `#palak` rosette is the one signature element — brand mark, eyebrow marker, card corner, empty state — so keep new decoration to a minimum.
 
 Four rules worth knowing before you edit it:
