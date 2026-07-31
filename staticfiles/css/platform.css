@@ -142,7 +142,14 @@ body.pf {
    o'lchamlar brauzerda o'lchab tanlangan. Eng tor holat — tizimga KIRGAN
    foydalanuvchi: ism va "Chiqish" tugmasi qo'shimcha ~130px oladi.
    Shu sababli gamburgerga o'tish nuqtasi 1279px. Bu yerdagi shriftni yoki
-   to'ldirishni kattalashtirsangiz, o'sha nuqtani ham ko'tarish kerak. */
+   to'ldirishni kattalashtirsangiz, o'sha nuqtani ham ko'tarish kerak.
+
+   Oxirgi o'lchov (brauzerda, tizimga kirgan holda, uzun ism bilan):
+   brend 154 + havolalar ~808 + kirish 199 + bo'shliq/chekka 84 = ~1245px,
+   ya'ni 1280px ekranda ~35px zaxira. "Instruksion texnologik xarita"
+   to'liq nomiga o'tilganda havolalar 88px kengaygani uchun .nav a
+   to'ldirishi 9px→7px, shrifti 0.92→0.88rem ga tushirildi, .nav gap esa
+   0 qilindi — shundagina yetti bo'lim 1280px da bir qatorda qoladi. */
 .topbar .wrap {
     display: flex;
     align-items: center;
@@ -183,15 +190,15 @@ body.pf {
 .nav {
     display: flex;
     align-items: center;
-    gap: 1px;
+    gap: 0;
     flex-shrink: 0;
 }
 
 .nav a {
     position: relative;
     display: block;
-    padding: 9px 9px;
-    font-size: 0.92rem;
+    padding: 9px 7px;
+    font-size: 0.88rem;
     line-height: 1.35;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.80);
@@ -206,8 +213,8 @@ body.pf {
 .nav a.is-active::after {
     content: '';
     position: absolute;
-    left: 9px;
-    right: 9px;
+    left: 7px;
+    right: 7px;
     bottom: 2px;
     height: 3px;
     border-radius: 3px;
