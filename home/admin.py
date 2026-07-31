@@ -78,8 +78,9 @@ class MaterialAdmin(admin.ModelAdmin):
             'fields': ('section', 'title', 'summary'),
         }),
         ("Mazmun", {
-            'fields': ('body', 'file', 'link', 'manba'),
-            'description': "Matn, fayl yoki havola — kamida bittasini to'ldiring.",
+            'fields': ('body', 'file', 'koruv', 'muqova', 'link', 'manba'),
+            'description': "Matn, fayl yoki havola — kamida bittasini to'ldiring. "
+                           "Word fayl uchun 'Ko'rish uchun PDF' ni ham yuklang.",
         }),
         ("Ko'rsatish", {
             'fields': ('order', 'is_published'),

@@ -206,3 +206,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Manba fayllar — mijoz bergan asl kitob va hujjatlar (~145 MB).
+# Saytga chiqqan nusxalari media/ da turadi, shuning uchun bularni gitga solish shart emas.
+malumotlar/

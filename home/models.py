@@ -87,6 +87,15 @@ class Material(models.Model):
         help_text="Ixtiyoriy (JPG yoki PNG). Ro'yxatda kitob muqovasi bo'lib ko'rinadi. "
                   "Bo'sh qoldirilsa, o'rniga fayl turi nishoni chiqadi.",
     )
+    # Word hujjatini brauzer ichida ko'rsatib bo'lmaydi, shuning uchun uning
+    # PDF nusxasi shu yerda saqlanadi: 'Ko'rish' tugmasi shuni ochadi,
+    # 'Yuklab olish' esa asl (tahrirlanadigan) faylni beradi.
+    koruv = models.FileField(
+        upload_to='materiallar/koruv/', blank=True, null=True,
+        verbose_name="Ko'rish uchun PDF",
+        help_text="Fayl Word bo'lsa, uning PDF nusxasini shu yerga yuklang — "
+                  "sahifada 'Ko'rish' tugmasi paydo bo'ladi. Fayl PDF bo'lsa, bo'sh qoldiring.",
+    )
     link = models.URLField(
         blank=True, verbose_name="Havola",
         help_text="Ixtiyoriy: tashqi manba (masalan, jurnal sayti) havolasi.",
@@ -121,6 +130,18 @@ class Material(models.Model):
     def is_pdf(self):
         """PDF bo'lsa sahifada ichki ko'ruvchi ochish mumkin."""
         return self.file_ext == 'PDF'
+
+    @property
+    def koruv_url(self):
+        """Ichki ko'ruvchi uchun PDF manzili — asl fayl yoki uning PDF nusxasi.
+
+        Bo'sh qaytsa, sahifada 'Ko'rish' tugmasi ko'rsatilmaydi.
+        """
+        if self.is_pdf:
+            return self.file.url
+        if self.koruv:
+            return self.koruv.url
+        return ''
 
 
 class Profile(models.Model):
