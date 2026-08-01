@@ -26,6 +26,9 @@
     --paper:    #FFFFFF;
     --stone:    #F4F0E8;
     --stone-2:  #EBE5D9;
+    /* Metodika kartalarining navbatlashuvchi foni (faqat shu bo'limda) */
+    --limon:    #FBF4CB;
+    --yashil:   #E7F2D6;
 
     /* Matn */
     --ink:      #1E2433;
@@ -744,6 +747,15 @@ body.pf {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 .material:hover { border-color: var(--firuza); box-shadow: var(--shadow-2); }
+
+/* Metodika bo'limi — kartalar navbatma-navbat limon va och yashil fonda.
+   Faqat shu bo'lim: qolgan bo'limlar (maqola, topshiriq, xarita, ishlanma)
+   oq kartalarda qoladi. Sinf `bolim.html` da `active` dan yasaladi. */
+.bolim-metodika .material:nth-child(odd)  { background: var(--limon); }
+.bolim-metodika .material:nth-child(even) { background: var(--yashil); }
+/* Nishon, muqova va tugmalar fonga singib ketmasin — ular oq qoladi. */
+.bolim-metodika .material-tag,
+.bolim-metodika .material-muqova { background: var(--paper); }
 
 .material-tag {
     display: flex;

@@ -14,7 +14,12 @@
     </div>
 </section>
 
-<section class="section">
+{% comment %}
+    `active` — bo'lim kaliti (metodika, maqola, …). Undan yasalgan sinf
+    ko'rinishni bitta bo'limga moslash imkonini beradi: masalan
+    .bolim-metodika kartalari limon/och yashil fonda.
+{% endcomment %}
+<section class="section bolim-{{ active }}">
     <div class="wrap">
         {% if materiallar %}
             <div class="section-head">
