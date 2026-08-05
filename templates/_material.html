@@ -1,0 +1,68 @@
+{% comment %} Bitta material kartasi. `bolim.html` dan chaqiriladi — oddiy ro'yxatda ham, kichik bo'lim (dropdown) ichida ham xuddi shu ko'rinish. {% endcomment %}
+<article class="material{% if m.muqova %} has-muqova{% endif %}">
+    {% if m.muqova %}
+        <div class="material-muqova">
+            {% comment %}
+                Muqovalar sahifaning asosiy ko'rinishi va har biri ~20 KB,
+                shuning uchun `loading="lazy"` qo'yilmagan — scroll paytida
+                sakrab chiqmasin. Ro'yxat juda uzaysa qayta o'ylash mumkin.
+            {% endcomment %}
+            <img src="{{ m.muqova.url }}" alt="{{ m.title }} — muqova">
+        </div>
+    {% else %}
+        <div class="material-tag">
+            {% if m.file_ext %}
+                {{ m.file_ext }}
+            {% else %}
+                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div>
+        <h3>{{ m.title }}</h3>
+        {% if m.manba %}<div class="meta">{{ m.manba }}</div>{% endif %}
+        {% if m.summary %}<p>{{ m.summary }}</p>{% endif %}
+    </div>
+
+    {% if m.file or m.link %}
+        <div class="actions">
+            {% if m.koruv_url %}
+                <button type="button" class="btn-sm" data-pdf-tugma
+                        data-manba="{{ m.koruv_url }}"
+                        aria-expanded="false" aria-controls="koruvchi-{{ m.pk }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span data-yorliq>Ko'rish</span>
+                </button>
+            {% endif %}
+            {% if m.file %}
+                <a class="btn-sm" href="{{ m.file.url }}" download>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    Yuklab olish
+                </a>
+            {% endif %}
+            {% if m.link %}
+                <a class="btn-sm" href="{{ m.link }}" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
+                    Manbaga o'tish
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% if m.body %}
+        <div class="material-body">
+            {{ m.body|linebreaks }}
+        </div>
+    {% endif %}
+
+    {% if m.koruv_url %}
+        {% comment %}
+            Ko'ruvchi: iframe manzili faqat tugma bosilganda beriladi,
+            shunda og'ir PDF sahifa ochilishida yuklanmaydi.
+        {% endcomment %}
+        <div class="material-koruvchi" id="koruvchi-{{ m.pk }}" hidden>
+            <iframe title="{{ m.title }} — PDF ko'rinishi" src="about:blank"></iframe>
+        </div>
+    {% endif %}
+</article>

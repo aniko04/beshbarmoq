@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Karla:wght@400;500;600;700;800&display=swap');
+/* Shriftlar ATAYLAB bu yerda `@import` qilinmaydi.
+   `@import` — render va JS ni bloklaydigan uslublar jadvali: Google Fonts
+   sekinlashsa (maktab tarmoqlarida odatiy hol), sahifadagi inline skriptlar
+   umuman ishga tushmaydi — test sahifasida rasm bosish ham, tekshirish ham
+   muzlab qoladi. Shuning uchun shriftlar HTML dagi `<link ... media="print"
+   onload="this.media='all'">` bilan bloklamasdan yuklanadi (base.html,
+   login.html, register.html). */
 
 /* =========================================================
    SUZANI — inkorporatsion topshiriqlar platformasi
@@ -143,16 +149,28 @@ body.pf {
 /* Navbar bitta qatorda: brend + yetti bo'lim + kirish.
    Yettita uzun o'zbekcha nom bir qatorga zo'rg'a sig'adi, shuning uchun
    o'lchamlar brauzerda o'lchab tanlangan. Eng tor holat — tizimga KIRGAN
-   foydalanuvchi: ism va "Chiqish" tugmasi qo'shimcha ~130px oladi.
-   Shu sababli gamburgerga o'tish nuqtasi 1279px. Bu yerdagi shriftni yoki
-   to'ldirishni kattalashtirsangiz, o'sha nuqtani ham ko'tarish kerak.
+   foydalanuvchi: ism va "Chiqish" tugmasi qo'shimcha ~199px oladi.
 
-   Oxirgi o'lchov (brauzerda, tizimga kirgan holda, uzun ism bilan):
-   brend 154 + havolalar ~808 + kirish 199 + bo'shliq/chekka 84 = ~1245px,
-   ya'ni 1280px ekranda ~35px zaxira. "Instruksion texnologik xarita"
-   to'liq nomiga o'tilganda havolalar 88px kengaygani uchun .nav a
-   to'ldirishi 9px→7px, shrifti 0.92→0.88rem ga tushirildi, .nav gap esa
-   0 qilindi — shundagina yetti bo'lim 1280px da bir qatorda qoladi. */
+   O'lchash usuli (brauzer kerak emas): `.topbar .wrap` ni `width: max-content`
+   qilib qo'yilgan sinov sahifasini headless Chrome bilan suratga olib,
+   navbar bandidagi eng chap va eng o'ng mazmun pikselini Pillow bilan
+   topiladi — farqi mazmunning haqiqiy eni.
+
+   Mazmun eni shriftga qarab (tizimga kirgan holda, uzun ism bilan):
+     0.88rem / 7px → 1227px  (kerak 1275px)   ← eski, mijozga kichik tuyuldi
+     0.94rem / 7px → 1279px  (kerak 1327px)   ← HOZIRGI
+     0.96rem / 8px → 1309px  (kerak 1357px)
+     1.00rem / 10px → 1369px (kerak 1417px)
+
+   "Kerakli" = mazmun + 48px chekka. Haqiqiy brauzerda vertikal aylantirish
+   yo'lagi ~15px oladi, shuning uchun 1366px oynada foydali kenglik ~1351px:
+   0.94rem varianti 24px zaxira bilan sig'adi, 0.96rem esa sig'maydi.
+   Shuning uchun ikki bosqich: 1366px+ da katta shrift (0.94rem), 1280–1365px
+   oralig'ida esa eski kichik shrift (0.88rem) — pastdagi media qoidasiga
+   qarang. Gamburgerga o'tish nuqtasi shu sababli 1279px da qoldi.
+
+   Shriftni yana kattalashtirsangiz, o'sha oraliq qoidani ham qayta o'lchang —
+   aks holda "Chiqish" tugmasi `overflow-x: hidden` ostida qirqilib qoladi. */
 .topbar .wrap {
     display: flex;
     align-items: center;
@@ -180,7 +198,7 @@ body.pf {
 .brand-logo { width: 42px; height: 42px; flex-shrink: 0; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
 .brand-sub {
-    font-size: 0.63rem;
+    font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--zafaron);
@@ -189,7 +207,7 @@ body.pf {
 .brand-name {
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 1.08rem;
+    font-size: 1.16rem;
     letter-spacing: -0.015em;
     color: #fff;
 }
@@ -204,8 +222,8 @@ body.pf {
 .nav a {
     position: relative;
     display: block;
-    padding: 9px 7px;
-    font-size: 0.88rem;
+    padding: 10px 7px;
+    font-size: 0.94rem;
     line-height: 1.35;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.80);
@@ -228,6 +246,54 @@ body.pf {
     background: var(--zafaron);
 }
 
+/* Bo'lim ostidagi menyu (hozircha faqat Topshiriq).
+   Sichqoncha ustiga kelganda ochiladi; klaviatura uchun :focus-within.
+   .nav-menu ning tepa to'ldirishi — havola bilan panel orasidagi "ko'prik":
+   sichqoncha bo'sh joydan o'tayotganda menyu yopilib qolmaydi. */
+.nav-item { position: relative; }
+.nav a.nav-bosh { display: flex; align-items: center; gap: 4px; }
+.nav-strelka { width: 11px; height: 11px; flex-shrink: 0; opacity: 0.75; transition: transform 0.18s; }
+.nav-item:hover .nav-strelka,
+.nav-item:focus-within .nav-strelka { transform: rotate(180deg); }
+
+.nav-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 60;
+    padding-top: 18px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.16s, transform 0.16s, visibility 0.16s;
+}
+.nav-item:hover .nav-menu,
+.nav-item:focus-within .nav-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+.nav-menu-ichi {
+    display: grid;
+    gap: 2px;
+    min-width: 246px;
+    padding: 8px;
+    background: var(--siyoh-2);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--r-md);
+    box-shadow: 0 18px 40px rgba(10, 16, 30, 0.45);
+}
+.nav .nav-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border-radius: var(--r-sm);
+}
+.nav .nav-menu a:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+.nav-menu .motif { width: 17px; height: 17px; color: var(--zafaron); }
+
 .nav-auth {
     display: flex;
     align-items: center;
@@ -237,7 +303,7 @@ body.pf {
     border-left: 1px solid rgba(255, 255, 255, 0.14);
 }
 .nav-user {
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.72);
     max-width: 84px;
@@ -247,9 +313,9 @@ body.pf {
 }
 .btn-nav {
     display: inline-block;
-    padding: 9px 18px;
+    padding: 10px 20px;
     border-radius: 999px;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
     font-weight: 700;
     text-decoration: none;
     background: var(--zafaron);
@@ -872,6 +938,103 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
 .empty p { color: var(--ink-2); max-width: 48ch; margin: 0 auto 22px; }
 
 /* =========================================================
+   KICHIK BO'LIMLAR — ochiladigan ro'yxat
+   Hozircha Topshiriq bo'limida: "Rasmli test" va "Texnologik diktantlar".
+   Sof <details>/<summary>: JS kerak emas, klaviatura bilan ham ishlaydi.
+   ========================================================= */
+.guruhlar { display: grid; gap: 16px; }
+.material-list + .guruhlar { margin-top: 16px; }
+
+.guruh {
+    /* Navbar yopishqoq — havoladan kelganda sarlavha uning ostida qolmasin. */
+    scroll-margin-top: 94px;
+    background: var(--stone);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1);
+    overflow: hidden;
+}
+.guruh > summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 19px 26px;
+    background: var(--paper);
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: 1.06rem;
+    font-weight: 700;
+    color: var(--siyoh);
+    /* Brauzerning o'z uchburchagi o'chadi — o'rniga o'ng tomondagi strelka. */
+    list-style: none;
+    transition: background-color 0.18s;
+}
+.guruh > summary::-webkit-details-marker { display: none; }
+.guruh > summary:hover { background: var(--stone-2); }
+.guruh[open] > summary { border-bottom: 1px solid var(--line); }
+.guruh > summary .motif { width: 24px; height: 24px; color: var(--anor); }
+
+.guruh-nomi { flex: 1; min-width: 0; }
+.guruh-son {
+    flex-shrink: 0;
+    padding: 2px 11px;
+    border-radius: 999px;
+    background: var(--stone);
+    color: var(--ink-2);
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.guruh > summary:hover .guruh-son { background: var(--paper); }
+.guruh-strelka {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--ink-3);
+    transition: transform 0.2s;
+}
+.guruh[open] .guruh-strelka { transform: rotate(180deg); }
+
+.guruh-ichi { padding: 20px 22px 22px; }
+.guruh-bosh { margin: 0; color: var(--ink-2); font-size: 0.95rem; }
+.guruh-bosh a { color: var(--firuza); font-weight: 700; }
+
+/* Kichik bo'lim ichidagi interaktiv sahifa havolasi (onlayn test va h.k.) */
+.guruh-ilova {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    background: var(--siyoh);
+    border-radius: var(--r-md);
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.18s, transform 0.18s;
+}
+.guruh-ilova:hover { background: var(--siyoh-2); transform: translateY(-2px); }
+.guruh-ilova .motif { width: 40px; height: 40px; color: var(--zafaron); flex-shrink: 0; }
+.guruh-ilova-matn { display: grid; gap: 3px; min-width: 0; }
+.guruh-ilova-matn b { font-family: var(--font-display); font-size: 1.06rem; }
+.guruh-ilova-matn span { font-size: 0.9rem; color: rgba(255, 255, 255, 0.74); }
+.guruh-ilova-tugma {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 10px 20px;
+    border-radius: 999px;
+    background: var(--zafaron);
+    color: var(--siyoh);
+    font-weight: 700;
+    font-size: 0.88rem;
+    white-space: nowrap;
+}
+.guruh-ilova-tugma svg { width: 16px; height: 16px; }
+.guruh-ilova:hover .guruh-ilova-tugma { background: var(--zafaron-l); }
+
+/* =========================================================
    MUALLIF (O'zim haqimda)
    ========================================================= */
 .muallif {
@@ -960,6 +1123,64 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
     .muallif-card { position: static; max-width: 320px; }
 }
 
+/* Keng ekranlar: navbar shrifti o'sadi.
+   1366px li noutbukda yetti bo'lim bir qatorga zo'rg'a sig'adi, shuning uchun
+   asosiy o'lcham (0.94rem) kichik — lekin 1600–1920px li monitorda navbar
+   chetlarida bo'sh joy ko'p qolib, yozuvlar mayda ko'rinardi. Shuning uchun
+   joy yetganda o'lcham bosqichma-bosqich kattalashadi. `.topbar .wrap` ning
+   max-width i ham har bosqichda o'sishi SHART — aks holda havolalar 1340px
+   ga qisilib, ikkinchi qatorga tushib ketadi.
+
+   O'lchangan mazmun eni (tizimga kirgan holat; `.wrap` ning 56px to'ldirishi
+   ichida; haqiqiy oyna uchun ~15px aylantirish yo'lagi qo'shiladi):
+     0.94rem / 7px  → 1325px  (kerak 1340px)  ← asosiy, 1366px uchun
+     1.00rem / 9px  → 1411px  (kerak 1426px)  ← 1450px dan
+     1.06rem / 11px → 1502px  (kerak 1517px)  ← 1560px dan
+     1.12rem / 13px → 1594px  (kerak 1609px)  ← 1660px dan
+   Har bosqichda ~25–50px zaxira qoldirilgan. O'lchamni o'zgartirsangiz,
+   qaytadan o'lchang: usul yuqorida, `.topbar .wrap` izohida yozilgan. */
+@media (min-width: 1450px) {
+    .topbar .wrap { max-width: 1420px; }
+    .nav a { font-size: 1.00rem; padding: 10px 9px; }
+    .brand-name { font-size: 1.20rem; }
+    .brand-sub { font-size: 0.70rem; }
+    .brand-logo { width: 44px; height: 44px; }
+    .nav-user { font-size: 0.98rem; max-width: 96px; }
+    .btn-nav { font-size: 0.98rem; }
+}
+
+@media (min-width: 1560px) {
+    .topbar .wrap { max-width: 1510px; }
+    .nav a { font-size: 1.06rem; padding: 10px 11px; }
+    .brand-name { font-size: 1.26rem; }
+    .brand-sub { font-size: 0.72rem; }
+    .brand-logo { width: 46px; height: 46px; }
+    .nav-user { font-size: 1.02rem; max-width: 110px; }
+    .btn-nav { font-size: 1.02rem; padding: 11px 22px; }
+}
+
+@media (min-width: 1660px) {
+    .topbar .wrap { max-width: 1600px; }
+    .nav a { font-size: 1.12rem; padding: 10px 13px; }
+    .brand-name { font-size: 1.32rem; }
+    .brand-sub { font-size: 0.74rem; }
+    .brand-logo { width: 48px; height: 48px; }
+    .nav-user { font-size: 1.06rem; max-width: 124px; }
+    .btn-nav { font-size: 1.06rem; padding: 12px 24px; }
+}
+
+/* 1280–1365px oralig'i: yetti bo'lim bir qatorda qolsin deb navbar
+   shrifti eski (kichikroq) o'lchamiga qaytadi. Kattaroq shrift faqat
+   1366px va undan keng ekranlarda — u yerda joy yetadi. Shu qoida
+   bo'lmasa, 1280px li noutbuk to'satdan gamburgerga tushib qolardi. */
+@media (max-width: 1365px) {
+    .nav a { font-size: 0.88rem; padding: 9px 7px; }
+    .brand-name { font-size: 1.08rem; }
+    .brand-sub { font-size: 0.63rem; }
+    .nav-user { font-size: 0.88rem; }
+    .btn-nav { font-size: 0.88rem; padding: 9px 18px; }
+}
+
 @media (max-width: 1279px) {
     .topbar .wrap { flex-wrap: wrap; min-height: 68px; }
     .nav-toggle { display: flex; }
@@ -976,6 +1197,24 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
     .nav.open { display: flex; }
     .nav a { padding: 14px 8px; font-size: 1.05rem; border-radius: 0; }
     .nav a.is-active::after { left: 8px; right: auto; width: 30px; bottom: 8px; }
+    /* Gamburger menyuda ochiladigan panel emas — kichik bo'limlar shunchaki
+       "Topshiriq" ostida ro'yxat bo'lib turadi (barmoq bilan hover yo'q). */
+    .nav-menu {
+        position: static;
+        padding-top: 0;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+    }
+    .nav-menu-ichi {
+        min-width: 0;
+        padding: 0 0 6px;
+        background: none;
+        border: none;
+        box-shadow: none;
+    }
+    .nav .nav-menu a { padding: 11px 8px 11px 26px; font-size: 0.97rem; }
+    .nav-strelka { display: none; }
     .nav-auth {
         order: 4;
         width: 100%;
@@ -1008,6 +1247,14 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
     .material .actions { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
     .material-body { grid-column: 1 / -1; }
     .hero-cta .btn { width: 100%; justify-content: center; }
+
+    .guruh-ilova { flex-wrap: wrap; gap: 12px; padding: 16px; }
+    .guruh-ilova .motif { display: none; }
+    .guruh-ilova-tugma { margin-left: 0; width: 100%; justify-content: center; }
+
+    .guruh > summary { padding: 16px 18px; gap: 10px; font-size: 1rem; }
+    .guruh > summary .motif { display: none; }   /* tor ekranda nom uchun joy */
+    .guruh-ichi { padding: 16px 14px 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -9,6 +9,19 @@
     <link rel="icon" type="image/png" href="/static/img/favicon-32.png" sizes="32x32">
     <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
     <link rel="stylesheet" href="/static/css/platform.css">
+    {% comment %}
+        Shriftlar bloklamasdan yuklanadi: `media="print"` bo'lgani uchun
+        brauzer uni kutmaydi, yuklangach `onload` bilan `all` ga o'tadi.
+        Oddiy `<link>` yoki CSS ichidagi `@import` bo'lsa, Google Fonts
+        sekinlashganda sahifaning JS i ham muzlab qolardi.
+    {% endcomment %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+          href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Karla:wght@400;500;600;700;800&display=swap">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Karla:wght@400;500;600;700;800&display=swap">
+    </noscript>
     {% block head %}{% endblock %}
 </head>
 <body class="pf">
@@ -52,7 +65,26 @@
                 <a href="/metodika"   {% if active == 'metodika' %}class="is-active" aria-current="page"{% endif %}>Metodika</a>
                 <a href="/maqola"     {% if active == 'maqola' %}class="is-active" aria-current="page"{% endif %}>Maqola</a>
                 <a href="/multimediya"{% if active == 'multimediya' %}class="is-active" aria-current="page"{% endif %}>Multimedia</a>
-                <a href="/topshiriq"  {% if active == 'topshiriq' %}class="is-active" aria-current="page"{% endif %}>Topshiriq</a>
+                {# Topshiriq — yagona bo'lim: ustiga sichqoncha kelganda kichik bo'limlar chiqadi. #}
+                <div class="nav-item">
+                    <a href="/topshiriq" class="nav-bosh{% if active == 'topshiriq' %} is-active{% endif %}"
+                       {% if active == 'topshiriq' %}aria-current="page"{% endif %}>
+                        Topshiriq
+                        <svg class="nav-strelka" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                    </a>
+                    <div class="nav-menu">
+                        <div class="nav-menu-ichi">
+                            <a href="/topshiriq/rasmli-test">
+                                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                                Rasmli test
+                            </a>
+                            <a href="/topshiriq#diktant">
+                                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                                Texnologik diktantlar
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <a href="/xarita"     {% if active == 'xarita' %}class="is-active" aria-current="page"{% endif %}>Instruksion texnologik xarita</a>
                 <a href="/ishlanma"   {% if active == 'ishlanma' %}class="is-active" aria-current="page"{% endif %}>Dars ishlanmalar</a>
             </nav>

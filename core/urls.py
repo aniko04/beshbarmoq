@@ -32,6 +32,7 @@ urlpatterns = [
     path('maqola', views.maqola, name='maqola'),
     path('multimediya', views.multimediya, name='multimediya'),
     path('topshiriq', views.topshiriq, name='topshiriq'),
+    path('topshiriq/rasmli-test', views.rasmli_test_sahifa, name='rasmli_test'),
     path('xarita', views.xarita, name='xarita'),
     path('ishlanma', views.ishlanma, name='ishlanma'),
 

@@ -15,6 +15,7 @@ class Result(models.Model):
         ('m8b', 'Mashq 8 – Fetr test'),
         ('m9b', 'Mashq 9 – Kvilling bilan ishlash test'),
         ('m10b', 'Mashq 10 – Loy va plastilin bilan ishlash test'),
+        ('rtest', "Rasmli test – 2–4-sinf (Topshiriq bo'limi)"),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
@@ -64,8 +65,24 @@ class Material(models.Model):
         (SECTION_ISHLANMA, "Dars ishlanmalar"),
     ]
 
+    # Kichik bo'limlar — hozircha faqat "Topshiriq" bo'limida ishlatiladi:
+    # sahifada har biri ochiladigan ro'yxat (dropdown) bo'lib chiqadi.
+    # Bo'sh qoldirilgan material guruhlardan tashqarida, ro'yxat boshida turadi.
+    KICHIK_RASMLI_TEST = 'rasmli_test'
+    KICHIK_DIKTANT = 'diktant'
+    KICHIK_BOLIM_CHOICES = [
+        (KICHIK_RASMLI_TEST, "Rasmli test"),
+        (KICHIK_DIKTANT, "Texnologik diktantlar"),
+    ]
+
     section = models.CharField(
         max_length=20, choices=SECTION_CHOICES, verbose_name="Bo'lim",
+    )
+    kichik_bolim = models.CharField(
+        max_length=20, choices=KICHIK_BOLIM_CHOICES, blank=True,
+        verbose_name="Kichik bo'lim",
+        help_text="Faqat \"Topshiriq\" bo'limi uchun: material qaysi ochiladigan "
+                  "ro'yxatga tushishi. Boshqa bo'limlarda bo'sh qoldiring.",
     )
     title = models.CharField(max_length=250, verbose_name="Sarlavha")
     summary = models.TextField(

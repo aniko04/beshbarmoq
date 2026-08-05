@@ -21,86 +21,77 @@
 {% endcomment %}
 <section class="section bolim-{{ active }}">
     <div class="wrap">
-        {% if materiallar %}
+        {% comment %}
+            `guruhlar` bo'lsa (Topshiriq bo'limi), bo'lim bo'sh bo'lsa ham
+            kichik bo'lim ro'yxatlari ko'rinib turadi — mijoz ularni admin
+            orqali to'ldirgach, sahifa o'zgarmaydi.
+        {% endcomment %}
+        {% if jami or guruhlar %}
             <div class="section-head">
-                <span class="eyebrow ink">
-                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
-                    {{ materiallar|length }} ta material
-                </span>
+                {% if jami %}
+                    <span class="eyebrow ink">
+                        <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                        {{ jami }} ta material
+                    </span>
+                {% endif %}
                 <h2>{{ bolim_sarlavha }}</h2>
             </div>
 
-            <div class="material-list">
-                {% for m in materiallar %}
-                    <article class="material{% if m.muqova %} has-muqova{% endif %}">
-                        {% if m.muqova %}
-                            <div class="material-muqova">
-                                {% comment %}
-                                    Muqovalar sahifaning asosiy ko'rinishi va har biri ~20 KB,
-                                    shuning uchun `loading="lazy"` qo'yilmagan — scroll paytida
-                                    sakrab chiqmasin. Ro'yxat juda uzaysa qayta o'ylash mumkin.
-                                {% endcomment %}
-                                <img src="{{ m.muqova.url }}" alt="{{ m.title }} — muqova">
-                            </div>
-                        {% else %}
-                            <div class="material-tag">
-                                {% if m.file_ext %}
-                                    {{ m.file_ext }}
-                                {% else %}
-                                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
-                                {% endif %}
-                            </div>
-                        {% endif %}
+            {% comment %} Kichik bo'limga tegishli bo'lmagan materiallar — oddiy ro'yxat. {% endcomment %}
+            {% if materiallar %}
+                <div class="material-list">
+                    {% for m in materiallar %}
+                        {% include "_material.html" %}
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-                        <div>
-                            <h3>{{ m.title }}</h3>
-                            {% if m.manba %}<div class="meta">{{ m.manba }}</div>{% endif %}
-                            {% if m.summary %}<p>{{ m.summary }}</p>{% endif %}
-                        </div>
-
-                        {% if m.file or m.link %}
-                            <div class="actions">
-                                {% if m.koruv_url %}
-                                    <button type="button" class="btn-sm" data-pdf-tugma
-                                            data-manba="{{ m.koruv_url }}"
-                                            aria-expanded="false" aria-controls="koruvchi-{{ m.pk }}">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                        <span data-yorliq>Ko'rish</span>
-                                    </button>
-                                {% endif %}
-                                {% if m.file %}
-                                    <a class="btn-sm" href="{{ m.file.url }}" download>
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                                        Yuklab olish
+            {% comment %} Kichik bo'limlar: har biri ochiladigan ro'yxat (dropdown). {% endcomment %}
+            {% if guruhlar %}
+                <div class="guruhlar">
+                    {% for g in guruhlar %}
+                        {% comment %} id — navbardagi menyu shu yerga olib keladi (/topshiriq#rasmli_test). {% endcomment %}
+                        <details class="guruh" id="{{ g.kalit }}"{% if forloop.first %} open{% endif %}>
+                            <summary>
+                                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                                <span class="guruh-nomi">{{ g.nomi }}</span>
+                                <span class="guruh-son">{{ g.materiallar|length }}</span>
+                                <svg class="guruh-strelka" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                            </summary>
+                            <div class="guruh-ichi">
+                                {% if g.ilova %}
+                                    {% comment %} Interaktiv sahifa (masalan onlayn test) — materiallardan yuqorida. {% endcomment %}
+                                    <a class="guruh-ilova" href="{{ g.ilova.url }}">
+                                        <svg class="motif" aria-hidden="true"><use href="#orama"/></svg>
+                                        <span class="guruh-ilova-matn">
+                                            <b>{{ g.ilova.sarlavha }}</b>
+                                            <span>{{ g.ilova.tavsif }}</span>
+                                        </span>
+                                        <span class="guruh-ilova-tugma">
+                                            {{ g.ilova.tugma }}
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                                        </span>
                                     </a>
                                 {% endif %}
-                                {% if m.link %}
-                                    <a class="btn-sm" href="{{ m.link }}" target="_blank" rel="noopener">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
-                                        Manbaga o'tish
-                                    </a>
+                                {% if g.materiallar %}
+                                    <div class="material-list">
+                                        {% for m in g.materiallar %}
+                                            {% include "_material.html" %}
+                                        {% endfor %}
+                                    </div>
+                                {% elif not g.ilova %}
+                                    <p class="guruh-bosh">
+                                        Bu ro'yxatga hali material qo'shilmagan.
+                                        {% if user.is_staff %}
+                                            <a href="/admin/home/material/add/">Material qo'shish</a>
+                                        {% endif %}
+                                    </p>
                                 {% endif %}
                             </div>
-                        {% endif %}
-
-                        {% if m.body %}
-                            <div class="material-body">
-                                {{ m.body|linebreaks }}
-                            </div>
-                        {% endif %}
-
-                        {% if m.koruv_url %}
-                            {% comment %}
-                                Ko'ruvchi: iframe manzili faqat tugma bosilganda beriladi,
-                                shunda og'ir PDF sahifa ochilishida yuklanmaydi.
-                            {% endcomment %}
-                            <div class="material-koruvchi" id="koruvchi-{{ m.pk }}" hidden>
-                                <iframe title="{{ m.title }} — PDF ko'rinishi" src="about:blank"></iframe>
-                            </div>
-                        {% endif %}
-                    </article>
-                {% endfor %}
-            </div>
+                        </details>
+                    {% endfor %}
+                </div>
+            {% endif %}
         {% else %}
             <div class="empty">
                 <svg class="motif" aria-hidden="true"><use href="#orama"/></svg>
@@ -150,6 +141,22 @@
             }
             tugma.setAttribute('aria-expanded', ochiladi ? 'true' : 'false');
         });
+    })();
+
+    // Navbar menyusidan kelgan havola (/topshiriq#rasmli_test) kerakli kichik
+    // bo'limni ochib, o'sha yerga olib tushadi. Sahifa allaqachon ochiq bo'lsa
+    // manzil o'zgarishining o'zi yetarli — shuning uchun hashchange ham tinglanadi.
+    (function () {
+        function ochish() {
+            var kalit = decodeURIComponent(location.hash.slice(1));
+            if (!kalit) return;
+            var guruh = document.getElementById(kalit);
+            if (!guruh || guruh.tagName !== 'DETAILS') return;
+            guruh.open = true;
+            guruh.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        }
+        ochish();
+        window.addEventListener('hashchange', ochish);
     })();
 </script>
 {% endblock %}

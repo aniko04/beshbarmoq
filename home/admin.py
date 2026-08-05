@@ -68,14 +68,17 @@ class ProfileAdmin(admin.ModelAdmin):
 # ===== Bo'lim materiallari =====
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['title', 'section', 'fayl_display', 'order', 'is_published', 'created_at']
-    list_filter = ['section', 'is_published']
+    list_display = ['title', 'section', 'kichik_bolim', 'fayl_display', 'order', 'is_published', 'created_at']
+    list_filter = ['section', 'kichik_bolim', 'is_published']
     search_fields = ['title', 'summary', 'manba']
     list_editable = ['order', 'is_published']
     list_per_page = 30
     fieldsets = (
         ("Asosiy", {
-            'fields': ('section', 'title', 'summary'),
+            'fields': ('section', 'kichik_bolim', 'title', 'summary'),
+            'description': "\"Kichik bo'lim\" faqat Topshiriq bo'limida ishlaydi — "
+                           "material \"Rasmli test\" yoki \"Texnologik diktantlar\" "
+                           "ro'yxatiga tushadi.",
         }),
         ("Mazmun", {
             'fields': ('body', 'file', 'koruv', 'muqova', 'link', 'manba'),

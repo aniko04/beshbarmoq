@@ -1,0 +1,384 @@
+/* =========================================================
+   RASMLI TEST — Topshiriq bo'limining interaktiv testi.
+   platform.css tokenlari ustida ishlaydi (base.html ni kengaytiradi),
+   lekin 2–4-sinf o'quvchilari uchun yirikroq va rangliroq.
+   ========================================================= */
+
+.rt-head::before { background-image: url('/static/img/qollar.jpg'); }
+
+/* Sarlavha ostidagi qisqa ma'lumot: topshiriq / ball / vaqt / sinf */
+.rt-fakt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 22px 0 0;
+}
+.rt-fakt li {
+    padding: 7px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.86);
+}
+.rt-fakt b { color: var(--zafaron); font-family: var(--font-display); }
+
+/* ===== Yopishqoq boshqaruv paneli ===== */
+.rt-panel {
+    position: sticky;
+    top: 73px;                 /* navbar balandligi */
+    z-index: 40;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 6px 18px rgba(20, 32, 58, 0.07);
+}
+.rt-progress {
+    height: 4px;
+    background: var(--stone-2);
+}
+.rt-progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--firuza), var(--zafaron));
+    transition: width 0.25s;
+}
+.rt-panel-ichi {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 11px 0;
+}
+.rt-holat { font-size: 0.92rem; color: var(--ink-2); }
+.rt-holat b { color: var(--siyoh); font-size: 1.05rem; }
+.rt-tekshir { margin-left: auto; padding: 10px 22px; }
+.rt-tekshir:disabled { opacity: 0.45; cursor: default; }
+.rt-panel-tugadi .rt-progress span { background: var(--firuza); }
+
+/* ===== Burchakdagi soat =====
+   O'ng pastki burchakda suzib turadi: tashqi halqa vaqt o'tgani sari
+   kamayadi, o'rtasida raqam. Ohirgi 5 daqiqada za'faron, 1 daqiqada
+   anor rangga o'tadi va sekin urib turadi. */
+.rt-soat {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 45;
+    width: 88px;
+    height: 88px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 12px 30px rgba(20, 32, 58, 0.24);
+    transition: box-shadow 0.3s, transform 0.3s, opacity 0.3s;
+}
+.rt-soat-halqa {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);   /* hisob tepadan boshlansin */
+}
+.rt-soat-fon { fill: none; stroke: var(--stone-2); stroke-width: 4; }
+.rt-soat-yoy {
+    fill: none;
+    stroke: var(--firuza);
+    stroke-width: 4;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.3s;
+}
+.rt-soat-matn { display: grid; justify-items: center; line-height: 1.15; }
+.rt-soat-matn b {
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    color: var(--siyoh);
+    font-variant-numeric: tabular-nums;
+}
+.rt-soat-matn small {
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+}
+.rt-soat.ogoh .rt-soat-yoy { stroke: var(--zafaron); }
+.rt-soat.kam .rt-soat-yoy { stroke: var(--anor); }
+.rt-soat.kam .rt-soat-matn b { color: var(--anor); }
+.rt-soat.kam { animation: rt-puls 1.4s ease-in-out infinite; }
+.rt-soat.tugadi { opacity: 0.75; animation: none; }
+.rt-soat.tugadi .rt-soat-yoy { stroke: var(--ink-3); }
+@keyframes rt-puls {
+    50% { box-shadow: 0 12px 30px rgba(192, 57, 43, 0.5); transform: scale(1.04); }
+}
+
+/* ===== Savol kartasi ===== */
+.rt-bolim { padding-top: 40px; }
+
+.rt-savol {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-1);
+    padding: 24px 26px 22px;
+    margin-bottom: 22px;
+    scroll-margin-top: 150px;
+}
+.rt-savol-bosh {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+.rt-raqam {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--siyoh);
+    color: #fff;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+.rt-savol-bosh h2 {
+    flex: 1;
+    min-width: 0;
+    font-size: 1.16rem;
+    line-height: 1.35;
+}
+.rt-ball {
+    flex-shrink: 0;
+    padding: 5px 13px;
+    border-radius: 999px;
+    background: var(--limon);
+    border: 1px solid var(--zafaron);
+    color: #8a5a12;
+    font-size: 0.8rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* ===== Rasm variantlari ===== */
+.rt-variantlar {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+.rt-variant {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    padding: 14px 14px 12px;
+    background: var(--stone);
+    border: 2px solid var(--line);
+    border-radius: var(--r-md);
+    font-family: inherit;
+    transition: border-color 0.16s, box-shadow 0.16s, transform 0.16s, background-color 0.16s;
+}
+/* Rasm qutisi: balandligi qat'iy — kartalar bir tekis turadi.
+   Rasmning O'ZI kattalashtirilmaydi: Worddagi asl nusxalar 180–320px,
+   cho'zilsa xira bo'lib ketadi. Shuning uchun tabiiy o'lchamida,
+   qutining o'rtasida turadi. */
+.rt-variant-rasm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+    padding: 6px;
+    background: #fff;
+    border-radius: var(--r-sm);
+    overflow: hidden;
+}
+.rt-variant img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+.rt-variant figcaption,
+.rt-variant-harf {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--siyoh);
+}
+
+/* Tanlanadigan variant (bitta javobli savollar) */
+button.rt-variant { cursor: pointer; }
+button.rt-variant:hover:not(:disabled) {
+    border-color: var(--firuza);
+    background: var(--paper);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+}
+button.rt-variant:disabled { cursor: default; }
+.rt-variant.tanlandi {
+    border-color: var(--firuza);
+    background: #E6F4F4;
+}
+.rt-variant.tanlandi .rt-variant-harf {
+    background: var(--firuza);
+    border-color: var(--firuza);
+    color: #fff;
+}
+/* Faqat ko'rsatish uchun (moslashtirish savollari) */
+.rt-korish .rt-variant { background: var(--stone); }
+
+/* ===== Moslashtirish qatorlari ===== */
+.rt-moslash {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+}
+.rt-qator {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: var(--r-md);
+    background: var(--stone);
+    border: 1.5px solid transparent;
+}
+.rt-yorliq {
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    color: var(--siyoh);
+}
+.rt-harflar { display: flex; gap: 8px; flex-shrink: 0; }
+.rt-harf {
+    width: 46px;
+    height: 42px;
+    border-radius: var(--r-sm);
+    border: 2px solid var(--line);
+    background: var(--paper);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+}
+.rt-harf:hover:not(:disabled) { border-color: var(--firuza); color: var(--siyoh); transform: translateY(-1px); }
+.rt-harf:disabled { cursor: default; }
+.rt-harf.tanlandi {
+    background: var(--firuza);
+    border-color: var(--firuza);
+    color: #fff;
+}
+.rt-javob {
+    flex-shrink: 0;
+    min-width: 46px;
+    text-align: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--firuza);
+}
+.rt-belgi {
+    flex-shrink: 0;
+    width: 26px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* Tekshirilgandan keyingi holat */
+.rt-qator.rt-togri { background: #E8F6EC; border-color: #48A860; }
+.rt-qator.rt-togri .rt-belgi { color: #2E7D45; }
+.rt-qator.rt-xato { background: #FDECEA; border-color: var(--anor); }
+.rt-qator.rt-xato .rt-belgi { color: var(--anor); }
+
+.rt-harf.kalit, .rt-variant.kalit {
+    border-color: #48A860;
+    box-shadow: 0 0 0 3px rgba(72, 168, 96, 0.22);
+}
+.rt-harf.kalit { background: #E8F6EC; color: #2E7D45; }
+.rt-harf.notogri, .rt-variant.notogri {
+    border-color: var(--anor);
+    background: #FDECEA;
+}
+.rt-harf.notogri { color: var(--anor); }
+.rt-variant.notogri .rt-variant-harf { background: var(--anor); border-color: var(--anor); color: #fff; }
+
+/* ===== Natija ===== */
+.rt-natija {
+    text-align: center;
+    padding: 44px 30px 40px;
+    background: var(--stone);
+    border: 2px dashed var(--stone-2);
+    border-radius: var(--r-lg);
+    scroll-margin-top: 150px;
+}
+.rt-natija[hidden] { display: none; }
+.rt-natija.rt-alo { background: #E8F6EC; border-color: #9AD3AA; }
+.rt-natija .motif { width: 74px; height: 74px; color: var(--zafaron); margin: 0 auto 14px; }
+.rt-natija h2 { font-size: 1.5rem; margin-bottom: 14px; }
+.rt-ochko { font-family: var(--font-display); font-size: 2rem; color: var(--siyoh); margin: 0; }
+.rt-ochko b { font-size: 2.6rem; color: var(--anor); }
+.rt-foiz {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--firuza);
+    margin: 4px 0 12px;
+}
+.rt-izoh { color: var(--ink-2); max-width: 54ch; margin: 0 auto 24px; }
+.rt-natija-tugma { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+/* Yorug' fondagi ikkilamchi tugma — platform.css dagi .btn-outline qorong'i
+   fon uchun mo'ljallangan, shuning uchun bu yerda o'zimizniki. */
+.btn-line {
+    background: var(--paper);
+    color: var(--siyoh);
+    border-color: var(--line);
+}
+.btn-line:hover { background: var(--stone); border-color: var(--siyoh); }
+
+@media (max-width: 900px) {
+    .rt-variant-rasm { height: 160px; }
+}
+
+@media (max-width: 660px) {
+    .rt-panel { top: 67px; }
+    .rt-panel-ichi { flex-wrap: wrap; gap: 10px; }
+    .rt-tekshir { width: 100%; margin-left: 0; justify-content: center; }
+
+    .rt-soat { right: 12px; bottom: 12px; width: 68px; height: 68px; }
+    .rt-soat-halqa { width: 68px; height: 68px; }
+    .rt-soat-matn b { font-size: 0.92rem; }
+    .rt-soat-matn small { font-size: 0.5rem; }
+
+    .rt-variant-rasm { height: 112px; padding: 4px; }
+
+    .rt-savol { padding: 18px 16px; }
+    .rt-savol-bosh { flex-wrap: wrap; gap: 10px; }
+    .rt-savol-bosh h2 { font-size: 1.05rem; flex-basis: 100%; order: 3; }
+    .rt-variantlar { gap: 10px; }
+    .rt-variant { padding: 8px 8px 10px; }
+    .rt-qator { flex-wrap: wrap; gap: 8px 12px; }
+    .rt-yorliq { flex-basis: 100%; }
+    .rt-harf { width: 42px; height: 40px; }
+}
+
+/* Chop etish uchun: boshqaruv paneli va tugmalar chiqmaydi */
+@media print {
+    .topbar, .footer, .rt-panel, .rt-natija-tugma, .skip-link,
+    .rt-soat { display: none !important; }
+    .rt-savol { break-inside: avoid; box-shadow: none; }
+    .rt-head { background: none; color: var(--ink); }
+}

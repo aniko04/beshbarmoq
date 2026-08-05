@@ -8,6 +8,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.conf import settings
 from functools import wraps
 from .models import Result, Profile, Material
+from . import rasmli_test
 import json
 
 
@@ -64,14 +65,41 @@ def multimediya(request):
     })
 
 
-def _bolim(request, section, nomi, lede, sarlavha):
-    """Admin orqali to'ldiriladigan material bo'limlarining umumiy ko'rinishi."""
+def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None):
+    """Admin orqali to'ldiriladigan material bo'limlarining umumiy ko'rinishi.
+
+    `guruhlash` berilsa (masalan Topshiriq bo'limida), materiallar kichik
+    bo'limlarga ajratiladi va sahifada har biri ochiladigan ro'yxat bo'lib
+    chiqadi. Kichik bo'limi belgilanmagan materiallar guruhlardan tashqarida,
+    ro'yxat boshida oddiy karta bo'lib qoladi.
+
+    `ilova` — kichik bo'lim kaliti bo'yicha interaktiv sahifaga havola
+    (masalan «Rasmli test» guruhidagi onlayn test): {kalit: {...}}.
+    """
+    hammasi = list(Material.objects.filter(section=section, is_published=True))
+    guruhlar = []
+    guruhsiz = hammasi
+    if guruhlash:
+        kalitlar = [kalit for kalit, _ in guruhlash]
+        guruhlar = [
+            {
+                'kalit': kalit,
+                'nomi': guruh_nomi,
+                'materiallar': [m for m in hammasi if m.kichik_bolim == kalit],
+                'ilova': (ilova or {}).get(kalit),
+            }
+            for kalit, guruh_nomi in guruhlash
+        ]
+        guruhsiz = [m for m in hammasi if m.kichik_bolim not in kalitlar]
+
     return render(request, 'bolim.html', {
         'active': section,
         'bolim_nomi': nomi,
         'bolim_lede': lede,
         'bolim_sarlavha': sarlavha,
-        'materiallar': Material.objects.filter(section=section, is_published=True),
+        'materiallar': guruhsiz,
+        'guruhlar': guruhlar,
+        'jami': len(hammasi),
     })
 
 
@@ -96,13 +124,44 @@ def maqola(request):
 
 
 def topshiriq(request):
-    """5-bo'lim — amaliy topshiriqlar."""
+    """5-bo'lim — amaliy topshiriqlar; ikki kichik bo'limga ajratilgan."""
     return _bolim(
         request, Material.SECTION_TOPSHIRIQ, "Topshiriq",
         "Sinfda va uyda bajarish uchun amaliy topshiriqlar to'plami hamda "
         "ularni baholash mezonlari.",
         "Amaliy topshiriqlar",
+        guruhlash=Material.KICHIK_BOLIM_CHOICES,
+        ilova={
+            Material.KICHIK_RASMLI_TEST: {
+                'url': '/topshiriq/rasmli-test',
+                'sarlavha': "Onlayn rasmli test",
+                'tavsif': "2–4-sinf o'quvchilari uchun {} ta topshiriq, {} ball, "
+                          "{} daqiqa. Javoblar shu yerda tekshiriladi.".format(
+                              len(rasmli_test.savollar()), rasmli_test.jami_ball(),
+                              rasmli_test.DAQIQA),
+                'tugma': "Testni boshlash",
+            },
+        },
     )
+
+
+def rasmli_test_sahifa(request):
+    """Topshiriq bo'limining «Rasmli test» kichik bo'limi — interaktiv test.
+
+    Savollar va javob kaliti `home/rasmli_test.py` da; sahifa o'sha ma'lumotdan
+    yig'iladi, tekshirish esa brauzerda bo'ladi (natija login qilganlarda
+    `/api/save-result` orqali saqlanadi).
+    """
+    return render(request, 'rasmli_test.html', {
+        'active': 'topshiriq',
+        'savollar': rasmli_test.savollar(),
+        # json_script shablonda o'zi JSON qiladi — bu yerda lug'atning o'zi beriladi.
+        'javoblar': rasmli_test.javob_kaliti(),
+        'jami_ball': rasmli_test.jami_ball(),
+        'jami_qator': rasmli_test.jami_qator(),
+        'qator_ball': rasmli_test.QATOR_BALL,
+        'daqiqa': rasmli_test.DAQIQA,
+    })
 
 
 def xarita(request):

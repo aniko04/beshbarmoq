@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+
+{% block title %}Rasmli test — Topshiriq{% endblock %}
+{% block description %}2–4-sinf o'quvchilari uchun rasmli test: {{ savollar|length }} ta topshiriq, {{ jami_ball }} ball, {{ daqiqa }} daqiqa.{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/rasmli-test.css">
+{% endblock %}
+
+{% block content %}
+<section class="page-head rt-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span>
+            <a href="/topshiriq">Topshiriq</a> <span aria-hidden="true">&rsaquo;</span>
+            <span>Rasmli test</span>
+        </nav>
+        <h1>Rasmli test</h1>
+        <p class="page-lede">
+            2–4-sinf o'quvchilari uchun. Har bir topshiriqda uchta rasm bor —
+            savolga mos keladiganini tanlang.
+        </p>
+        <ul class="rt-fakt">
+            <li><b>{{ savollar|length }}</b> topshiriq</li>
+            <li><b>{{ jami_ball }}</b> ball</li>
+            <li><b>{{ daqiqa }}</b> daqiqa</li>
+            <li><b>2–4</b> sinf</li>
+        </ul>
+    </div>
+</section>
+
+{% comment %} Yopishqoq boshqaruv paneli: bajarilgani, vaqt va tekshirish tugmasi. {% endcomment %}
+<div class="rt-panel" id="rt-panel">
+    <div class="wrap">
+        <div class="rt-progress" aria-hidden="true"><span id="rt-progress-chiziq"></span></div>
+        <div class="rt-panel-ichi">
+            <span class="rt-holat">
+                Bajarildi: <b id="rt-bajarildi">0</b> / {{ jami_qator }}
+            </span>
+            <button type="button" class="btn btn-solid rt-tekshir" id="rt-tekshir">
+                Tekshirish
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+{% comment %}
+    Soat — sahifaning o'ng pastki burchagida suzib turadi. Halqa vaqt
+    o'tgan sari kamayadi; birinchi javob belgilangandan keyin yuradi.
+{% endcomment %}
+<div class="rt-soat" id="rt-soat-quti" role="timer" aria-live="off"
+     title="Testga {{ daqiqa }} daqiqa berilgan">
+    <svg class="rt-soat-halqa" viewBox="0 0 48 48" width="88" height="88" aria-hidden="true">
+        <circle class="rt-soat-fon" cx="24" cy="24" r="21"/>
+        <circle class="rt-soat-yoy" id="rt-soat-yoy" cx="24" cy="24" r="21"/>
+    </svg>
+    <span class="rt-soat-matn">
+        <b id="rt-soat">{{ daqiqa }}:00</b>
+        <small id="rt-soat-yorliq">daqiqa</small>
+    </span>
+</div>
+
+<section class="section rt-bolim">
+    <div class="wrap">
+        {% for s in savollar %}
+            <article class="rt-savol" id="savol-{{ s.raqam }}" data-savol="{{ s.raqam }}">
+                <header class="rt-savol-bosh">
+                    <span class="rt-raqam">{{ s.raqam }}</span>
+                    <h2>{{ s.savol }}</h2>
+                    <span class="rt-ball">{{ s.ball }} ball</span>
+                </header>
+
+                <div class="rt-variantlar{% if s.moslash %} rt-korish{% endif %}">
+                    {% for v in s.variantlar %}
+                        {% if s.moslash %}
+                            {% comment %} Moslashtirish savolida rasmlar faqat ko'rsatiladi, tanlov pastda. {% endcomment %}
+                            <figure class="rt-variant">
+                                <span class="rt-variant-rasm">
+                                    {% comment %}
+                                        `loading="lazy"` ATAYLAB yo'q: 45 rasm jami ~1 MB,
+                                        lekin kechikib yuklanganda ba'zi brauzerlarda quti
+                                        bo'sh qolib ketardi — testda esa rasm ko'rinmasa,
+                                        savolni yechib bo'lmaydi.
+                                    {% endcomment %}
+                                    <img src="{{ v.rasm }}" alt="{{ v.harf }} varianti" decoding="async">
+                                </span>
+                                <figcaption>{{ v.harf }}</figcaption>
+                            </figure>
+                        {% else %}
+                            <button type="button" class="rt-variant rt-tanlov"
+                                    data-qator="0" data-harf="{{ v.kalit }}"
+                                    aria-pressed="false">
+                                <span class="rt-variant-rasm">
+                                    {% comment %}
+                                        `loading="lazy"` ATAYLAB yo'q: 45 rasm jami ~1 MB,
+                                        lekin kechikib yuklanganda ba'zi brauzerlarda quti
+                                        bo'sh qolib ketardi — testda esa rasm ko'rinmasa,
+                                        savolni yechib bo'lmaydi.
+                                    {% endcomment %}
+                                    <img src="{{ v.rasm }}" alt="{{ v.harf }} varianti" decoding="async">
+                                </span>
+                                <span class="rt-variant-harf">{{ v.harf }}</span>
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if s.moslash %}
+                    <div class="rt-moslash">
+                        {% for q in s.qatorlar %}
+                            <div class="rt-qator" data-qator="{{ q.nomer }}">
+                                <span class="rt-yorliq">{{ q.yorliq }}</span>
+                                <div class="rt-harflar" role="group" aria-label="{{ q.yorliq }} uchun javob">
+                                    {% for v in s.variantlar %}
+                                        <button type="button" class="rt-harf rt-tanlov"
+                                                data-qator="{{ q.nomer }}" data-harf="{{ v.kalit }}"
+                                                aria-pressed="false"
+                                                aria-label="{{ q.yorliq }} — {{ v.harf }}">{{ v.harf }}</button>
+                                    {% endfor %}
+                                </div>
+                                <span class="rt-belgi" aria-hidden="true"></span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="rt-moslash rt-yagona">
+                        <div class="rt-qator" data-qator="0">
+                            <span class="rt-yorliq">Mos rasmni bosing — javobingiz shu yerda ko'rinadi</span>
+                            <span class="rt-javob" data-javob>—</span>
+                            <span class="rt-belgi" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                {% endif %}
+            </article>
+        {% endfor %}
+
+        {% comment %} Natija — tekshirilgandan keyin ochiladi. {% endcomment %}
+        <div class="rt-natija" id="rt-natija" hidden>
+            <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+            <h2 id="rt-natija-sarlavha">Natija</h2>
+            <p class="rt-ochko"><b id="rt-ball">0</b> / {{ jami_ball }} ball</p>
+            <p class="rt-foiz" id="rt-foiz">0%</p>
+            <p class="rt-izoh" id="rt-izoh"></p>
+            <div class="rt-natija-tugma">
+                <button type="button" class="btn btn-solid" id="rt-qayta">Qaytadan yechish</button>
+                <a class="btn btn-line" href="/topshiriq">Topshiriq bo'limiga qaytish</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form hidden>{% csrf_token %}</form>
+{% endblock %}
+
+{% block scripts %}
+{{ javoblar|json_script:"rt-kalit" }}
+<script>
+(function () {
+    var KALIT = JSON.parse(document.getElementById('rt-kalit').textContent);
+    var QATOR_BALL = {{ qator_ball }};
+    var JAMI_QATOR = {{ jami_qator }};
+    var JAMI_BALL = {{ jami_ball }};
+    var DAQIQA = {{ daqiqa }};
+    var KIRGAN = {% if user.is_authenticated %}true{% else %}false{% endif %};
+
+    var tanlangan = {};      // {savol: {qator: harf}}
+    var tekshirildi = false;
+    var qolgan = DAQIQA * 60;
+    var soatId = null;
+
+    var elSoat = document.getElementById('rt-soat');
+    var elSoatQuti = document.getElementById('rt-soat-quti');
+    var elSoatYoy = document.getElementById('rt-soat-yoy');
+    var elSoatYorliq = document.getElementById('rt-soat-yorliq');
+    var elBajarildi = document.getElementById('rt-bajarildi');
+    var elChiziq = document.getElementById('rt-progress-chiziq');
+    var elNatija = document.getElementById('rt-natija');
+
+    var HALQA = 2 * Math.PI * 21;   // SVG dagi r=21 aylana uzunligi
+    elSoatYoy.style.strokeDasharray = HALQA;
+    elSoatYoy.style.strokeDashoffset = 0;
+
+    function sanoq() {
+        return Object.keys(tanlangan).reduce(function (n, s) {
+            return n + Object.keys(tanlangan[s]).length;
+        }, 0);
+    }
+
+    function holatniYangila() {
+        var n = sanoq();
+        elBajarildi.textContent = n;
+        elChiziq.style.width = (n / JAMI_QATOR * 100) + '%';
+    }
+
+    function soatMatni(sek) {
+        var d = Math.floor(sek / 60), s = sek % 60;
+        return d + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function soatniChiz() {
+        elSoat.textContent = soatMatni(qolgan);
+        elSoatYoy.style.strokeDashoffset = HALQA * (1 - qolgan / (DAQIQA * 60));
+        elSoatQuti.classList.toggle('ogoh', qolgan <= 300 && qolgan > 60);
+        elSoatQuti.classList.toggle('kam', qolgan <= 60);
+    }
+
+    function soatniBoshla() {
+        if (soatId || tekshirildi) return;
+        elSoatQuti.classList.add('yuribdi');
+        elSoatYorliq.textContent = 'qoldi';
+        soatId = setInterval(function () {
+            qolgan--;
+            soatniChiz();
+            if (qolgan <= 0) { clearInterval(soatId); soatId = null; tekshir(true); }
+        }, 1000);
+    }
+
+    // ===== Tanlash =====
+    document.addEventListener('click', function (h) {
+        var tugma = h.target.closest('.rt-tanlov');
+        if (!tugma || tekshirildi) return;
+
+        var savol = tugma.closest('.rt-savol');
+        var raqam = savol.dataset.savol;
+        var qator = tugma.dataset.qator;
+
+        tanlangan[raqam] = tanlangan[raqam] || {};
+        tanlangan[raqam][qator] = tugma.dataset.harf;
+
+        // shu qatordagi boshqa tugmalardan belgini olamiz
+        var qardoshlar = tugma.parentNode.querySelectorAll('.rt-tanlov[data-qator="' + qator + '"]');
+        if (tugma.classList.contains('rt-harf')) {
+            qardoshlar.forEach(function (t) {
+                t.classList.toggle('tanlandi', t === tugma);
+                t.setAttribute('aria-pressed', t === tugma ? 'true' : 'false');
+            });
+        } else {
+            savol.querySelectorAll('.rt-variant.rt-tanlov').forEach(function (t) {
+                t.classList.toggle('tanlandi', t === tugma);
+                t.setAttribute('aria-pressed', t === tugma ? 'true' : 'false');
+            });
+            var koz = savol.querySelector('[data-javob]');
+            if (koz) koz.textContent = tugma.querySelector('.rt-variant-harf').textContent;
+        }
+
+        holatniYangila();
+        soatniBoshla();
+    });
+
+    // ===== Tekshirish =====
+    function tekshir(vaqtTugadi) {
+        if (tekshirildi) return;
+        tekshirildi = true;
+        if (soatId) { clearInterval(soatId); soatId = null; }
+
+        var togri = 0;
+        document.querySelectorAll('.rt-savol').forEach(function (savol) {
+            var raqam = savol.dataset.savol;
+            var kalitlar = KALIT[raqam];
+            var berilgan = tanlangan[raqam] || {};
+
+            kalitlar.forEach(function (togriHarf, i) {
+                var javob = berilgan[i];
+                var qatorEl = savol.querySelector('.rt-qator[data-qator="' + i + '"]');
+                var yaxshi = javob === togriHarf;
+                if (yaxshi) togri++;
+
+                if (qatorEl) {
+                    qatorEl.classList.add(yaxshi ? 'rt-togri' : 'rt-xato');
+                    var belgi = qatorEl.querySelector('.rt-belgi');
+                    if (belgi) belgi.textContent = yaxshi ? '✓' : '✕';
+                }
+
+                // harf tugmalari
+                savol.querySelectorAll('.rt-harf[data-qator="' + i + '"]').forEach(function (t) {
+                    if (t.dataset.harf === togriHarf) t.classList.add('kalit');
+                    if (t.dataset.harf === javob && !yaxshi) t.classList.add('notogri');
+                });
+
+                // yagona javobli savolda rasm kartalari va qator matni
+                if (kalitlar.length === 1) {
+                    var togriYorliq = '';
+                    savol.querySelectorAll('.rt-variant.rt-tanlov').forEach(function (t) {
+                        if (t.dataset.harf === togriHarf) {
+                            t.classList.add('kalit');
+                            togriYorliq = t.querySelector('.rt-variant-harf').textContent.trim();
+                        }
+                        if (t.dataset.harf === javob && !yaxshi) t.classList.add('notogri');
+                    });
+                    var matnEl = qatorEl && qatorEl.querySelector('.rt-yorliq');
+                    if (matnEl) {
+                        matnEl.textContent = yaxshi
+                            ? "Javobingiz to'g'ri"
+                            : (javob ? "Xato — to'g'ri javob: " + togriYorliq
+                                     : "Javob belgilanmadi — to'g'ri javob: " + togriYorliq);
+                    }
+                }
+            });
+        });
+
+        document.querySelectorAll('.rt-tanlov').forEach(function (t) { t.disabled = true; });
+
+        var ball = togri * QATOR_BALL;
+        var foiz = Math.round(ball / JAMI_BALL * 100);
+        document.getElementById('rt-ball').textContent = ball;
+        document.getElementById('rt-foiz').textContent = foiz + '%';
+        document.getElementById('rt-natija-sarlavha').textContent =
+            foiz === 100 ? "Barakalla! Hammasi to'g'ri" :
+            foiz >= 70 ? 'Yaxshi natija!' :
+            foiz >= 40 ? 'Yomon emas, yana urinib ko\'ring' : 'Mavzuni takrorlash kerak';
+        document.getElementById('rt-izoh').textContent =
+            (vaqtTugadi ? 'Vaqt tugadi. ' : '') +
+            togri + ' ta javob to\'g\'ri, ' + (JAMI_QATOR - togri) + ' tasi xato. ' +
+            "Xato javoblar qizil, to'g'risi esa yashil ramka bilan belgilandi.";
+        elNatija.hidden = false;
+        elNatija.classList.toggle('rt-alo', foiz >= 70);
+        elNatija.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        var panel = document.getElementById('rt-panel');
+        panel.classList.add('rt-panel-tugadi');
+        document.getElementById('rt-tekshir').disabled = true;
+        elSoatQuti.classList.add('tugadi');
+        elSoatQuti.classList.remove('kam', 'ogoh');
+        elSoatYorliq.textContent = vaqtTugadi ? 'tugadi' : 'sarflandi';
+        if (!vaqtTugadi) elSoat.textContent = soatMatni(DAQIQA * 60 - qolgan);
+
+        if (KIRGAN) {
+            fetch('/api/save-result', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': kuki('csrftoken') },
+                body: JSON.stringify({ mashq: 'rtest', score: ball, total: JAMI_BALL })
+            }).catch(function () {});
+        }
+    }
+
+    function kuki(nom) {
+        var m = document.cookie.match('(^|;)\\s*' + nom + '\\s*=\\s*([^;]+)');
+        return m ? m.pop() : '';
+    }
+
+    document.getElementById('rt-tekshir').addEventListener('click', function () {
+        var qoldi = JAMI_QATOR - sanoq();
+        if (qoldi > 0 && !confirm(qoldi + " ta javob belgilanmadi. Shunday tekshirilsinmi?")) return;
+        tekshir(false);
+    });
+    document.getElementById('rt-qayta').addEventListener('click', function () {
+        location.reload();
+    });
+
+    holatniYangila();
+})();
+</script>
+{% endblock %}
