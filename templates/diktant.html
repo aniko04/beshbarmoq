@@ -1,0 +1,552 @@
+{% extends "base.html" %}
+
+{% block title %}Texnologik diktantlar — Topshiriq{% endblock %}
+{% block description %}Texnologik diktant: {{ bosqichlar|length }} bosqich, har birida {{ daqiqa }} daqiqa. Rasmlarni nomlarga moslashtiring.{% endblock %}
+
+{% block head %}
+{% comment %}
+    `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi, shuning uchun
+    CSS ni tahrirlaganda bu raqamni oshiring (base.html dagi izohga qarang).
+{% endcomment %}
+<link rel="stylesheet" href="/static/css/diktant.css?v=1">
+{% endblock %}
+
+{% block content %}
+{% comment %} Boshlash oynasi — sahifa ochilishi bilan vaqt ketmasin. {% endcomment %}
+<div class="dk-parda" id="dk-parda" role="dialog" aria-modal="true"
+     aria-labelledby="dk-boshla-sarlavha" aria-describedby="dk-boshla-lede">
+    <div class="dk-boshla">
+        <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+        <h2 id="dk-boshla-sarlavha">Texnologik diktantni boshlaymizmi?</h2>
+        <p class="dk-boshla-lede" id="dk-boshla-lede">
+            Topshiriqlar {{ bosqichlar|length }} bosqichga bo'lingan va ketma-ket
+            bajariladi. Boshlashdan oldin quyidagilarni o'qib chiqing.
+        </p>
+
+        <ul class="dk-qoida">
+            <li><span>Har bir topshiriqda <b>4 ta rasm</b> (1, 2, 3, 4) va <b>4 ta nom</b> bor.</span></li>
+            <li><span>Har bir nom yoniga <b>mos rasm raqamini</b> bosib qo'ying.</span></li>
+            <li><span>Har raqam <b>faqat bir marta</b> ishlatiladi — band raqamni bossangiz, u eski joyidan olinadi.</span></li>
+            <li><span>Bosqichni tekshirgach, <b>keyingisi ochiladi</b>. Jami {{ jami_ball }} ball.</span></li>
+        </ul>
+
+        <div class="dk-ogoh">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+            <span>
+                Har bosqichga <b>{{ daqiqa }} daqiqa</b> beriladi va vaqt shu bosqich
+                boshlanganda ketadi. Vaqt tugasa, javoblar o'zi tekshiriladi.
+            </span>
+        </div>
+
+        <div class="dk-boshla-tugma">
+            <button type="button" class="btn btn-solid" id="dk-boshla-tugma" autofocus>
+                Boshlash
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+            </button>
+            <a class="btn btn-line" href="/topshiriq">Ortga qaytish</a>
+        </div>
+    </div>
+</div>
+
+<section class="page-head dk-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span>
+            <a href="/topshiriq">Topshiriq</a> <span aria-hidden="true">&rsaquo;</span>
+            <span>Texnologik diktantlar</span>
+        </nav>
+        <h1>Texnologik diktantlar</h1>
+        <p class="page-lede">
+            Rasmlarni nomlariga moslashtiring: har bir nom yoniga mos rasm
+            raqamini qo'ying. Topshiriqlar bosqichma-bosqich ochiladi.
+        </p>
+        <ul class="dk-fakt">
+            <li><b>{{ bosqichlar|length }}</b> bosqich</li>
+            <li><b>{{ jami_ball }}</b> ball</li>
+            <li>bosqichiga <b>{{ daqiqa }}</b> daqiqa</li>
+            <li><b>2–4</b> sinf</li>
+        </ul>
+    </div>
+</section>
+
+{% comment %} Yopishqoq yo'lakcha: bosqichlar, bajarilgani va tekshirish tugmasi. {% endcomment %}
+<div class="dk-yolak" id="dk-yolak">
+    <div class="wrap">
+        <ol class="dk-qadamlar" id="dk-qadamlar">
+            {% for b in bosqichlar %}
+                <li class="dk-qadam{% if forloop.first %} joriy{% else %} qulf{% endif %}"
+                    id="qadam-{{ b.raqam }}" data-bosqich="{{ b.raqam }}">
+                    <span class="dk-qadam-raqam">{{ b.raqam }}</span>
+                    <span class="dk-qadam-nomi">{{ b.nomi }}</span>
+                </li>
+            {% endfor %}
+        </ol>
+        <div class="dk-progress" aria-hidden="true"><span id="dk-progress-chiziq"></span></div>
+        <div class="dk-panel-ichi">
+            <span class="dk-holat">
+                Bajarildi: <b id="dk-bajarildi">0</b> / <span id="dk-jami-qator">0</span>
+            </span>
+            <button type="button" class="btn btn-solid dk-tekshir" id="dk-tekshir">
+                Bosqichni tekshirish
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="dk-soat" id="dk-soat-quti" role="timer" aria-live="off"
+     title="Har bosqichga {{ daqiqa }} daqiqa berilgan">
+    <svg class="dk-soat-halqa" viewBox="0 0 48 48" width="88" height="88" aria-hidden="true">
+        <circle class="dk-soat-fon" cx="24" cy="24" r="21"/>
+        <circle class="dk-soat-yoy" id="dk-soat-yoy" cx="24" cy="24" r="21"/>
+    </svg>
+    <span class="dk-soat-matn">
+        <b id="dk-soat">{{ daqiqa }}:00</b>
+        <small id="dk-soat-yorliq">daqiqa</small>
+    </span>
+</div>
+
+<section class="section">
+    <div class="wrap">
+        {% for b in bosqichlar %}
+            <section class="dk-bosqich" id="bosqich-{{ b.raqam }}"
+                     data-bosqich="{{ b.raqam }}" data-kalit="{{ b.kalit }}"
+                     data-qator="{{ b.qator }}" data-ball="{{ b.ball }}"
+                     {% if not forloop.first %}hidden{% endif %}>
+
+                <header class="dk-bosqich-bosh">
+                    <h2>{{ b.nomi }}</h2>
+                    <p>{{ b.savollar|length }} ta topshiriq · {{ b.ball }} ball · {{ b.daqiqa }} daqiqa</p>
+                </header>
+
+                {% for s in b.savollar %}
+                    <article class="dk-savol" id="savol-{{ s.id }}" data-savol="{{ s.id }}">
+                        <header class="dk-savol-bosh">
+                            <span class="dk-raqam">{{ s.nomer }}</span>
+                            <h3>{{ s.savol }}</h3>
+                            <span class="dk-ball">{{ s.ball }} ball</span>
+                        </header>
+
+                        <div class="dk-rasmlar">
+                            {% for r in s.rasmlar %}
+                                <figure class="dk-rasm" data-raqam="{{ r.raqam }}">
+                                    <span class="dk-rasm-quti">
+                                        {% comment %}
+                                            `loading="lazy"` ATAYLAB yo'q — Rasmli testdagi sabab:
+                                            yuklanmagan rasm javob berib bo'lmaydigan topshiriq demak.
+                                        {% endcomment %}
+                                        <img src="{{ r.rasm }}" alt="{{ r.raqam }}-rasm" decoding="async">
+                                    </span>
+                                    <figcaption>{{ r.raqam }}</figcaption>
+                                </figure>
+                            {% endfor %}
+                        </div>
+
+                        <div class="dk-qatorlar">
+                            {% for q in s.qatorlar %}
+                                <div class="dk-qator" data-qator="{{ q.nomer }}">
+                                    <span class="dk-yorliq">{{ q.yorliq }}</span>
+                                    <div class="dk-raqamlar" role="group" aria-label="{{ q.yorliq }} uchun rasm raqami">
+                                        {% for r in raqamlar %}
+                                            <button type="button" class="dk-tanlov"
+                                                    data-qator="{{ q.nomer }}" data-raqam="{{ r }}"
+                                                    aria-pressed="false"
+                                                    aria-label="{{ q.yorliq }} — {{ r }}-rasm">{{ r }}</button>
+                                        {% endfor %}
+                                    </div>
+                                    <span class="dk-belgi" aria-hidden="true"></span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </article>
+                {% endfor %}
+
+                {% comment %} Bosqich natijasi — tekshirilgandan keyin ochiladi. {% endcomment %}
+                <div class="dk-natija" id="natija-{{ b.raqam }}" hidden>
+                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                    <h3 data-sarlavha>Bosqich natijasi</h3>
+                    <p class="dk-ochko"><b data-ball>0</b> / {{ b.ball }} ball</p>
+                    <p class="dk-foiz" data-foiz>0%</p>
+                    <p class="dk-izoh" data-izoh></p>
+                    <div class="dk-natija-tugma">
+                        {% if not forloop.last %}
+                            <button type="button" class="btn btn-solid" data-keyingi="{{ b.raqam }}">
+                                Keyingi bosqich
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+                            </button>
+                        {% endif %}
+                        <button type="button" class="btn btn-line" data-qayta="{{ b.raqam }}">Shu bosqichni qayta yechish</button>
+                        <a class="btn btn-line" href="/topshiriq">Topshiriq bo'limiga qaytish</a>
+                    </div>
+                </div>
+            </section>
+        {% endfor %}
+
+        {% comment %} Hamma bosqich tugagandagi umumiy xulosa. {% endcomment %}
+        <div class="dk-natija dk-alo" id="dk-yakun" hidden>
+            <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+            <h3>Diktant yakunlandi</h3>
+            <p class="dk-ochko"><b id="dk-yakun-ball">0</b> / {{ jami_ball }} ball</p>
+            <p class="dk-foiz" id="dk-yakun-foiz">0%</p>
+            <p class="dk-izoh" id="dk-yakun-izoh"></p>
+            <div class="dk-natija-tugma">
+                <button type="button" class="btn btn-solid" id="dk-yakun-qayta">Boshidan yechish</button>
+                <a class="btn btn-line" href="/topshiriq">Topshiriq bo'limiga qaytish</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form hidden>{% csrf_token %}</form>
+{% endblock %}
+
+{% block scripts %}
+{{ javoblar|json_script:"dk-kalit" }}
+<script>
+(function () {
+    var KALIT = JSON.parse(document.getElementById('dk-kalit').textContent);
+    var QATOR_BALL = {{ qator_ball }};
+    var JAMI_BALL = {{ jami_ball }};
+    var DAQIQA = {{ daqiqa }};
+    var KIRGAN = {% if user.is_authenticated %}true{% else %}false{% endif %};
+
+    var bosqichlar = Array.prototype.slice.call(document.querySelectorAll('.dk-bosqich'));
+    var OXIRGI = bosqichlar.length;
+
+    var joriy = 1;               // ochiq turgan bosqich raqami
+    var tanlangan = {};          // {savolId: {qator: raqam}}
+    var tekshirilgan = {};       // {bosqich: true}
+    var ballar = {};             // {bosqich: to'plangan ball}
+    var qolgan = DAQIQA * 60;
+    var soatId = null;
+
+    var elSoat = document.getElementById('dk-soat');
+    var elSoatQuti = document.getElementById('dk-soat-quti');
+    var elSoatYoy = document.getElementById('dk-soat-yoy');
+    var elSoatYorliq = document.getElementById('dk-soat-yorliq');
+    var elBajarildi = document.getElementById('dk-bajarildi');
+    var elJamiQator = document.getElementById('dk-jami-qator');
+    var elChiziq = document.getElementById('dk-progress-chiziq');
+    var elTekshir = document.getElementById('dk-tekshir');
+
+    var HALQA = 2 * Math.PI * 21;
+    elSoatYoy.style.strokeDasharray = HALQA;
+    elSoatYoy.style.strokeDashoffset = 0;
+
+    function bosqichEl(n) { return document.getElementById('bosqich-' + n); }
+
+    // ===== Holat va progress =====
+    function joriySavollar() {
+        return Array.prototype.slice.call(bosqichEl(joriy).querySelectorAll('.dk-savol'));
+    }
+
+    function sanoq() {
+        return joriySavollar().reduce(function (n, savol) {
+            var berilgan = tanlangan[savol.dataset.savol] || {};
+            return n + Object.keys(berilgan).length;
+        }, 0);
+    }
+
+    function holatniYangila() {
+        var jami = parseInt(bosqichEl(joriy).dataset.qator, 10);
+        var n = sanoq();
+        elBajarildi.textContent = n;
+        elJamiQator.textContent = jami;
+        elChiziq.style.width = (n / jami * 100) + '%';
+    }
+
+    // ===== Soat =====
+    function soatMatni(sek) {
+        var d = Math.floor(sek / 60), s = sek % 60;
+        return d + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    function soatniChiz() {
+        elSoat.textContent = soatMatni(qolgan);
+        elSoatYoy.style.strokeDashoffset = HALQA * (1 - qolgan / (DAQIQA * 60));
+        elSoatQuti.classList.toggle('ogoh', qolgan <= 120 && qolgan > 30);
+        elSoatQuti.classList.toggle('kam', qolgan <= 30);
+    }
+
+    function soatniBoshla() {
+        if (soatId || tekshirilgan[joriy]) return;
+        qolgan = DAQIQA * 60;
+        elSoatQuti.classList.remove('tugadi');
+        elSoatYorliq.textContent = 'qoldi';
+        soatniChiz();
+        soatId = setInterval(function () {
+            qolgan--;
+            soatniChiz();
+            if (qolgan <= 0) { soatniToxtat(); tekshir(true); }
+        }, 1000);
+    }
+
+    function soatniToxtat() {
+        if (soatId) { clearInterval(soatId); soatId = null; }
+    }
+
+    // ===== Tanlash (har raqam bitta qatorda) =====
+    document.addEventListener('click', function (h) {
+        var tugma = h.target.closest('.dk-tanlov');
+        if (!tugma || tugma.disabled) return;
+
+        var savol = tugma.closest('.dk-savol');
+        var id = savol.dataset.savol;
+        var qator = tugma.dataset.qator;
+        var raqam = tugma.dataset.raqam;
+
+        var berilgan = tanlangan[id] = tanlangan[id] || {};
+        // Shu raqam boshqa qatorda tursa — o'sha qatordan olinadi, chunki
+        // har bir raqam roppa-rosa bir marta ishlatiladi.
+        Object.keys(berilgan).forEach(function (q) {
+            if (q !== qator && berilgan[q] === raqam) delete berilgan[q];
+        });
+        berilgan[qator] = raqam;
+
+        savolniChiz(savol);
+        holatniYangila();
+    });
+
+    function savolniChiz(savol) {
+        var berilgan = tanlangan[savol.dataset.savol] || {};
+        var ishlatilgan = {};
+        Object.keys(berilgan).forEach(function (q) { ishlatilgan[berilgan[q]] = q; });
+
+        savol.querySelectorAll('.dk-tanlov').forEach(function (t) {
+            var tanlandi = berilgan[t.dataset.qator] === t.dataset.raqam;
+            t.classList.toggle('tanlandi', tanlandi);
+            // Boshqa qatorda band bo'lgan raqam xiraroq ko'rinadi (bosilsa tortib olinadi)
+            t.classList.toggle('band', !tanlandi && ishlatilgan[t.dataset.raqam] !== undefined);
+            t.setAttribute('aria-pressed', tanlandi ? 'true' : 'false');
+        });
+    }
+
+    // ===== Tekshirish =====
+    function tekshir(vaqtTugadi) {
+        if (tekshirilgan[joriy]) return;
+        tekshirilgan[joriy] = true;
+        soatniToxtat();
+
+        var togri = 0, jamiQator = 0;
+        joriySavollar().forEach(function (savol) {
+            var id = savol.dataset.savol;
+            var kalitlar = KALIT[id];
+            var berilgan = tanlangan[id] || {};
+
+            kalitlar.forEach(function (togriRaqam, i) {
+                jamiQator++;
+                var javob = berilgan[i];
+                var yaxshi = javob !== undefined && parseInt(javob, 10) === togriRaqam;
+                if (yaxshi) togri++;
+
+                var qatorEl = savol.querySelector('.dk-qator[data-qator="' + i + '"]');
+                if (qatorEl) {
+                    qatorEl.classList.add(yaxshi ? 'dk-togri' : 'dk-xato');
+                    var belgi = qatorEl.querySelector('.dk-belgi');
+                    if (belgi) belgi.textContent = yaxshi ? '✓' : '✕';
+                }
+
+                savol.querySelectorAll('.dk-tanlov[data-qator="' + i + '"]').forEach(function (t) {
+                    var r = parseInt(t.dataset.raqam, 10);
+                    if (r === togriRaqam) t.classList.add('kalit');
+                    if (javob !== undefined && parseInt(javob, 10) === r && !yaxshi) t.classList.add('notogri');
+                    t.disabled = true;
+                });
+            });
+        });
+
+        var ball = togri * QATOR_BALL;
+        ballar[joriy] = ball;
+
+        var jamiBall = parseInt(bosqichEl(joriy).dataset.ball, 10);
+        var foiz = Math.round(ball / jamiBall * 100);
+        var quti = document.getElementById('natija-' + joriy);
+        quti.querySelector('[data-ball]').textContent = ball;
+        quti.querySelector('[data-foiz]').textContent = foiz + '%';
+        quti.querySelector('[data-sarlavha]').textContent =
+            foiz === 100 ? "Barakalla! Hammasi to'g'ri" :
+            foiz >= 70 ? 'Yaxshi natija!' :
+            foiz >= 40 ? "Yomon emas, davom eting" : 'Mavzuni takrorlash kerak';
+        quti.querySelector('[data-izoh]').textContent =
+            (vaqtTugadi ? 'Vaqt tugadi. ' : '') +
+            togri + " ta javob to'g'ri, " + (jamiQator - togri) + ' tasi xato. ' +
+            (joriy < OXIRGI ? 'Keyingi bosqich ochildi.'
+                            : "Bu oxirgi bosqich edi.");
+        quti.classList.toggle('dk-alo', foiz >= 70);
+        quti.hidden = false;
+
+        elTekshir.disabled = true;
+        elSoatQuti.classList.add('tugadi');
+        elSoatQuti.classList.remove('kam', 'ogoh');
+        elSoatYorliq.textContent = vaqtTugadi ? 'tugadi' : 'sarflandi';
+        if (!vaqtTugadi) elSoat.textContent = soatMatni(DAQIQA * 60 - qolgan);
+
+        // Bosqich yo'lakchasi: shu bosqich tugadi, keyingisi ochildi
+        var qadam = document.getElementById('qadam-' + joriy);
+        qadam.classList.remove('joriy');
+        qadam.classList.add('tugadi');
+        if (joriy < OXIRGI) {
+            document.getElementById('qadam-' + (joriy + 1)).classList.remove('qulf');
+        }
+
+        natijaniSaqla(bosqichEl(joriy).dataset.kalit, ball, jamiBall);
+        quti.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        if (joriy === OXIRGI) yakunla();
+    }
+
+    function natijaniSaqla(kalit, ball, jami) {
+        if (!KIRGAN) return;
+        fetch('/api/save-result', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': kuki('csrftoken') },
+            body: JSON.stringify({ mashq: kalit, score: ball, total: jami })
+        }).catch(function () {});
+    }
+
+    function kuki(nom) {
+        var m = document.cookie.match('(^|;)\\s*' + nom + '\\s*=\\s*([^;]+)');
+        return m ? m.pop() : '';
+    }
+
+    // ===== Bosqichdan bosqichga =====
+    function bosqichgaOt(n) {
+        bosqichEl(joriy).hidden = true;
+        joriy = n;
+        bosqichEl(joriy).hidden = false;
+
+        document.querySelectorAll('.dk-qadam').forEach(function (q) {
+            var r = parseInt(q.dataset.bosqich, 10);
+            q.classList.toggle('joriy', r === joriy && !tekshirilgan[r]);
+        });
+
+        elTekshir.disabled = !!tekshirilgan[joriy];
+        holatniYangila();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        soatniBoshla();
+    }
+
+    document.addEventListener('click', function (h) {
+        var keyingi = h.target.closest('[data-keyingi]');
+        if (keyingi) {
+            bosqichgaOt(parseInt(keyingi.dataset.keyingi, 10) + 1);
+            return;
+        }
+        var qayta = h.target.closest('[data-qayta]');
+        if (qayta) {
+            bosqichniTozala(parseInt(qayta.dataset.qayta, 10));
+        }
+    });
+
+    function bosqichniTozala(n) {
+        var el = bosqichEl(n);
+        el.querySelectorAll('.dk-savol').forEach(function (savol) {
+            delete tanlangan[savol.dataset.savol];
+            savol.querySelectorAll('.dk-tanlov').forEach(function (t) {
+                t.disabled = false;
+                t.classList.remove('tanlandi', 'band', 'kalit', 'notogri');
+                t.setAttribute('aria-pressed', 'false');
+            });
+            savol.querySelectorAll('.dk-qator').forEach(function (q) {
+                q.classList.remove('dk-togri', 'dk-xato');
+                var belgi = q.querySelector('.dk-belgi');
+                if (belgi) belgi.textContent = '';
+            });
+        });
+        document.getElementById('natija-' + n).hidden = true;
+        document.getElementById('dk-yakun').hidden = true;
+        delete tekshirilgan[n];
+        delete ballar[n];
+
+        var qadam = document.getElementById('qadam-' + n);
+        qadam.classList.remove('tugadi');
+        soatniToxtat();
+        if (n === joriy) {
+            elTekshir.disabled = false;
+            qadam.classList.add('joriy');
+            holatniYangila();
+            soatniBoshla();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function yakunla() {
+        var jami = 0;
+        Object.keys(ballar).forEach(function (b) { jami += ballar[b]; });
+        var foiz = Math.round(jami / JAMI_BALL * 100);
+        document.getElementById('dk-yakun-ball').textContent = jami;
+        document.getElementById('dk-yakun-foiz').textContent = foiz + '%';
+        document.getElementById('dk-yakun-izoh').textContent =
+            "To'rtala bosqich bo'yicha umumiy natija. Har bir bosqichni alohida "
+            + "qayta yechib, natijani yaxshilashingiz mumkin.";
+        document.getElementById('dk-yakun').hidden = false;
+    }
+
+    elTekshir.addEventListener('click', function () {
+        var jami = parseInt(bosqichEl(joriy).dataset.qator, 10);
+        var qoldi = jami - sanoq();
+        if (qoldi > 0 && !confirm(qoldi + " ta javob belgilanmadi. Shunday tekshirilsinmi?")) return;
+        tekshir(false);
+    });
+
+    document.getElementById('dk-yakun-qayta').addEventListener('click', function () {
+        location.reload();
+    });
+
+    // ===== Boshlash oynasi =====
+    var elParda = document.getElementById('dk-parda');
+    var elBoshla = document.getElementById('dk-boshla-tugma');
+
+    function boshla() {
+        if (elParda.hidden) return;
+        elParda.hidden = true;
+        document.body.style.overflow = '';
+        soatniBoshla();
+        var birinchi = bosqichEl(joriy).querySelector('.dk-tanlov');
+        if (birinchi) birinchi.focus({ preventScroll: true });
+    }
+
+    document.body.style.overflow = 'hidden';
+    elBoshla.addEventListener('click', boshla);
+    elParda.addEventListener('keydown', function (h) {
+        if (h.key === 'Enter' || h.key === ' ') { h.preventDefault(); boshla(); }
+    });
+    elBoshla.focus();
+
+    // ===== Chiqishda ogohlantirish =====
+    // Bosqich boshlangan, lekin hali tekshirilmagan bo'lsa — javoblar
+    // hech qayerda saqlanmagan (natija faqat tekshirilgach yuboriladi).
+    var chiqishgaRuxsat = false;
+
+    function ishKetyapti() {
+        return soatId !== null && !tekshirilgan[joriy];
+    }
+
+    document.addEventListener('click', function (h) {
+        if (!ishKetyapti() || chiqishgaRuxsat) return;
+        var havola = h.target.closest('a[href]');
+        if (!havola) return;
+        var manzil = havola.getAttribute('href');
+        if (!manzil || manzil.charAt(0) === '#' || havola.target === '_blank') return;
+
+        if (confirm("Bosqich hali tekshirilmadi — javoblaringiz saqlanmaydi.\n\n"
+                    + "Rostdan ham chiqib, diktantni yakunlaysizmi?")) {
+            chiqishgaRuxsat = true;
+        } else {
+            h.preventDefault();
+        }
+    }, true);
+
+    window.addEventListener('beforeunload', function (h) {
+        if (!ishKetyapti() || chiqishgaRuxsat) return;
+        h.preventDefault();
+        h.returnValue = '';
+    });
+
+    holatniYangila();
+})();
+</script>
+{% endblock %}

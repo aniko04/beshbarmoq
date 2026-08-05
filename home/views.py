@@ -9,6 +9,7 @@ from django.conf import settings
 from functools import wraps
 from .models import Result, Profile, Material
 from . import rasmli_test
+from . import diktant
 import json
 
 
@@ -141,6 +142,16 @@ def topshiriq(request):
                               rasmli_test.DAQIQA),
                 'tugma': "Testni boshlash",
             },
+            Material.KICHIK_DIKTANT: {
+                'url': '/topshiriq/diktantlar',
+                'sarlavha': "Onlayn texnologik diktant",
+                'tavsif': "{} bosqich, har birida {} ta topshiriq va {} daqiqa. "
+                          "Bosqichlar ketma-ket ochiladi.".format(
+                              diktant.BOSQICH_SONI,
+                              len(diktant.bosqichlar()[0]['savollar']),
+                              diktant.BOSQICH_DAQIQA),
+                'tugma': "Diktantni boshlash",
+            },
         },
     )
 
@@ -161,6 +172,27 @@ def rasmli_test_sahifa(request):
         'jami_qator': rasmli_test.jami_qator(),
         'qator_ball': rasmli_test.QATOR_BALL,
         'daqiqa': rasmli_test.DAQIQA,
+    })
+
+
+def diktant_sahifa(request):
+    """Topshiriq bo'limining «Texnologik diktantlar» kichik bo'limi.
+
+    Worddagi to'rt variant — to'rt bosqich. Sahifa hammasini bir marta
+    yuboradi, lekin bir vaqtda bittasi ko'rinadi: bosqich tekshirilgandan
+    keyin keyingisi ochiladi (JS, sahifa yangilanmaydi). Har bosqich
+    natijasi `dikt1`…`dikt4` kaliti bilan alohida saqlanadi.
+    """
+    return render(request, 'diktant.html', {
+        'active': 'topshiriq',
+        'bosqichlar': diktant.bosqichlar(),
+        # json_script shablonda o'zi JSON qiladi — bu yerda lug'atning o'zi beriladi.
+        'javoblar': diktant.javob_kaliti(),
+        'raqamlar': diktant.RAQAMLAR,
+        'qator_ball': diktant.QATOR_BALL,
+        'bosqich_ball': diktant.bosqich_ball(),
+        'jami_ball': diktant.jami_ball(),
+        'daqiqa': diktant.BOSQICH_DAQIQA,
     })
 
 

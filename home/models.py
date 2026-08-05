@@ -16,6 +16,12 @@ class Result(models.Model):
         ('m9b', 'Mashq 9 – Kvilling bilan ishlash test'),
         ('m10b', 'Mashq 10 – Loy va plastilin bilan ishlash test'),
         ('rtest', "Rasmli test – 2–4-sinf (Topshiriq bo'limi)"),
+        # Texnologik diktantlar — Worddagi to'rt variant to'rt bosqich bo'lib
+        # ketma-ket yechiladi, har biri alohida yozuv bo'lib tushadi.
+        ('dikt1', "Texnologik diktant – I bosqich"),
+        ('dikt2', "Texnologik diktant – II bosqich"),
+        ('dikt3', "Texnologik diktant – III bosqich"),
+        ('dikt4', "Texnologik diktant – IV bosqich"),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Foydalanuvchi")
