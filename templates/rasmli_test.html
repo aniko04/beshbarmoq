@@ -417,6 +417,44 @@
     // tushib, savollarni parda ostidan ko'rib qolmasin.
     document.body.style.overflow = 'hidden';
     elBoshla.addEventListener('click', boshla);
+
+    // ===== Chiqishda ogohlantirish =====
+    // Test boshlangan, lekin hali tekshirilmagan bo'lsa — javoblar hech
+    // qayerda saqlanmagan (natija faqat "Tekshirish" dan keyin yuboriladi).
+    // Shuning uchun sahifadan ketishdan oldin so'raymiz.
+    var chiqishgaRuxsat = false;
+
+    function testKetyapti() {
+        return soatId !== null && !tekshirildi;
+    }
+
+    // Sahifa ichidagi havolalar (navbardagi "Chiqish", "Ortga qaytish",
+    // nishon yo'li va h.k.) — bu yerda o'zbekcha o'z matnimizni ko'rsata olamiz.
+    document.addEventListener('click', function (h) {
+        if (!testKetyapti() || chiqishgaRuxsat) return;
+        var havola = h.target.closest('a[href]');
+        if (!havola) return;
+        var manzil = havola.getAttribute('href');
+        // Shu sahifa ichidagi (#...) va yangi oynada ochiladigan havolalar chiqish emas.
+        if (!manzil || manzil.charAt(0) === '#' || havola.target === '_blank') return;
+
+        if (confirm("Test hali yakunlanmadi — javoblaringiz saqlanmaydi.\n\n"
+                    + "Rostdan ham chiqib, testni yakunlaysizmi?")) {
+            // Ruxsat berildi: quyidagi beforeunload ikkinchi marta so'ramasin.
+            chiqishgaRuxsat = true;
+        } else {
+            h.preventDefault();
+        }
+    }, true);
+
+    // Oynani yopish, yangilash yoki manzilni qo'lda o'zgartirish — bu yerda
+    // brauzer o'z standart matnini ko'rsatadi (matnni almashtirib bo'lmaydi),
+    // lekin tasodifan yopib yuborishdan saqlaydi.
+    window.addEventListener('beforeunload', function (h) {
+        if (!testKetyapti() || chiqishgaRuxsat) return;
+        h.preventDefault();
+        h.returnValue = '';
+    });
     // Enter/Probel bilan ham boshlansin (tugma fokusda bo'lmasa ham).
     elParda.addEventListener('keydown', function (h) {
         if (h.key === 'Enter' || h.key === ' ') { h.preventDefault(); boshla(); }
