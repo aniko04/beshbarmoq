@@ -349,6 +349,108 @@ button.rt-variant:disabled { cursor: default; }
 }
 .btn-line:hover { background: var(--stone); border-color: var(--siyoh); }
 
+/* ===== Boshlash oynasi =====
+   Test darrov boshlanib ketmasin: sahifa xiralashadi, ustida qoida va
+   "Boshlash" tugmasi turadi. Soat ham shu tugma bosilganda yuradi.
+
+   Xiralik ATAYLAB `backdrop-filter` bilan — mazmunning o'ziga `filter`
+   qo'yilsa, u `position: fixed`/`sticky` uchun yangi tayanch blok yasaydi
+   va navbar, boshqaruv paneli hamda burchakdagi soat joyidan siljib
+   ketardi. `backdrop-filter` esa ortidagi rasmni faqat chizishda xiralatadi.
+   Brauzer uni qo'llab-quvvatlamasa, ostidagi yarim shaffof fon qoladi. */
+.rt-parda {
+    position: fixed;
+    inset: 0;
+    z-index: 200;          /* navbar 60, soat 45, panel 40 — hammasidan tepada */
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(20, 32, 58, 0.55);
+    backdrop-filter: blur(9px);
+    -webkit-backdrop-filter: blur(9px);
+    animation: rt-parda-kir 0.28s ease-out;
+}
+.rt-parda[hidden] { display: none; }
+
+@keyframes rt-parda-kir { from { opacity: 0; } to { opacity: 1; } }
+
+.rt-boshla {
+    width: min(560px, 100%);
+    max-height: 100%;
+    overflow-y: auto;
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: 0 24px 70px rgba(20, 32, 58, 0.42);
+    padding: 40px 38px 34px;
+    text-align: center;
+    animation: rt-boshla-kir 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+@keyframes rt-boshla-kir {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+}
+.rt-boshla .motif { width: 52px; height: 52px; color: var(--zafaron); }
+.rt-boshla h2 {
+    font-family: var(--font-display);
+    font-size: 1.62rem;
+    color: var(--siyoh);
+    margin: 10px 0 8px;
+}
+.rt-boshla-lede { color: var(--ink-2); margin: 0 auto 22px; max-width: 42ch; }
+
+/* Qoidalar — chapga tekislangan, chunki ro'yxatni o'qish osonroq */
+.rt-qoida {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+    text-align: left;
+    display: grid;
+    gap: 10px;
+}
+.rt-qoida li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.97rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+}
+.rt-qoida li::before {
+    content: '';
+    flex-shrink: 0;
+    width: 9px;
+    height: 9px;
+    margin-top: 7px;
+    border-radius: 50%;
+    background: var(--firuza);
+}
+.rt-qoida b { color: var(--ink); }
+
+/* Vaqt haqidagi ogohlantirish — bosishdan oldin ko'zga tashlansin */
+.rt-ogoh {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    border-radius: var(--r-sm);
+    background: rgba(232, 160, 42, 0.13);
+    border: 1px solid rgba(232, 160, 42, 0.42);
+    color: var(--ink);
+    font-size: 0.94rem;
+}
+.rt-ogoh svg { flex-shrink: 0; color: var(--zafaron); }
+
+.rt-boshla-tugma { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.rt-boshla-tugma .btn { font-size: 1.04rem; padding: 14px 30px; }
+
+@media (max-width: 660px) {
+    .rt-boshla { padding: 30px 22px 26px; }
+    .rt-boshla h2 { font-size: 1.36rem; }
+    .rt-boshla-tugma .btn { width: 100%; }
+}
+
 @media (max-width: 900px) {
     .rt-variant-rasm { height: 160px; }
 }
@@ -378,7 +480,7 @@ button.rt-variant:disabled { cursor: default; }
 /* Chop etish uchun: boshqaruv paneli va tugmalar chiqmaydi */
 @media print {
     .topbar, .footer, .rt-panel, .rt-natija-tugma, .skip-link,
-    .rt-soat { display: none !important; }
+    .rt-soat, .rt-parda { display: none !important; }
     .rt-savol { break-inside: avoid; box-shadow: none; }
     .rt-head { background: none; color: var(--ink); }
 }

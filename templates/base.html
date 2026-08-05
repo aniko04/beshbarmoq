@@ -8,7 +8,12 @@
     <link rel="icon" href="/static/img/favicon.ico" sizes="48x48">
     <link rel="icon" type="image/png" href="/static/img/favicon-32.png" sizes="32x32">
     <link rel="apple-touch-icon" href="/static/img/apple-touch-icon.png">
-    <link rel="stylesheet" href="/static/css/platform.css">
+    {% comment %}
+        `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi, shuning uchun
+        stilni tahrirlaganda ham manzil o'zgarmaydi va brauzer eski nusxada
+        qolib ketadi. platform.css ni o'zgartirsangiz raqamni oshiring.
+    {% endcomment %}
+    <link rel="stylesheet" href="/static/css/platform.css?v=2">
     {% comment %}
         Shriftlar bloklamasdan yuklanadi: `media="print"` bo'lgani uchun
         brauzer uni kutmaydi, yuklangach `onload` bilan `all` ga o'tadi.

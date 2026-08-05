@@ -4,10 +4,59 @@
 {% block description %}2–4-sinf o'quvchilari uchun rasmli test: {{ savollar|length }} ta topshiriq, {{ jami_ball }} ball, {{ daqiqa }} daqiqa.{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="/static/css/rasmli-test.css">
+{% comment %}
+    `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi (core/settings.py:
+    CompressedStaticFilesStorage), shuning uchun fayl o'zgarganda ham manzil
+    o'sha-o'sha qoladi va brauzer eski nusxani beradi — natijada yangi
+    qoidalar (masalan boshlash oynasi) umuman qo'llanmaydi. CSS ni
+    tahrirlaganda bu raqamni OSHIRING.
+{% endcomment %}
+<link rel="stylesheet" href="/static/css/rasmli-test.css?v=2">
 {% endblock %}
 
 {% block content %}
+{% comment %}
+    Boshlash oynasi — sahifa ochilishi bilan test boshlanib ketmasin.
+    Ortidagi mazmun xiralashadi, soat esa "Boshlash" bosilgandagina yuradi.
+{% endcomment %}
+<div class="rt-parda" id="rt-parda" role="dialog" aria-modal="true"
+     aria-labelledby="rt-boshla-sarlavha" aria-describedby="rt-boshla-lede">
+    <div class="rt-boshla">
+        <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+        <h2 id="rt-boshla-sarlavha">Rasmli testni boshlaymizmi?</h2>
+        <p class="rt-boshla-lede" id="rt-boshla-lede">
+            2–4-sinf o'quvchilari uchun rasmli test. Boshlashdan oldin
+            quyidagilarni o'qib chiqing.
+        </p>
+
+        <ul class="rt-qoida">
+            <li><span>Jami <b>{{ savollar|length }} ta topshiriq</b>, to'liq bajarilsa <b>{{ jami_ball }} ball</b> to'planadi.</span></li>
+            <li><span>Har bir topshiriqda rasmlar bor — savolga <b>mos keladiganini bosing</b>.</span></li>
+            <li><span>Javobni <b>tekshirishdan oldin xohlagancha o'zgartirish</b> mumkin.</span></li>
+            <li><span>Hamma savolga javob bergach, pastdagi <b>«Tekshirish»</b> tugmasini bosing.</span></li>
+        </ul>
+
+        <div class="rt-ogoh">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
+                 stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>
+            </svg>
+            <span>
+                Testga <b>{{ daqiqa }} daqiqa</b> berilgan. Vaqt «Boshlash» tugmasini
+                bosganingizdan keyin ketadi va tugaganda javoblar o'zi tekshiriladi.
+            </span>
+        </div>
+
+        <div class="rt-boshla-tugma">
+            <button type="button" class="btn btn-solid" id="rt-boshla-tugma" autofocus>
+                Boshlash
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m13 6 6 6-6 6"/></svg>
+            </button>
+            <a class="btn btn-line" href="/topshiriq">Ortga qaytish</a>
+        </div>
+    </div>
+</div>
+
 <section class="page-head rt-head">
     <div class="wrap">
         <nav class="crumbs" aria-label="Yo'l">
@@ -47,7 +96,7 @@
 
 {% comment %}
     Soat — sahifaning o'ng pastki burchagida suzib turadi. Halqa vaqt
-    o'tgan sari kamayadi; birinchi javob belgilangandan keyin yuradi.
+    o'tgan sari kamayadi; «Boshlash» tugmasi bosilgandan keyin yuradi.
 {% endcomment %}
 <div class="rt-soat" id="rt-soat-quti" role="timer" aria-live="off"
      title="Testga {{ daqiqa }} daqiqa berilgan">
@@ -245,7 +294,6 @@
         }
 
         holatniYangila();
-        soatniBoshla();
     });
 
     // ===== Tekshirish =====
@@ -347,6 +395,33 @@
     document.getElementById('rt-qayta').addEventListener('click', function () {
         location.reload();
     });
+
+    // ===== Boshlash oynasi =====
+    // Sahifa ochilganda test kutib turadi: parda ostidagi mazmun xira,
+    // soat esa to'xtab turibdi. Tugma bosilganda parda yopiladi va
+    // AYNAN SHU PAYTDA vaqt keta boshlaydi.
+    var elParda = document.getElementById('rt-parda');
+    var elBoshla = document.getElementById('rt-boshla-tugma');
+
+    function boshla() {
+        if (elParda.hidden) return;
+        elParda.hidden = true;
+        document.body.style.overflow = '';
+        soatniBoshla();
+        // Fokus testning o'ziga o'tsin — klaviatura bilan yechayotganlar uchun.
+        var birinchi = document.querySelector('.rt-tanlov');
+        if (birinchi) birinchi.focus({ preventScroll: true });
+    }
+
+    // Parda ochiq turganda sahifa aylanmasin — bola tasodifan pastga
+    // tushib, savollarni parda ostidan ko'rib qolmasin.
+    document.body.style.overflow = 'hidden';
+    elBoshla.addEventListener('click', boshla);
+    // Enter/Probel bilan ham boshlansin (tugma fokusda bo'lmasa ham).
+    elParda.addEventListener('keydown', function (h) {
+        if (h.key === 'Enter' || h.key === ' ') { h.preventDefault(); boshla(); }
+    });
+    elBoshla.focus();
 
     holatniYangila();
 })();
