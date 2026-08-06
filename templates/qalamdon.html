@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}{{ sarlavha }} — Instruksion texnologik xarita{% endblock %}
+{% block description %}{{ tavsif }} {{ bosqichlar|length }} bosqich, {{ video_soni }} ta video.{% endblock %}
+
+{% block head %}
+{% comment %}
+    `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi, shuning uchun
+    CSS ni tahrirlaganda bu raqamni oshiring (base.html dagi izohga qarang).
+{% endcomment %}
+<link rel="stylesheet" href="/static/css/qalamdon.css?v=5">
+{% endblock %}
+
+{% block content %}
+<section class="page-head ql-head">
+    <div class="wrap">
+        <nav class="crumbs" aria-label="Yo'l">
+            <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span>
+            <a href="/xarita">Instruksion texnologik xarita</a> <span aria-hidden="true">&rsaquo;</span>
+            <span>{{ sarlavha }}</span>
+        </nav>
+        <h1>{{ sarlavha }}</h1>
+        <p class="page-lede">{{ tavsif }}</p>
+        <ul class="ql-fakt">
+            <li><b>{{ bosqichlar|length }}</b> bosqich</li>
+            <li><b>{{ video_soni }}</b> ta video</li>
+            <li>origami</li>
+            <li><b>2–4</b> sinf</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section">
+    <div class="wrap">
+        {% comment %}
+            Sarlavha markazda va yolg'iz. Jadval ustidagi `<caption>` va video
+            ustuni haqidagi yo'riqnoma olib tashlandi: birinchisi sahifa
+            boshidagi lede ni so'zma-so'z takrorlardi, ikkinchisini esa ijro
+            tugmasining o'zi aytib turadi.
+        {% endcomment %}
+        <div class="section-head ql-bosh">
+            <span class="eyebrow ink">
+                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                Instruksion texnologik xarita
+            </span>
+            <h2>Yasash bosqichlari</h2>
+        </div>
+
+        {% comment %}
+            To'rt ustunli jadval. Bosqich raqami alohida ustun emas, birinchi
+            katakdagi doiracha — Wordda T/r ustuni bor edi, lekin saytda uni
+            ustun qilsak, mazmunli ustunlar tor qolib ketardi.
+            660px dan pastda jadval kartalarga aylanadi (CSS dagi izohga qarang),
+            shuning uchun har katakda `data-ustun` sarlavhasi turadi.
+        {% endcomment %}
+        <div class="ql-jadval-quti">
+            <table class="ql-jadval">
+                {% comment %}
+                    Har ustunning o'z rangi va belgisi bor — matnlar Worddagidek
+                    qoldirilgan, faqat markazga olingan. Ranglar palitradan
+                    ketma-ket olinadi: to'q indigo → och indigo → feruza → zafaron.
+                {% endcomment %}
+                <thead>
+                    <tr>
+                        <th scope="col" class="ql-th1">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>
+                            <span>{{ ustunlar.0 }}</span>
+                        </th>
+                        <th scope="col" class="ql-th2">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m4 17 4.5-4.5L12 16l3-2.5 5 4"/></svg>
+                            <span>{{ ustunlar.1 }}</span>
+                        </th>
+                        <th scope="col" class="ql-th3">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="14" height="12" rx="2.5"/><path d="m16.5 11 5-3v8l-5-3z"/></svg>
+                            <span>{{ ustunlar.2 }}</span>
+                        </th>
+                        <th scope="col" class="ql-th4">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M8.2 7.6 20 18M8.2 16.4 20 6"/></svg>
+                            <span>{{ ustunlar.3 }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for q in bosqichlar %}
+                        <tr>
+                            <th scope="row" class="ql-qadam" data-ustun="{{ ustunlar.0 }}">
+                                <span class="ql-nomer">{{ q.nomer }}</span>
+                                <span class="ql-matn">{{ q.matn }}</span>
+                            </th>
+
+                            <td class="ql-tasvir" data-ustun="{{ ustunlar.1 }}">
+                                {% comment %}
+                                    Rasmlar manbada kichik (164–275px), shuning uchun har birida
+                                    kattalashtirish tugmasi bor — modalda to'liq o'lchamda ochiladi.
+                                {% endcomment %}
+                                <button type="button" class="ql-quti ql-ochiladi"
+                                        data-katta="rasm" data-manba="{{ q.tasvir }}"
+                                        data-sarlavha="{{ q.nomer }}-bosqich · tasviri"
+                                        data-izoh="{{ q.matn }}"
+                                        aria-label="{{ q.nomer }}-bosqich tasvirini kattalashtirish">
+                                    <img src="{{ q.tasvir }}" alt="{{ q.nomer }}-bosqich tasviri"
+                                         decoding="async" loading="lazy">
+                                    <span class="ql-katta-belgi" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>
+                                    </span>
+                                </button>
+                            </td>
+
+                            <td class="ql-video" data-ustun="{{ ustunlar.2 }}">
+                                {% if q.tur == 'video' %}
+                                    {% comment %}
+                                        `preload="none"` — 8 MB lik lavhalar sahifa ochilishida
+                                        yuklanmasin; ko'rinib turgani poster surati. Ovoz izmi
+                                        fayldan butunlay olib tashlangan, `muted` esa qo'shimcha
+                                        kafolat (avtomatik ijro siyosatlari uchun ham kerak).
+                                        Ikki yo'l: katakning o'zida ijro (butun quti — tugma) yoki
+                                        burchakdagi tugma orqali modalda kattalashtirib ko'rish.
+                                    {% endcomment %}
+                                    <div class="ql-pleyer-quti">
+                                        <button type="button" class="ql-pleyer" data-pleyer
+                                                aria-label="{{ q.nomer }}-bosqich videosini shu yerda ijro etish">
+                                            <video src="{{ q.video }}" poster="{{ q.poster }}"
+                                                   muted loop playsinline preload="none"
+                                                   disablepictureinpicture></video>
+                                            <span class="ql-tugma" aria-hidden="true">
+                                                <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+                                                    <path d="M8 5.5v13l11-6.5z"/>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                        <button type="button" class="ql-katta" data-katta="video"
+                                                data-manba="{{ q.video }}" data-poster="{{ q.poster }}"
+                                                data-sarlavha="{{ q.nomer }}-bosqich · videosi · {{ q.davomiylik }}"
+                                                data-izoh="{{ q.matn }}"
+                                                aria-label="{{ q.nomer }}-bosqich videosini katta oynada ochish">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>
+                                            Kattalashtirish
+                                        </button>
+                                    </div>
+                                {% else %}
+                                    <button type="button" class="ql-quti ql-ochiladi"
+                                            data-katta="rasm" data-manba="{{ q.korinish }}"
+                                            data-sarlavha="{{ q.nomer }}-bosqich · ko'rinishi"
+                                            data-izoh="{{ q.matn }}"
+                                            aria-label="{{ q.nomer }}-bosqich ko'rinishini kattalashtirish">
+                                        <img src="{{ q.korinish }}" alt="{{ q.nomer }}-bosqich ko'rinishi"
+                                             decoding="async" loading="lazy">
+                                        <span class="ql-katta-belgi" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>
+                                        </span>
+                                    </button>
+                                {% endif %}
+                            </td>
+
+                            <td class="ql-anjom" data-ustun="{{ ustunlar.3 }}">
+                                {% if q.anjom_matn %}<span class="ql-anjom-matn">{{ q.anjom_matn }}</span>{% endif %}
+                                {% if q.anjom_rasm %}
+                                    <button type="button" class="ql-quti ql-ochiladi"
+                                            data-katta="rasm" data-manba="{{ q.anjom_rasm }}"
+                                            data-sarlavha="{{ q.nomer }}-bosqich · ish anjomlari"
+                                            data-izoh="{{ q.matn }}"
+                                            aria-label="{{ q.nomer }}-bosqich ish anjomlarini kattalashtirish">
+                                        <img src="{{ q.anjom_rasm }}" alt="{{ q.nomer }}-bosqich uchun ish anjomlari"
+                                             decoding="async" loading="lazy">
+                                        <span class="ql-katta-belgi" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>
+                                        </span>
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ql-xulosa">
+            <svg class="motif" aria-hidden="true"><use href="#orama"/></svg>
+            <div>
+                <h3>Xulosa</h3>
+                <p>{{ xulosa }}</p>
+            </div>
+        </div>
+
+        {% comment %}
+            Kattalashtirish oynasi — bitta bo'lib, sahifada bir marta turadi;
+            ichi bosilgan katakdan to'ldiriladi. Har katakka alohida modal
+            yasalsa, 13 ta yashirin video sahifada osilib turardi.
+        {% endcomment %}
+        <div class="ql-modal" id="ql-modal" hidden role="dialog" aria-modal="true"
+             aria-labelledby="ql-modal-sarlavha">
+            <div class="ql-modal-ichi">
+                <header class="ql-modal-bosh">
+                    <div>
+                        <b id="ql-modal-sarlavha"></b>
+                        <span id="ql-modal-izoh"></span>
+                    </div>
+                    <button type="button" class="ql-yop" id="ql-yop" aria-label="Yopish">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+                    </button>
+                </header>
+                <div class="ql-modal-media" id="ql-modal-media"></div>
+            </div>
+        </div>
+
+        <div class="ql-ortga">
+            <a class="btn btn-line" href="/xarita">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H6"/><path d="m11 6-6 6 6 6"/></svg>
+                Xaritalar bo'limiga qaytish
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    // ===== 1. Katakning O'ZIDA ijro =====
+    // Bir vaqtda faqat bitta lavha yuradi — 13 ta katakda bir nechtasi birdan
+    // ishlasa, sahifa ham og'irlashadi, ko'z ham chalg'iydi.
+    var joriy = null;
+
+    function toxtat() {
+        if (!joriy) return;
+        joriy.pause();
+        var q = joriy.closest('[data-pleyer]');
+        if (q) q.classList.remove('ketyapti');
+        joriy = null;
+    }
+
+    document.addEventListener('click', function (h) {
+        var quti = h.target.closest('[data-pleyer]');
+        if (!quti) return;
+        var video = quti.querySelector('video');
+        if (!video) return;
+
+        if (joriy && joriy !== video) toxtat();
+
+        if (video.paused) {
+            video.play().then(function () {
+                quti.classList.add('ketyapti');
+                joriy = video;
+            }).catch(function () {
+                // Ijro etib bo'lmasa (kodek yoki fayl muammosi) — jim qolmasin
+                quti.classList.add('xato');
+            });
+        } else {
+            video.pause();
+            quti.classList.remove('ketyapti');
+            joriy = null;
+        }
+    });
+
+    // ===== 2. Kattalashtirish oynasi =====
+    var modal = document.getElementById('ql-modal');
+    var media = document.getElementById('ql-modal-media');
+    var mSarlavha = document.getElementById('ql-modal-sarlavha');
+    var mIzoh = document.getElementById('ql-modal-izoh');
+    var qaytadigan = null;    // modal yopilgach fokus shu tugmaga qaytadi
+
+    function och(tugma) {
+        var tur = tugma.dataset.katta;
+        mSarlavha.textContent = tugma.dataset.sarlavha || '';
+        mIzoh.textContent = tugma.dataset.izoh || '';
+        media.textContent = '';
+
+        if (tur === 'video') {
+            var v = document.createElement('video');
+            v.src = tugma.dataset.manba;
+            if (tugma.dataset.poster) v.poster = tugma.dataset.poster;
+            // Ovoz fayldan olib tashlangan, lekin `muted` bo'lmasa ba'zi
+            // brauzerlar avtomatik ijroga ruxsat bermaydi.
+            v.muted = true;
+            v.loop = true;
+            v.controls = true;
+            v.playsInline = true;
+            media.appendChild(v);
+            v.play().catch(function () {});   // ijro etilmasa boshqaruv tugmalari qoladi
+        } else {
+            var r = document.createElement('img');
+            r.src = tugma.dataset.manba;
+            r.alt = tugma.dataset.sarlavha || '';
+            media.appendChild(r);
+        }
+
+        toxtat();                       // katakdagi lavha yonma-yon yurmasin
+        qaytadigan = tugma;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        document.getElementById('ql-yop').focus();
+    }
+
+    function yop() {
+        if (modal.hidden) return;
+        modal.hidden = true;
+        media.textContent = '';         // videoni to'xtatish va yuklashni uzish
+        document.body.style.overflow = '';
+        if (qaytadigan) { qaytadigan.focus(); qaytadigan = null; }
+    }
+
+    document.addEventListener('click', function (h) {
+        var tugma = h.target.closest('[data-katta]');
+        if (tugma) { och(tugma); return; }
+        if (h.target.closest('#ql-yop') || h.target === modal) yop();
+    });
+
+    document.addEventListener('keydown', function (h) {
+        if (h.key === 'Escape') yop();
+    });
+})();
+</script>
+{% endblock %}

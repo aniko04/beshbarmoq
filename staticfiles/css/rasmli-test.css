@@ -4,6 +4,18 @@
    lekin 2–4-sinf o'quvchilari uchun yirikroq va rangliroq.
    ========================================================= */
 
+/* Savol kartalarining navbatlashuvchi foni. Metodika bo'limida shunday
+   juftlik bor (`--limon`/`--yashil`, platform.css), lekin bu ikkisi faqat
+   shu sahifada ishlatilgani uchun shu yerda turadi.
+   Ranglar Metodika juftligiga yorug'lik jihatidan yaqin olingan, matn
+   kontrasti esa AA dan ancha yuqori (--ink bilan 13.1 va 12.8). */
+:root {
+    --osmon:      #E1EEFA;
+    --osmon-2:    #B9D5EF;   /* chegara uchun to'qroq tovlanish */
+    --binafsha:   #EDE6F9;
+    --binafsha-2: #D2C4EE;
+}
+
 .rt-head::before { background-image: url('/static/img/qollar.jpg'); }
 
 /* Sarlavha ostidagi qisqa ma'lumot: topshiriq / ball / vaqt / sinf */
@@ -123,6 +135,18 @@
     margin-bottom: 22px;
     scroll-margin-top: 150px;
 }
+/* Kartalar navbatma-navbat osmon va binafsha fonda — Metodika bo'limidagi
+   limon/yashil juftligi bilan bir mantiqda. `.rt-savol` lar `.wrap` ning
+   1..15-farzandlari (oxirida `.rt-natija` turadi), shuning uchun nth-child
+   to'g'ri sanaydi. */
+.rt-savol:nth-child(odd) {
+    background: var(--osmon);
+    border-color: var(--osmon-2);
+}
+.rt-savol:nth-child(even) {
+    background: var(--binafsha);
+    border-color: var(--binafsha-2);
+}
 .rt-savol-bosh {
     display: flex;
     align-items: center;
@@ -174,8 +198,11 @@
     gap: 10px;
     margin: 0;
     padding: 14px 14px 12px;
-    background: var(--stone);
-    border: 2px solid var(--line);
+    /* Yarim shaffof oq: kartaning rangi ostidan sal ko'rinib turadi, shunda
+       ichidagi OQ rasm qutisi ajralib turadi. To'liq oq qilsak, ikkisi
+       qo'shilib ketardi; bej (--stone) esa osmon/binafsha fonda loyqa. */
+    background: rgba(255, 255, 255, 0.62);
+    border: 2px solid rgba(255, 255, 255, 0.9);
     border-radius: var(--r-md);
     font-family: inherit;
     transition: border-color 0.16s, box-shadow 0.16s, transform 0.16s, background-color 0.16s;
@@ -236,7 +263,7 @@ button.rt-variant:disabled { cursor: default; }
     color: #fff;
 }
 /* Faqat ko'rsatish uchun (moslashtirish savollari) */
-.rt-korish .rt-variant { background: var(--stone); }
+.rt-korish .rt-variant { background: rgba(255, 255, 255, 0.62); }
 
 /* ===== Moslashtirish qatorlari ===== */
 .rt-moslash {
@@ -252,7 +279,10 @@ button.rt-variant:disabled { cursor: default; }
     gap: 14px;
     padding: 10px 14px;
     border-radius: var(--r-md);
-    background: var(--stone);
+    /* Variant kartalari bilan bir xil yarim shaffof oq (yuqoridagi izoh).
+       To'g'ri/xato holatlari (.rt-togri / .rt-xato) o'z rangini beradi —
+       ular ikki sinfli, shuning uchun shu qoidadan kuchli. */
+    background: rgba(255, 255, 255, 0.62);
     border: 1.5px solid transparent;
 }
 .rt-yorliq {

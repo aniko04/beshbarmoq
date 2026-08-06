@@ -5,6 +5,18 @@
    ikkalasi bir sahifada uchrashmaydi, sinflar chalkashmasin.
    ========================================================= */
 
+/* Topshiriq kartalarining navbatlashuvchi foni. Rasmli testda ham shunday
+   juftlik bor (--osmon/--binafsha), Metodikada esa --limon/--yashil —
+   shuning uchun bu sahifaga UCHINCHI juftlik olindi: shaftoli va pudina.
+   Ikkalasi ham juda och, --ink bilan kontrasti 12 dan yuqori. Tokenlar
+   platform.css ga emas, shu yerga qo'yilgan — faqat shu sahifa ishlatadi. */
+:root {
+    --shaftoli:   #FCEADB;
+    --shaftoli-2: #F0D0AE;   /* chegara uchun to'qroq tovlanish */
+    --pudina:     #E0F1EB;
+    --pudina-2:   #B4DCD1;
+}
+
 .dk-head::before { background-image: url('/static/img/sinf.jpg'); }
 
 /* Sarlavha ostidagi qisqa ma'lumot */
@@ -166,6 +178,17 @@
     padding: 24px 26px;
     margin-bottom: 22px;
 }
+/* Kartalar navbatma-navbat shaftoli va pudina fonda. `:nth-of-type` —
+   chunki bosqich ichida `<header>` va natija `<div>` ham bor, faqat
+   topshiriqlar `<article>`, ya'ni sanoq har bosqichda 1 dan boshlanadi. */
+.dk-savol:nth-of-type(odd) {
+    background: var(--shaftoli);
+    border-color: var(--shaftoli-2);
+}
+.dk-savol:nth-of-type(even) {
+    background: var(--pudina);
+    border-color: var(--pudina-2);
+}
 .dk-savol-bosh {
     display: flex;
     align-items: center;
@@ -196,10 +219,14 @@
     flex-shrink: 0;
     padding: 5px 13px;
     border-radius: 999px;
-    background: rgba(232, 160, 42, 0.16);
+    /* Oldin zafaron shaffofi edi — rangli karta ostida ikki fonda ikki xil
+       ko'rinardi. Endi qopqoq oq, chegarasi zafaron: har ikkalasida bir xil. */
+    background: var(--paper);
+    border: 1px solid var(--zafaron);
     color: #8a5a00;
     font-size: 0.82rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 /* Rasmlar qatori — raqami bilan */
@@ -212,8 +239,10 @@
 .dk-rasm {
     margin: 0;
     padding: 10px 10px 12px;
-    background: var(--stone);
-    border: 1px solid var(--line);
+    /* Yarim shaffof oq: karta rangi ostidan sal ko'rinadi, shunda ICHIDAGI
+       oq rasm qutisi ajralib turadi. Bej (--stone) rangli fonda loyqa. */
+    background: rgba(255, 255, 255, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.9);
     border-radius: var(--r-md);
     text-align: center;
 }
@@ -256,8 +285,11 @@
     gap: 14px;
     padding: 10px 14px;
     border-radius: var(--r-sm);
-    background: var(--stone);
-    border: 1.5px solid transparent;
+    /* Rasm qutisi bilan bir mantiqda — kartaning yengilroq tovlanishi.
+       Tekshirilgandan keyingi .dk-togri/.dk-xato ikki sinfli, shuning uchun
+       ular baribir shu qoidadan ustun turadi. */
+    background: rgba(255, 255, 255, 0.62);
+    border: 1.5px solid rgba(255, 255, 255, 0.9);
 }
 .dk-yorliq { flex: 1; min-width: 0; font-size: 0.99rem; color: var(--ink); }
 .dk-raqamlar { display: flex; gap: 6px; flex-shrink: 0; }

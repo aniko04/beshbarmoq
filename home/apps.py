@@ -8,6 +8,7 @@ class HomeConfig(AppConfig):
     def ready(self):
         register(_rasmli_test_rasmlari)
         register(_diktant_rasmlari)
+        register(_qalamdon_fayllari)
 
 
 def _rasmli_test_rasmlari(app_configs, **kwargs):
@@ -42,4 +43,22 @@ def _diktant_rasmlari(app_configs, **kwargs):
         "«Texnologik diktantlar» rasmlari yetishmayapti: " + ', '.join(yoq),
         hint="static/img/diktant/ ni Worddan qayta yasang.",
         id='home.W002',
+    )]
+
+
+def _qalamdon_fayllari(app_configs, **kwargs):
+    """«Qalamdon» xaritasining rasm va videolari joyidami.
+
+    Videolar `media/` da turadi va hech qanday yig'ish bosqichidan
+    o'tmaydi — ko'chirilmay qolsa sahifada bo'sh pleyer qoladi, xato esa
+    hech qayerda ko'rinmaydi. Shuning uchun ular ham shu yerda sanaladi.
+    """
+    from . import qalamdon
+    yoq = qalamdon.yetishmagan_fayllar()
+    if not yoq:
+        return []
+    return [Warning(
+        "«Qalamdon» xaritasi fayllari yetishmayapti: " + ', '.join(yoq),
+        hint="static/img/qalamdon/ va media/xarita/qalamdon/ ni tekshiring.",
+        id='home.W003',
     )]

@@ -10,6 +10,7 @@ from functools import wraps
 from .models import Result, Profile, Material
 from . import rasmli_test
 from . import diktant
+from . import qalamdon
 import json
 
 
@@ -66,7 +67,8 @@ def multimediya(request):
     })
 
 
-def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None):
+def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None,
+           bolim_ilova=None):
     """Admin orqali to'ldiriladigan material bo'limlarining umumiy ko'rinishi.
 
     `guruhlash` berilsa (masalan Topshiriq bo'limida), materiallar kichik
@@ -76,6 +78,11 @@ def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None):
 
     `ilova` — kichik bo'lim kaliti bo'yicha interaktiv sahifaga havola
     (masalan «Rasmli test» guruhidagi onlayn test): {kalit: {...}}.
+
+    `bolim_ilova` — o'sha havolaning guruhsiz varianti: bo'limning eng
+    boshida turadi (Xarita bo'limidagi «Qalamdon» sahifasi shunday). Xarita
+    guruhlarga bo'linmagani uchun `ilova` dagi kalit tizimi bu yerda ish
+    bermaydi.
     """
     hammasi = list(Material.objects.filter(section=section, is_published=True))
     guruhlar = []
@@ -100,6 +107,7 @@ def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None):
         'bolim_sarlavha': sarlavha,
         'materiallar': guruhsiz,
         'guruhlar': guruhlar,
+        'bolim_ilova': bolim_ilova,
         'jami': len(hammasi),
     })
 
@@ -182,12 +190,17 @@ def diktant_sahifa(request):
     yuboradi, lekin bir vaqtda bittasi ko'rinadi: bosqich tekshirilgandan
     keyin keyingisi ochiladi (JS, sahifa yangilanmaydi). Har bosqich
     natijasi `dikt1`…`dikt4` kaliti bilan alohida saqlanadi.
+
+    Topshiriqlar har ochilishda aralashadi (rasm raqamlari ham, nom qatorlari
+    ham), shuning uchun javob kaliti AYNAN shu aralashmadan olinadi — ikkisi
+    bir chaqiruvdan chiqishi shart.
     """
+    tuzilma = diktant.aralashtirilgan()
     return render(request, 'diktant.html', {
         'active': 'topshiriq',
-        'bosqichlar': diktant.bosqichlar(),
+        'bosqichlar': tuzilma,
         # json_script shablonda o'zi JSON qiladi — bu yerda lug'atning o'zi beriladi.
-        'javoblar': diktant.javob_kaliti(),
+        'javoblar': diktant.javob_kaliti(tuzilma),
         'raqamlar': diktant.RAQAMLAR,
         'qator_ball': diktant.QATOR_BALL,
         'bosqich_ball': diktant.bosqich_ball(),
@@ -203,7 +216,33 @@ def xarita(request):
         "Amaliy mavzular bo'yicha bosqichma-bosqich texnologik xaritalar: "
         "ish ketma-ketligi, kerakli jihozlar va xavfsizlik qoidalari.",
         "Texnologik xaritalar",
+        bolim_ilova={
+            'url': '/xarita/qalamdon',
+            'sarlavha': qalamdon.SARLAVHA,
+            'tavsif': "{} bosqichli to'liq xarita: har bosqichning tasviri, "
+                      "{} ta video lavha va kerakli ish anjomlari.".format(
+                          len(qalamdon.bosqichlar()), qalamdon.video_soni()),
+            'tugma': "Xaritani ochish",
+        },
     )
+
+
+def qalamdon_sahifa(request):
+    """«Qalamdon "Organayzer"» — Xarita bo'limining to'liq texnologik xaritasi.
+
+    Worddagi jadval saytda to'rt ustunli bo'lib chiqadi: uchinchi «Vidyosi»
+    ustuni faqat shu yerda bor (Word fayl o'zgartirilmagan). Ma'lumot
+    `home/qalamdon.py` da; sahifada JS faqat videoni bosilganda ijro etadi.
+    """
+    return render(request, 'qalamdon.html', {
+        'active': 'xarita',
+        'sarlavha': qalamdon.SARLAVHA,
+        'tavsif': qalamdon.TAVSIF,
+        'xulosa': qalamdon.XULOSA,
+        'ustunlar': qalamdon.USTUNLAR,
+        'bosqichlar': qalamdon.bosqichlar(),
+        'video_soni': qalamdon.video_soni(),
+    })
 
 
 def ishlanma(request):

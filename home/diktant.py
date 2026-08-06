@@ -34,6 +34,7 @@ belgilangan. Quyida tuzatilgan; mijoz e'tiroz bildirsa, o'sha ikki
 raqamni qaytarish yetarli — boshqa hech narsaga tegmaydi.
 """
 
+import random
 from pathlib import Path
 
 QATOR_BALL = 5           # har bir mos qator uchun ball
@@ -225,11 +226,73 @@ def bosqichlar():
     return chiqish
 
 
-def javob_kaliti():
-    """{savol id: [to'g'ri raqamlar]} — sahifadagi JS shu bilan tekshiradi."""
+def aralashtirilgan(rnd=None):
+    """`bosqichlar()` ning har sahifa ochilishida qayta aralashtirilgan nusxasi.
+
+    Worddan olingan tartibda javoblar ko'zga tashlanadigan darajada bir xil
+    edi (masalan qog'oz turlari topshiriqlarining hammasida 4-2-3-1, birinchi
+    topshiriqda esa to'g'ridan-to'g'ri 1-2-3-4), ya'ni o'quvchi rasmga
+    qaramasdan ham topib olardi. Shuning uchun har topshiriqda IKKI narsa
+    aralashadi:
+
+      1. rasmlarning raqamlari — qaysi rasm 1, qaysisi 4 bo'lishi;
+      2. nom qatorlarining tartibi.
+
+    Javob kaliti shu yerda birga hisoblanadi (`javob_kaliti()` ga aynan shu
+    ro'yxat berilishi shart), aks holda sahifadagi kalit boshqa tartibda
+    bo'lib, hamma javob xato chiqadi.
+
+    `_KESH` dagi asl ma'lumot o'zgarmaydi — har savol uchun yangi ro'yxat
+    yasaladi, matn va rasm manzillari esa o'sha-o'sha.
+    """
+    rnd = rnd or random.Random()
+    chiqish = []
+    for bosqich in bosqichlar():
+        savollar = []
+        for savol in bosqich['savollar']:
+            # tartib[k-1] = k-o'rinda turadigan rasmning ASL raqami
+            tartib = list(RAQAMLAR)
+            rnd.shuffle(tartib)
+            yangi_raqam = {asl: yangi for yangi, asl in enumerate(tartib, 1)}
+
+            rasmlar = [
+                {'raqam': yangi, 'rasm': savol['rasmlar'][asl - 1]['rasm']}
+                for yangi, asl in enumerate(tartib, 1)
+            ]
+
+            qatorlar = list(savol['qatorlar'])
+            # 24 ta joylashuvdan 2 tasi — 1-2-3-4 va 4-3-2-1 — tasodif bo'lsa
+            # ham "aralashtirilmagan" bo'lib ko'rinadi, shuning uchun ular
+            # qaytadan tashlanadi (urinish soni cheklangan, sikl qotib
+            # qolmaydi; qator soni 2 dan kam bo'lsa shart baribir bajarilmaydi).
+            for _ in range(20):
+                rnd.shuffle(qatorlar)
+                javoblar = [yangi_raqam[q['javob']] for q in qatorlar]
+                if javoblar != sorted(javoblar) and javoblar != sorted(javoblar, reverse=True):
+                    break
+
+            qatorlar = [
+                {'nomer': i, 'yorliq': q['yorliq'], 'javob': yangi_raqam[q['javob']]}
+                for i, q in enumerate(qatorlar)
+            ]
+
+            savollar.append(dict(savol, rasmlar=rasmlar, qatorlar=qatorlar))
+        chiqish.append(dict(bosqich, savollar=savollar))
+    return chiqish
+
+
+def javob_kaliti(manba=None):
+    """{savol id: [to'g'ri raqamlar]} — sahifadagi JS shu bilan tekshiradi.
+
+    `manba` — `aralashtirilgan()` qaytargan ro'yxat. Berilmasa asl (aralashmagan)
+    tartib olinadi; sahifa ALBATTA o'zi ko'rsatayotgan ro'yxatni uzatishi kerak.
+    """
+    if manba is None:
+        manba = bosqichlar()
     return {
-        _savol_id(v, n): [javob for _, javob in qatorlar]
-        for v, n, _, qatorlar in _XOM
+        savol['id']: [q['javob'] for q in savol['qatorlar']]
+        for bosqich in manba
+        for savol in bosqich['savollar']
     }
 
 
