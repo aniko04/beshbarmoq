@@ -9,8 +9,16 @@ Word faylining o'zi o'zgartirilmagan: bu ustun faqat saytda bor.
 
 Video ustunining manbasi — o'sha papkadagi `1..13` raqamli fayllar, ya'ni
 tartib raqami to'g'ridan-to'g'ri bosqich raqamiga mos. Ularning 9 tasi mp4,
-4 tasi (1, 11, 12, 13) esa surat, shuning uchun bu ustunda ikki xil katak
+3 tasi (1, 11, 12) esa surat, shuning uchun bu ustunda ikki xil katak
 bo'ladi va shablon `tur` maydoniga qarab ajratadi.
+
+13-bosqich alohida: unga keyinroq mijozning to'liq darsligi qo'shildi
+(`Qog'ozdan_qalam_stendi…mp4`, 4 daqiqa, 640x360, OVOZI SAQLANGAN — qolgan
+9 lavhadan farqli). Katakning yuzida turadigan `poster13.jpg` ham alohida:
+u videodan olingan kadr EMAS, balki tayyor buyumning surati (manba
+`13.png`, 760px) — mijoz shuni so'ragan. Bir marta videodan kadr olib
+ko'rilgan edi, lekin qaytarildi; ya'ni bu poster videoni almashtirmasa
+ham o'zgarmaydi.
 
 **Videolar qayta kodlangan, va buni tushirib qoldirib bo'lmaydi:** asl
 fayllar HEVC (H.265) 1080p edi — bu kodekni Chrome Windowsda faqat tizimda
@@ -24,7 +32,9 @@ Hajmi 49 MB dan 8.3 MB ga tushdi.
 Rasmlar `static/img/qalamdon/` da: `qadamNN.jpg` — bosqich tasviri (Word
 ichidan), `anjomNN.jpg` — kerakli anjomlar. Anjom rasmlarining 1–12 tasi
 Worddan emas, MIJOZ bergan yangi to'plamdan (izohli rasmlar: «Qaychi»,
-«Tish kovlagich» va h.k.); faqat 13-bosqichniki Worddan qolgan. Ular
+«Tish kovlagich» va h.k.); faqat 13-bosqichniki Worddan qolgan. Yangi
+rasmlarning chetida ingichka qora ramka bor edi — u kulrang soyasi bilan
+birga qirqib tashlangan (skript `scratchpad/anjomlar.py` da). Ular
 katak nisbatiga (1.133) oq bilan to'ldirilgan — katak `object-fit: cover`
 bilan to'ladi, izoh matni esa qirqilmaydi. Rasmli test va Diktantdagi
 to'rt qoida bu yerda ham amal qiladi: Worddagi JPEG bayti o'zgarishsiz
@@ -46,7 +56,7 @@ from pathlib import Path
 
 RASM_YOL = '/static/img/qalamdon/'
 VIDEO_YOL = '/media/xarita/qalamdon/'
-RASM_VERSIYA = 5         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
+RASM_VERSIYA = 7         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
 
 RASM_KATALOG = Path(__file__).resolve().parent.parent / 'static' / 'img' / 'qalamdon'
 VIDEO_KATALOG = Path(__file__).resolve().parent.parent / 'media' / 'xarita' / 'qalamdon'
@@ -77,13 +87,14 @@ USTUNLAR = [
 # Lavhalar davomiyligi (soniya) — katakdagi «VIDEO 0:08» yorlig'i uchun.
 # Fayldan o'qilmaydi: buning uchun har sahifa ochilishida ffprobe kerak
 # bo'lardi, videolar esa qayta kodlanmasa o'zgarmaydi.
-_DAVOMIYLIK = {2: 8.0, 3: 5.6, 4: 2.4, 5: 7.8, 6: 3.6, 7: 2.8, 8: 7.9, 9: 7.1, 10: 7.7}
+_DAVOMIYLIK = {2: 8.0, 3: 5.6, 4: 2.4, 5: 7.8, 6: 3.6, 7: 2.8, 8: 7.9, 9: 7.1,
+               10: 7.7, 13: 244.8}
 
 # (bosqich, matn, video turi, anjom matni)
 # Matnlar Worddan o'zgartirilmasdan olingan; faqat qo'shtirnoqsimon
 # apostroflar (U+2018/U+2019) sayt bo'ylab ishlatiladigan ʻ (U+02BB) ga
 # keltirilgan — diktant.py da ham shunday.
-# `tur`: 'video' → mp4, 'rasm' → surat (1, 11, 12, 13-bosqichlar).
+# `tur`: 'video' → mp4, 'rasm' → surat (1, 11, 12-bosqichlar).
 _XOM = [
     # Wordda 1-bosqichning anjomlari matn bilan berilgan edi («Rangli qogʻoz,
     # rangli toshlar, yelim.»). Mijoz uni olib tashlashni so'radi: endi bu
@@ -112,8 +123,10 @@ _XOM = [
          "tayyorlanadi.", 'rasm', None),
     (12, "Tayyorlangan modullar belgilangan tartibda oʻzaro biriktirilib, koʻp "
          "qirrali qalamdon konstruksiyasi hosil qilinadi.", 'rasm', None),
+    # 13-bosqich mijozning to'liq darsligi (4 daqiqa) — qolgan lavhalardan
+    # farqli o'laroq uzun va OVOZLI.
     (13, "Tayyor buyum bezak elementlari bilan estetik jihatdan boyitilib, "
-         "foydalanishga tayyor origami qalamdoni hosil qilinadi.", 'rasm', None),
+         "foydalanishga tayyor origami qalamdoni hosil qilinadi.", 'video', None),
 ]
 
 _KESH = None
