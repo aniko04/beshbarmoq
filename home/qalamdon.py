@@ -21,8 +21,12 @@ butunlay olib tashlangan** (`-an`) — sahifada video ovozsiz turishi kerak,
 `muted` atributiga ishonib qolgandan ko'ra ovozning o'zi bo'lmagani aniq.
 Hajmi 49 MB dan 8.3 MB ga tushdi.
 
-Rasmlar Word ichidan olingan (`static/img/qalamdon/`): `qadamNN.jpg` —
-bosqich tasviri, `anjomNN.jpg` — kerakli anjomlar. Rasmli test va Diktantdagi
+Rasmlar `static/img/qalamdon/` da: `qadamNN.jpg` — bosqich tasviri (Word
+ichidan), `anjomNN.jpg` — kerakli anjomlar. Anjom rasmlarining 1–12 tasi
+Worddan emas, MIJOZ bergan yangi to'plamdan (izohli rasmlar: «Qaychi»,
+«Tish kovlagich» va h.k.); faqat 13-bosqichniki Worddan qolgan. Ular
+katak nisbatiga (1.133) oq bilan to'ldirilgan — katak `object-fit: cover`
+bilan to'ladi, izoh matni esa qirqilmaydi. Rasmli test va Diktantdagi
 to'rt qoida bu yerda ham amal qiladi: Worddagi JPEG bayti o'zgarishsiz
 nusxalanadi, PNG shaffofligi OQQA yotqizilib q97/`subsampling=0` bilan
 saqlanadi (manbalar 164–275px, tekis ranglari past sifatda buziladi),
@@ -42,7 +46,7 @@ from pathlib import Path
 
 RASM_YOL = '/static/img/qalamdon/'
 VIDEO_YOL = '/media/xarita/qalamdon/'
-RASM_VERSIYA = 1         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
+RASM_VERSIYA = 5         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
 
 RASM_KATALOG = Path(__file__).resolve().parent.parent / 'static' / 'img' / 'qalamdon'
 VIDEO_KATALOG = Path(__file__).resolve().parent.parent / 'media' / 'xarita' / 'qalamdon'
@@ -60,12 +64,14 @@ XULOSA = (
     "malakalari shakllanadi."
 )
 
-# Word jadvalidagi ustun sarlavhalari — «Vidyosi» qo'shilgan holda.
+# Ustun sarlavhalari. Wordda uchinchisi yo'q edi, to'rtinchisi esa
+# «Kerakli ish anjomlari» deb yozilgan; mijoz ikkalasini ham qisqartirdi —
+# jadval boshida uzun sarlavha ustunni siqib qo'yardi.
 USTUNLAR = [
     "Ishni bajarish ketma-ketligi",
     "Ishni bajarish boʻyicha amalga oshiriladigan ishlar tasviri",
-    "Vidyosi",
-    "Kerakli ish anjomlari",
+    "Video",
+    "Anjomlar",
 ]
 
 # Lavhalar davomiyligi (soniya) — katakdagi «VIDEO 0:08» yorlig'i uchun.
@@ -79,9 +85,11 @@ _DAVOMIYLIK = {2: 8.0, 3: 5.6, 4: 2.4, 5: 7.8, 6: 3.6, 7: 2.8, 8: 7.9, 9: 7.1, 1
 # keltirilgan — diktant.py da ham shunday.
 # `tur`: 'video' → mp4, 'rasm' → surat (1, 11, 12, 13-bosqichlar).
 _XOM = [
+    # Wordda 1-bosqichning anjomlari matn bilan berilgan edi («Rangli qogʻoz,
+    # rangli toshlar, yelim.»). Mijoz uni olib tashlashni so'radi: endi bu
+    # ustunda rasm bor, matn esa katakni qo'shnilaridan baland qilib qo'yardi.
     (1, "Ish uchun A4 formatdagi rangli qogʻoz tanlab olinadi. Ish joyi tartibga "
-        "keltirilib, zarur jihoz va materiallar tayyorlanadi.", 'rasm',
-        "Rangli qogʻoz, rangli toshlar, yelim."),
+        "keltirilib, zarur jihoz va materiallar tayyorlanadi.", 'rasm', None),
     (2, "Qogʻoz varagʻi uzunligi boʻylab teng ikkiga buklanib, buklash chizigʻi "
         "hosil qilinadi.", 'video', None),
     (3, "Hosil qilingan markaziy chiziq boʻylab qogʻoz qayta buklanib, aniq "
@@ -130,8 +138,7 @@ def bosqichlar():
             'tasvir': _rasm(f'qadam{nomer:02d}.jpg'),
             'tur': tur,
             'anjom_matn': anjom_matn,
-            # 1-bosqichda anjomlar matn bilan berilgan, qolganlarida rasm bilan.
-            'anjom_rasm': _rasm(f'anjom{nomer:02d}.jpg') if nomer > 1 else None,
+            'anjom_rasm': _rasm(f'anjom{nomer:02d}.jpg'),
         }
         if tur == 'video':
             sek = _DAVOMIYLIK.get(nomer, 0)
@@ -158,7 +165,7 @@ def yetishmagan_fayllar():
         nomer = qadam['nomer']
         yoq += [
             nom for nom in (f'qadam{nomer:02d}.jpg',
-                            f'anjom{nomer:02d}.jpg' if nomer > 1 else None,
+                            f'anjom{nomer:02d}.jpg',
                             f'poster{nomer:02d}.jpg' if qadam['tur'] == 'video' else None,
                             f'v{nomer:02d}.jpg' if qadam['tur'] == 'rasm' else None)
             if nom and not (RASM_KATALOG / nom).exists()

@@ -8,7 +8,7 @@
     `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi, shuning uchun
     CSS ni tahrirlaganda bu raqamni oshiring (base.html dagi izohga qarang).
 {% endcomment %}
-<link rel="stylesheet" href="/static/css/qalamdon.css?v=5">
+<link rel="stylesheet" href="/static/css/qalamdon.css?v=6">
 {% endblock %}
 
 {% block content %}
@@ -84,8 +84,14 @@
                     {% for q in bosqichlar %}
                         <tr>
                             <th scope="row" class="ql-qadam" data-ustun="{{ ustunlar.0 }}">
-                                <span class="ql-nomer">{{ q.nomer }}</span>
-                                <span class="ql-matn">{{ q.matn }}</span>
+                                {% comment %}
+                                    Ichki `div` kerak: `<th>` ning o'ziga flex berilsa,
+                                    u `table-cell` bo'lishdan to'xtab, qatordan tushib qoladi.
+                                {% endcomment %}
+                                <div class="ql-qadam-ichi">
+                                    <span class="ql-nomer">{{ q.nomer }}</span>
+                                    <span class="ql-matn">{{ q.matn }}</span>
+                                </div>
                             </th>
 
                             <td class="ql-tasvir" data-ustun="{{ ustunlar.1 }}">
