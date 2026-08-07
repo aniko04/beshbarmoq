@@ -30,9 +30,11 @@ butunlay olib tashlangan** (`-an`) — sahifada video ovozsiz turishi kerak,
 Hajmi 49 MB dan 8.3 MB ga tushdi.
 
 Rasmlar `static/img/qalamdon/` da: `qadamNN.jpg` — bosqich tasviri (Word
-ichidan), `anjomNN.jpg` — kerakli anjomlar. Anjom rasmlarining 1–12 tasi
-Worddan emas, MIJOZ bergan yangi to'plamdan (izohli rasmlar: «Qaychi»,
-«Tish kovlagich» va h.k.); faqat 13-bosqichniki Worddan qolgan. Yangi
+ichidan), `anjomNN.jpg` — kerakli anjomlar. Anjom rasmlarining hammasi Worddan
+emas, MIJOZ bergan to'plamdan: 1–12 izohli rasmlar («Qaychi», «Tish
+kovlagich» va h.k.), 13-bosqichniki esa keyinroq alohida berilgan tayyor
+buyum surati (ko'k-sariq origami qalamdon; ilgari bu yerda Worddan
+qolgan kvadrat rasm turardi). Yangi
 rasmlarning chetida ingichka qora ramka bor edi — u kulrang soyasi bilan
 birga qirqib tashlangan (skript `scratchpad/anjomlar.py` da). Ular
 katak nisbatiga (1.133) oq bilan to'ldirilgan — katak `object-fit: cover`
@@ -56,7 +58,7 @@ from pathlib import Path
 
 RASM_YOL = '/static/img/qalamdon/'
 VIDEO_YOL = '/media/xarita/qalamdon/'
-RASM_VERSIYA = 7         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
+RASM_VERSIYA = 8         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauzer keshi)
 
 RASM_KATALOG = Path(__file__).resolve().parent.parent / 'static' / 'img' / 'qalamdon'
 VIDEO_KATALOG = Path(__file__).resolve().parent.parent / 'media' / 'xarita' / 'qalamdon'

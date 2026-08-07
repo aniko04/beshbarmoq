@@ -41,6 +41,13 @@
        yuqori. (Rasmli test va Diktantning juftliklari o'z CSS fayllarida.) */
     --gulnor:   #FBE9E6;
     --nilufar:  #E8EAF7;
+    /* Dars ishlanmalar uchun uchinchi juftlik. Bu bo'limning muqovalari
+       rang-barang plakatlar, shuning uchun juftlik ataylab eng betaraf
+       yo'nalishdan olindi: firuzadan zangori, zafarondan behi. Nomlari
+       yangi — sadaf/qumoq va pudina/shaftoli qalamdon.css va diktant.css
+       da band, ular ham base.html bilan birga yuklanadi. */
+    --zangori:  #E3EEF3;
+    --behi:     #FCEFDD;
 
     /* Matn */
     --ink:      #1E2433;
@@ -820,20 +827,27 @@ body.pf {
 }
 .material:hover { border-color: var(--firuza); box-shadow: var(--shadow-2); }
 
-/* Metodika va Maqola bo'limlari — kartalar navbatma-navbat rangli fonda,
-   har bo'limning o'z juftligi bilan. Qolganlari (topshiriq, xarita,
-   ishlanma) oq kartalarda qoladi. Sinf `bolim.html` da `active` dan
-   yasaladi, kartalar esa `.material-list` ning bevosita farzandlari —
-   shuning uchun nth-child to'g'ri sanaydi. */
+/* Metodika, Maqola va Ishlanma bo'limlari — kartalar navbatma-navbat rangli
+   fonda, har bo'limning o'z juftligi bilan. Qolganlari (topshiriq, xarita)
+   oq kartalarda qoladi. Sinf `bolim.html` da `active` dan yasaladi, kartalar
+   esa `.material-list` ning bevosita farzandlari — shuning uchun nth-child
+   to'g'ri sanaydi. */
 .bolim-metodika .material:nth-child(odd)  { background: var(--limon); }
 .bolim-metodika .material:nth-child(even) { background: var(--yashil); }
 .bolim-maqola   .material:nth-child(odd)  { background: var(--gulnor); }
 .bolim-maqola   .material:nth-child(even) { background: var(--nilufar); }
-/* Nishon, muqova va tugmalar fonga singib ketmasin — ular oq qoladi. */
+.bolim-ishlanma .material:nth-child(odd)  { background: var(--zangori); }
+.bolim-ishlanma .material:nth-child(even) { background: var(--behi); }
+/* Nishon, muqova va tugmalar fonga singib ketmasin — ular oq qoladi.
+   Ishlanmada bu ayniqsa muhim: muqovalar ensiz-cho'ziq plakatlar bo'lgani
+   uchun `object-fit: cover` dan keyin ham quti chetida ozgina joy qoladi,
+   u rangli bo'lsa muqova atrofida ingichka rangli hoshiya bo'lib ko'rinadi. */
 .bolim-metodika .material-tag,
 .bolim-metodika .material-muqova,
 .bolim-maqola .material-tag,
-.bolim-maqola .material-muqova { background: var(--paper); }
+.bolim-maqola .material-muqova,
+.bolim-ishlanma .material-tag,
+.bolim-ishlanma .material-muqova { background: var(--paper); }
 
 .material-tag {
     display: flex;
