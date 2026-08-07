@@ -3,11 +3,14 @@
     {% if m.muqova %}
         <div class="material-muqova">
             {% comment %}
-                Muqovalar sahifaning asosiy ko'rinishi va har biri ~20 KB,
-                shuning uchun `loading="lazy"` qo'yilmagan — scroll paytida
-                sakrab chiqmasin. Ro'yxat juda uzaysa qayta o'ylash mumkin.
+                Muqovalar sahifaning asosiy ko'rinishi, shuning uchun
+                `loading="lazy"` qo'yilmagan — scroll paytida sakrab
+                chiqmasin. Metodika/Maqolada har biri ~20 KB, Ishlanmada
+                esa ~100 KB (mijozning fotorasm plakatlari), ya'ni o'sha
+                bo'lim ~1.1 MB — ro'yxat yana uzaysa qayta o'ylash kerak.
+                `muqova_url` (`muqova.url` emas) — keshga qarshi `?v=`.
             {% endcomment %}
-            <img src="{{ m.muqova.url }}" alt="{{ m.title }} — muqova">
+            <img src="{{ m.muqova_url }}" alt="{{ m.title }} — muqova">
         </div>
     {% else %}
         <div class="material-tag">

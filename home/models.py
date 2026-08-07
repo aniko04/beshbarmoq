@@ -2,6 +2,29 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+def _versiyali(fayl):
+    """Fayl manzili + `?v=<o'zgartirilgan vaqt>` — brauzer keshi uchun.
+
+    `media/` manzillari hashlanmaydi (statik fayllar ham — `core/settings.py`
+    dagi `CompressedStaticFilesStorage` ga qarang), shuning uchun bir fayl
+    o'sha nom bilan almashtirilsa manzil o'zgarmaydi va brauzer eskisini
+    ko'rsatishda davom etadi. Django `serve()` shartli so'rovlarni to'g'ri
+    qaytaradi, lekin Chrome `Cache-Control` yo'q javob uchun evristik
+    muddat qo'yadi (fayl yoshining 10%) va umuman qayta so'ramaydi —
+    ishlanma muqovalari PDF ichiga qo'shilganda aynan shu bo'ldi: kartada
+    yangi muqova, ramkada esa eski 6 betlik PDF turaverdi.
+
+    Raqam qo'lda emas, fayl vaqtidan olinadi — fayl almashtirilishi bilan
+    manzil o'zi yangilanadi, hech narsa esdan chiqmaydi. Fayl o'chib ketgan
+    bo'lsa oddiy manzil qaytadi (sahifa yiqilmasin).
+    """
+    try:
+        vaqt = int(fayl.storage.get_modified_time(fayl.name).timestamp())
+    except Exception:
+        return fayl.url
+    return f'{fayl.url}?v={vaqt}'
+
+
 class Result(models.Model):
     """Foydalanuvchi mashq natijalari."""
     MASHQ_CHOICES = [
@@ -161,10 +184,15 @@ class Material(models.Model):
         Bo'sh qaytsa, sahifada 'Ko'rish' tugmasi ko'rsatilmaydi.
         """
         if self.is_pdf:
-            return self.file.url
+            return _versiyali(self.file)
         if self.koruv:
-            return self.koruv.url
+            return _versiyali(self.koruv)
         return ''
+
+    @property
+    def muqova_url(self):
+        """Muqova rasmi manzili keshga qarshi belgisi bilan."""
+        return _versiyali(self.muqova) if self.muqova else ''
 
 
 class Profile(models.Model):
