@@ -163,6 +163,165 @@
         .hujjat-muqova .motif { width: 150px; height: 150px; }
         .hujjat-amal .btn-sm { flex: 1 1 100%; justify-content: center; }
     }
+
+    /* ===== Sertifikatlar ===== */
+    .sert-tur {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 22px;
+    }
+
+    .sert {
+        display: flex;
+        flex-direction: column;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        overflow: hidden;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+    .sert:hover { border-color: var(--firuza); box-shadow: var(--shadow-2); transform: translateY(-3px); }
+
+    /* Rasm qutisi qat'iy oq: skanerlar oq fonga tekislangan, har qanday
+       tus rasm atrofida oq to'rtburchak bo'lib ko'rinadi. */
+    .sert-rasm {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 200px;
+        padding: 12px;
+        background: #fff;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        cursor: zoom-in;
+    }
+    /* Sensorli ekranda hover yo'q — lupa doim ko'rinadi, kursor ustiga
+       kelganda esa to'liq quyuqlashadi. */
+    .sert-lupa {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--siyoh);
+        color: #fff;
+        opacity: 0.55;
+        transition: opacity 0.18s ease;
+    }
+    .sert:hover .sert-lupa { opacity: 1; }
+    /* Manba rasmlar 877-1591px - hech qachon kattalashtirmaymiz. */
+    .sert-rasm img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 3px;
+        box-shadow: 0 1px 6px rgba(20, 32, 58, 0.14);
+    }
+
+    .sert-tan {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 8px;
+        padding: 18px 18px 20px;
+    }
+    .sert-nishon {
+        align-self: flex-start;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--anor);
+        background: var(--stone);
+        border-radius: 999px;
+        padding: 4px 11px;
+    }
+    .sert-tan h3 {
+        font-size: 1.02rem;
+        line-height: 1.35;
+        margin: 0;
+        color: var(--ink);
+    }
+    .sert-manba {
+        font-size: 0.86rem;
+        line-height: 1.5;
+        color: var(--ink-3);
+        margin: 0;
+    }
+    .sert-amal {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 12px;
+    }
+    .sert-amal .btn-sm { font-size: 0.82rem; padding: 7px 12px; }
+
+    /* ===== Kattalashtirish oynasi (bitta, hamma karta uchun) ===== */
+    .sert-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px;
+        background: rgba(20, 32, 58, 0.93);
+    }
+    .sert-modal[hidden] { display: none; }
+    .sert-modal figure {
+        margin: 0;
+        max-width: min(1180px, 100%);
+        max-height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    /* Kattalashtirishda ham asl o'lchamdan oshirmaymiz. */
+    .sert-modal img {
+        max-width: 100%;
+        max-height: calc(100vh - 140px);
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: var(--r-sm);
+        background: #fff;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+    .sert-modal figcaption {
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 0.92rem;
+        text-align: center;
+    }
+    .sert-yopish {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        cursor: pointer;
+    }
+    .sert-yopish:hover { background: rgba(255, 255, 255, 0.24); }
+
+    @media (max-width: 560px) {
+        .sert-rasm { height: 170px; }
+        .sert-modal { padding: 16px; }
+    }
 </style>
 {% endblock %}
 
@@ -479,6 +638,122 @@
         </div>
     </div>
 </section>
+
+{% comment %}
+    SERTIFIKATLAR — rasmlar `static/img/sertifikat/`, PDF asllari
+    `media/sertifikatlar/` da. Yangisini qo'shish: PDF ni media ga,
+    undan chiqarilgan JPG ni static ga qo'ying va quyiga bitta
+    <article class="sert"> nusxasini qo'shing. Rasm hech qachon
+    kattalashtirilmaydi — manba kengligi 800px dan kam bo'lmasin.
+{% endcomment %}
+<section class="section" id="sertifikatlar">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="eyebrow ink">
+                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                Malaka hujjatlari
+            </span>
+            <h2>Sertifikatlar</h2>
+            <p>
+                Xalqaro malaka oshirish dasturlari va chet tilini bilish darajasi
+                bo'yicha olingan hujjatlar. Har bir sertifikatni kattalashtirib
+                ko'rish yoki PDF holida yuklab olish mumkin.
+            </p>
+        </div>
+
+        <div class="sert-tur">
+            <article class="sert">
+                <button type="button" class="sert-rasm"
+                        data-rasm="/static/img/sertifikat/inti-1.jpg"
+                        data-izoh="INTI International University (Malayziya) &mdash; 144 soatlik &laquo;Teacher Training Programme&raquo;, 2026-yil 1&ndash;30-yanvar">
+                    <img src="/static/img/sertifikat/inti-1.jpg" alt="INTI International University sertifikati &mdash; 144 soatlik o'qituvchilar malaka dasturi" loading="lazy" width="1591" height="1125">
+                    <span class="sert-lupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+                </button>
+                <div class="sert-tan">
+                    <span class="sert-nishon">Malaka oshirish</span>
+                    <h3>Teacher Training Programme &mdash; 144 soat</h3>
+                    <p class="sert-manba">
+                        INTI International University, Malayziya<br>
+                        2026-yil 1&ndash;30-yanvar
+                    </p>
+                    <div class="sert-amal">
+                        <a class="btn-sm" href="/media/sertifikatlar/inti-teacher-training-144-soat.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>PDF hujjat</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="sert">
+                <button type="button" class="sert-rasm"
+                        data-rasm="/static/img/sertifikat/inti-2.jpg"
+                        data-izoh="INTI International University (Malayziya) &mdash; 4 soatlik ochiq ma'ruza (Guest Lecture), 2026-yil 15-yanvar">
+                    <img src="/static/img/sertifikat/inti-2.jpg" alt="INTI International University sertifikati &mdash; 4 soatlik ochiq ma'ruza" loading="lazy" width="1591" height="1125">
+                    <span class="sert-lupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+                </button>
+                <div class="sert-tan">
+                    <span class="sert-nishon">Ochiq ma'ruza</span>
+                    <h3>Guest Lecture &mdash; 4 soat</h3>
+                    <p class="sert-manba">
+                        INTI International University, Malayziya<br>
+                        2026-yil 15-yanvar
+                    </p>
+                    <div class="sert-amal">
+                        <a class="btn-sm" href="/media/sertifikatlar/inti-guest-lecture.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>PDF hujjat</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="sert">
+                <button type="button" class="sert-rasm"
+                        data-rasm="/static/img/sertifikat/inti-3.jpg"
+                        data-izoh="INTI International University (Malayziya) &mdash; &laquo;Study Tour Programme&raquo;, 2026-yil 13&ndash;19-yanvar">
+                    <img src="/static/img/sertifikat/inti-3.jpg" alt="INTI International University sertifikati &mdash; Study Tour dasturi" loading="lazy" width="1591" height="1125">
+                    <span class="sert-lupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+                </button>
+                <div class="sert-tan">
+                    <span class="sert-nishon">Xalqaro tajriba</span>
+                    <h3>Study Tour Programme</h3>
+                    <p class="sert-manba">
+                        INTI International University, Malayziya<br>
+                        2026-yil 13&ndash;19-yanvar
+                    </p>
+                    <div class="sert-amal">
+                        <a class="btn-sm" href="/media/sertifikatlar/inti-study-tour.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>PDF hujjat</a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="sert">
+                <button type="button" class="sert-rasm"
+                        data-rasm="/static/img/sertifikat/turk-b1.jpg"
+                        data-izoh="Chet tilini bilish darajasi to'g'risidagi sertifikat &mdash; turk tili, B1 daraja. Berilgan sana 07.10.2025, amal qilish muddati 06.10.2027.">
+                    <img src="/static/img/sertifikat/turk-b1.jpg" alt="Turk tili B1 daraja sertifikati" loading="lazy" width="877" height="1240">
+                    <span class="sert-lupa" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" width="15" height="15"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.6-3.6M11 8.4v5.2M8.4 11h5.2"/></svg></span>
+                </button>
+                <div class="sert-tan">
+                    <span class="sert-nishon">Chet tili</span>
+                    <h3>Turk tili &mdash; B1 daraja</h3>
+                    <p class="sert-manba">
+                        Bilim va malakalarni baholash agentligi<br>
+                        07.10.2025 &mdash; 06.10.2027
+                    </p>
+                    <div class="sert-amal">
+                        <a class="btn-sm" href="/media/sertifikatlar/turk-tili-b1.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h3"/></svg>PDF hujjat</a>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<div class="sert-modal" id="sert-modal" role="dialog" aria-modal="true" aria-label="Sertifikat" hidden>
+    <button type="button" class="sert-yopish" id="sert-yopish" aria-label="Yopish">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+    <figure>
+        <img id="sert-modal-rasm" src="" alt="">
+        <figcaption id="sert-modal-izoh"></figcaption>
+    </figure>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -505,6 +780,42 @@
                 matn.textContent = "Shu yerda ko'rish";
             }
             tugma.setAttribute('aria-expanded', ochiq ? 'true' : 'false');
+        });
+    })();
+
+    // Sertifikatni kattalashtirish: bitta oyna hamma kartaga xizmat qiladi.
+    (function () {
+        var oyna = document.getElementById('sert-modal');
+        if (!oyna) return;
+        var rasm = document.getElementById('sert-modal-rasm');
+        var izoh = document.getElementById('sert-modal-izoh');
+
+        function och(tugma) {
+            rasm.setAttribute('src', tugma.getAttribute('data-rasm'));
+            var ich = tugma.querySelector('img');
+            rasm.setAttribute('alt', ich ? ich.getAttribute('alt') : '');
+            izoh.textContent = tugma.getAttribute('data-izoh') || '';
+            oyna.removeAttribute('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function yop() {
+            oyna.setAttribute('hidden', '');
+            rasm.setAttribute('src', '');   // yuklashni to'xtatadi
+            document.body.style.overflow = '';
+        }
+
+        Array.prototype.forEach.call(document.querySelectorAll('.sert-rasm'), function (t) {
+            t.addEventListener('click', function () { och(t); });
+        });
+
+        document.getElementById('sert-yopish').addEventListener('click', yop);
+        oyna.addEventListener('click', function (e) {
+            // Faqat fonga bosilganda yopamiz, rasmning o'ziga emas.
+            if (e.target === oyna || e.target.tagName === 'FIGURE') yop();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !oyna.hasAttribute('hidden')) yop();
         });
     })();
 </script>
