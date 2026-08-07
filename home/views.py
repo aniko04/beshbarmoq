@@ -52,7 +52,14 @@ def home(request):
 
 def haqida(request):
     """1-bo'lim — muallif va platforma haqida."""
-    muallif_foto = (settings.MEDIA_ROOT / 'muallif.jpg').exists()
+    foto = settings.MEDIA_ROOT / 'muallif.jpg'
+    # Bo'sh satr — rasm yo'q, shablon o'rniga naqsh chiqaradi. Bor bo'lsa
+    # manzil `?v=<fayl vaqti>` bilan beriladi: rasm o'sha nom bilan
+    # almashtirilganda brauzer eskisini ushlab qolmasin (`Material`
+    # dagi `_versiyali` bilan bir xil mantiq).
+    muallif_foto = (
+        f'/media/muallif.jpg?v={int(foto.stat().st_mtime)}' if foto.exists() else ''
+    )
     return render(request, 'haqida.html', {
         'active': 'haqida',
         'muallif_foto': muallif_foto,

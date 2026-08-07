@@ -188,12 +188,13 @@
                 (buxdpi.uz) va ochiq nashrlar bazalaridan olingan. Yangilash kerak bo'lsa
                 shu bo'limdagi matnlarni to'g'ridan-to'g'ri tahrirlang.
                 Rasm: rasmni `media/muallif.jpg` nomi bilan saqlasangiz avtomatik
-                chiqadi; bo'lmasa uning o'rniga naqsh ko'rinadi.
+                chiqadi; bo'lmasa uning o'rniga naqsh ko'rinadi. `muallif_foto`
+                bo'sh satr yoki `?v=` li to'liq manzil — view shuni yasaydi.
             {% endcomment %}
             <div class="muallif-card">
                 <div class="muallif-foto">
                     {% if muallif_foto %}
-                        <img src="/media/muallif.jpg" alt="Jo'rayeva Dilnoz Raxmidinovnaning surati">
+                        <img src="{{ muallif_foto }}" alt="Jo'rayeva Dilnoz Raxmidinovnaning surati">
                     {% else %}
                         <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
                     {% endif %}
