@@ -76,6 +76,110 @@
     }
     .muallif-kontakt a:hover { color: var(--anor); border-bottom-color: currentColor; }
 
+    /* ===== Ilmiy rahbar ===== */
+    .rahbar {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 34px;
+        align-items: start;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: var(--r-lg);
+        padding: 28px;
+        box-shadow: var(--shadow-1);
+    }
+
+    /* Surat qutisi manba nisbatiga (3:4) teng — kesilmasin. */
+    .rahbar-foto {
+        aspect-ratio: 3 / 4;
+        border-radius: var(--r-md);
+        background: var(--siyoh);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .rahbar-foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .rahbar-foto .motif { width: 96px; height: 96px; color: var(--zafaron); opacity: 0.5; }
+
+    .rahbar-nishon {
+        display: inline-block;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.09em;
+        color: var(--anor);
+        background: var(--stone);
+        border-radius: 999px;
+        padding: 4px 11px;
+        margin-bottom: 10px;
+    }
+    .rahbar-info h3 { font-size: 1.32rem; line-height: 1.35; margin: 0 0 8px; color: var(--ink); }
+    .rahbar-lavozim { font-size: 0.98rem; line-height: 1.6; color: var(--ink-2); margin: 0 0 14px; }
+
+    .rahbar-teg { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+    .rahbar-teg span {
+        font-size: 0.82rem;
+        color: var(--siyoh);
+        background: var(--stone-2);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 13px;
+    }
+
+    .rahbar-info > p { font-size: 1rem; line-height: 1.7; color: var(--ink-2); margin: 0 0 14px; }
+
+    /* Raqamli ko'rsatkichlar — matn ichida yo'qolib ketmasligi uchun alohida. */
+    .rahbar-son {
+        list-style: none;
+        padding: 0;
+        margin: 20px 0 18px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+        gap: 12px;
+    }
+    .rahbar-son li {
+        background: var(--stone);
+        border: 1px solid var(--line);
+        border-radius: var(--r-md);
+        padding: 12px 14px;
+    }
+    .rahbar-son b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 1.42rem;
+        line-height: 1.1;
+        color: var(--siyoh);
+    }
+    .rahbar-son span { font-size: 0.82rem; line-height: 1.4; color: var(--ink-3); }
+
+    .rahbar-kontakt {
+        list-style: none;
+        padding: 16px 0 0;
+        margin: 0 0 18px;
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 10px 26px;
+    }
+    .rahbar-kontakt li { font-size: 0.88rem; color: var(--ink-2); word-break: break-word; }
+    .rahbar-kontakt li b {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--ink-3);
+    }
+    /* `.prose` dan tashqarida — havola rangini shu yerda beramiz. */
+    .rahbar-kontakt a { color: var(--siyoh); text-decoration: none; border-bottom: 1px solid var(--line); }
+    .rahbar-kontakt a:hover { color: var(--anor); border-bottom-color: currentColor; }
+
+    @media (max-width: 760px) {
+        .rahbar { grid-template-columns: 1fr; gap: 22px; padding: 20px; }
+        .rahbar-foto { max-width: 260px; }
+    }
+
     /* ===== Sahifa oxiri: metodik portfolio (PDF) ===== */
     .hujjat-band { background: var(--stone); }
 
@@ -573,6 +677,99 @@
                 </p>
             </div>
         </div>
+    </div>
+</section>
+
+{% comment %}
+    ILMIY RAHBAR — ma'lumot BuxDPI rasmiy xodimlar sahifasidan olingan:
+    https://buxdpi.uz/employee/41703e81-7fc5-4358-b3ba-d8b86787170c/detail/
+    Surat: `media/rahbar.jpg` (manba `malumotlar/ozimhaqimda/` da). Fayl
+    bo'lmasa view bo'sh satr beradi va o'rniga naqsh chiqadi.
+{% endcomment %}
+<section class="section" id="ilmiy-rahbar">
+    <div class="wrap">
+        <div class="section-head">
+            <span class="eyebrow ink">
+                <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                Ilmiy rahbarlik
+            </span>
+            <h2>Ilmiy rahbar</h2>
+            <p>
+                Tadqiqot Buxoro davlat pedagogika instituti Boshlang'ich ta'lim
+                kafedrasi mudiri rahbarligida olib borilmoqda.
+            </p>
+        </div>
+
+        <article class="rahbar">
+            <div class="rahbar-foto">
+                {% if rahbar_foto %}
+                    <img src="{{ rahbar_foto }}" alt="Saidova Mohinur Jonpo'latovnaning surati" width="640" height="854">
+                {% else %}
+                    <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
+                {% endif %}
+            </div>
+
+            <div class="rahbar-info">
+                <span class="rahbar-nishon">Ilmiy rahbar</span>
+                <h3>Saidova Mohinur Jonpo'latovna</h3>
+                <p class="rahbar-lavozim">
+                    Buxoro davlat pedagogika instituti<br>
+                    Maktabgacha va boshlang'ich ta'lim fakulteti<br>
+                    Boshlang'ich ta'lim kafedrasi mudiri
+                </p>
+                <div class="rahbar-teg">
+                    <span>Pedagogika fanlari doktori (DSc)</span>
+                    <span>Professor</span>
+                    <span>&laquo;Oliy ta'lim a'lochisi&raquo;, 2023</span>
+                </div>
+
+                <p>
+                    1991-yil 15-dekabrda Buxoro shahrida tug'ilgan. 2009&ndash;2013-yillarda
+                    Buxoro davlat universiteti Pedagogika fakultetida tahsil olib, universitetni
+                    imtiyozli tugatgan. 2009&ndash;2020-yillarda Buxoro shahar 123-maktab-internatida
+                    o'qituvchi, 2020&ndash;2021-yillarda Buxoro davlat universiteti Boshlang'ich
+                    ta'lim metodikasi kafedrasi o'qituvchisi, 2021&ndash;2022-yillarda esa
+                    Boshlang'ich ta'lim nazariyasi va metodikasi kafedrasi mudiri bo'lib
+                    ishlagan; 2022-yildan hozirga qadar Buxoro davlat pedagogika instituti
+                    Boshlang'ich ta'lim kafedrasiga rahbarlik qilmoqda.
+                </p>
+                <p>
+                    2020-yilda &laquo;Boshlang'ich sinf matematika darslarida axborot
+                    texnologiyalaridan foydalanish metodikasini takomillashtirish&raquo; mavzusidagi
+                    nomzodlik, 2022-yilda &laquo;Masofaviy ta'lim sharoitida bo'lajak boshlang'ich
+                    sinf o'qituvchisining metodik tayyorgarligini takomillashtirish&raquo;
+                    mavzusidagi doktorlik dissertatsiyasini himoya qilgan va
+                    &laquo;O'zbekistonning eng yosh fan doktori ayoli&raquo; deb e'tirof etilgan.
+                    2022-yilda dotsent, 2023-yilda professor ilmiy unvonini olgan.
+                </p>
+
+                <ul class="rahbar-son">
+                    <li><b>14+</b><span>darslik</span></li>
+                    <li><b>3</b><span>o'quv qo'llanma</span></li>
+                    <li><b>18</b><span>dasturiy mahsulot guvohnomasi</span></li>
+                    <li><b>43</b><span>xorijiy jurnal maqolasi</span></li>
+                    <li><b>200+</b><span>respublika jurnali maqolasi</span></li>
+                </ul>
+
+                <p>
+                    Ilmiy qiziqishlari boshlang'ich ta'lim metodikasi, matematika o'qitishda
+                    axborot texnologiyalari, masofaviy ta'lim sharoitida bo'lajak o'qituvchining
+                    metodik tayyorgarligi va o'quvchilarda kreativ fikrlashni rivojlantirishga
+                    qaratilgan. &laquo;Matematika o'qitish metodikasi&raquo;, &laquo;Kreativ
+                    pedagogika&raquo;, &laquo;Ta'limda multimedia texnologiyalardan
+                    foydalanish&raquo; darsliklari hamda 1&ndash;4-sinflar uchun
+                    &laquo;Quvnoq matematika&raquo;, &laquo;Kreativ topshiriqlar&raquo; kabi
+                    elektron ta'lim resurslari muallifi.
+                </p>
+
+                <ul class="rahbar-kontakt">
+                    <li><b>Mutaxassislik</b>Boshlang'ich ta'lim</li>
+                    <li><b>Elektron pochta</b><a href="mailto:mohinur_saidova30g@gmail.com">mohinur_saidova30g@gmail.com</a></li>
+                    <li><b>ORCID</b><a href="https://orcid.org/0000-0001-8392-8311" target="_blank" rel="noopener">0000-0001-8392-8311</a></li>
+                    <li><b>Rasmiy sahifa</b><a href="https://buxdpi.uz/employee/41703e81-7fc5-4358-b3ba-d8b86787170c/detail/" target="_blank" rel="noopener">buxdpi.uz &mdash; xodim sahifasi</a></li>
+                </ul>
+            </div>
+        </article>
     </div>
 </section>
 

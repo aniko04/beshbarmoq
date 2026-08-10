@@ -60,9 +60,15 @@ def haqida(request):
     muallif_foto = (
         f'/media/muallif.jpg?v={int(foto.stat().st_mtime)}' if foto.exists() else ''
     )
+    # Ilmiy rahbarning surati ham xuddi shu tartibda: `media/rahbar.jpg`.
+    rahbar = settings.MEDIA_ROOT / 'rahbar.jpg'
+    rahbar_foto = (
+        f'/media/rahbar.jpg?v={int(rahbar.stat().st_mtime)}' if rahbar.exists() else ''
+    )
     return render(request, 'haqida.html', {
         'active': 'haqida',
         'muallif_foto': muallif_foto,
+        'rahbar_foto': rahbar_foto,
     })
 
 

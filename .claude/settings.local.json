@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(wc:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(py -3.11 -c ' *)",
+      "Bash(env/Scripts/python.exe -c ' *)",
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --hide-scrollbars --force-prefers-reduced-motion --user-data-dir=\"C:\\\\Users\\\\aniko\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--codes-beshbarmoq\\\\70afab6a-0b96-422c-979f-f4d6dca3d433\\\\scratchpad\\\\cprof\" --window-size=1440,9000 --screenshot=\"C:\\\\Users\\\\aniko\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--codes-beshbarmoq\\\\70afab6a-0b96-422c-979f-f4d6dca3d433\\\\scratchpad\\\\met.png\" \"http://127.0.0.1:8013/metodika\")"
     ]
   }
 }
