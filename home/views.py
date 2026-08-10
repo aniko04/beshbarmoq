@@ -11,6 +11,7 @@ from .models import Result, Profile, Material
 from . import rasmli_test
 from . import diktant
 from . import qalamdon
+from . import xonqizi
 import json
 
 
@@ -93,9 +94,10 @@ def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None,
     (masalan «Rasmli test» guruhidagi onlayn test): {kalit: {...}}.
 
     `bolim_ilova` — o'sha havolaning guruhsiz varianti: bo'limning eng
-    boshida turadi (Xarita bo'limidagi «Qalamdon» sahifasi shunday). Xarita
-    guruhlarga bo'linmagani uchun `ilova` dagi kalit tizimi bu yerda ish
-    bermaydi.
+    boshida turadi (Xarita bo'limidagi xaritalar shunday). Xarita guruhlarga
+    bo'linmagani uchun `ilova` dagi kalit tizimi bu yerda ish bermaydi.
+    Bu — RO'YXAT: bo'limda bir nechta interaktiv sahifa bo'lishi mumkin
+    (hozir Qalamdon va Xon qizi).
     """
     hammasi = list(Material.objects.filter(section=section, is_published=True))
     guruhlar = []
@@ -229,14 +231,24 @@ def xarita(request):
         "Amaliy mavzular bo'yicha bosqichma-bosqich texnologik xaritalar: "
         "ish ketma-ketligi, kerakli jihozlar va xavfsizlik qoidalari.",
         "Texnologik xaritalar",
-        bolim_ilova={
-            'url': '/xarita/qalamdon',
-            'sarlavha': qalamdon.SARLAVHA,
-            'tavsif': "{} bosqichli to'liq xarita: har bosqichning tasviri, "
-                      "{} ta video lavha va kerakli ish anjomlari.".format(
-                          len(qalamdon.bosqichlar()), qalamdon.video_soni()),
-            'tugma': "Xaritani ochish",
-        },
+        bolim_ilova=[
+            {
+                'url': '/xarita/qalamdon',
+                'sarlavha': qalamdon.SARLAVHA,
+                'tavsif': "{} bosqichli to'liq xarita: har bosqichning tasviri, "
+                          "{} ta video lavha va kerakli ish anjomlari.".format(
+                              len(qalamdon.bosqichlar()), qalamdon.video_soni()),
+                'tugma': "Xaritani ochish",
+            },
+            {
+                'url': '/xarita/xonqizi',
+                'sarlavha': xonqizi.SARLAVHA,
+                'tavsif': "{} bosqichli to'liq xarita: har bosqichning tasviri, "
+                          "{} ta video lavha va kerakli ish anjomlari.".format(
+                              len(xonqizi.bosqichlar()), xonqizi.video_soni()),
+                'tugma': "Xaritani ochish",
+            },
+        ],
     )
 
 
@@ -255,6 +267,24 @@ def qalamdon_sahifa(request):
         'ustunlar': qalamdon.USTUNLAR,
         'bosqichlar': qalamdon.bosqichlar(),
         'video_soni': qalamdon.video_soni(),
+    })
+
+
+def xonqizi_sahifa(request):
+    """«Applikatsiya "Xon qizi"» — Xarita bo'limining ikkinchi to'liq xaritasi.
+
+    Tuzilishi `qalamdon_sahifa` bilan bir xil; ma'lumot `home/xonqizi.py` da.
+    Farqi: 1-bosqichda video yo'q (mijozning ko'rsatmasi), qolgan 11 bosqichga
+    lavhalar ketma-ket qo'yilgan.
+    """
+    return render(request, 'xonqizi.html', {
+        'active': 'xarita',
+        'sarlavha': xonqizi.SARLAVHA,
+        'tavsif': xonqizi.TAVSIF,
+        'xulosa': xonqizi.XULOSA,
+        'ustunlar': xonqizi.USTUNLAR,
+        'bosqichlar': xonqizi.bosqichlar(),
+        'video_soni': xonqizi.video_soni(),
     })
 
 

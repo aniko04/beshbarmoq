@@ -9,6 +9,7 @@ class HomeConfig(AppConfig):
         register(_rasmli_test_rasmlari)
         register(_diktant_rasmlari)
         register(_qalamdon_fayllari)
+        register(_xonqizi_fayllari)
 
 
 def _rasmli_test_rasmlari(app_configs, **kwargs):
@@ -61,4 +62,17 @@ def _qalamdon_fayllari(app_configs, **kwargs):
         "«Qalamdon» xaritasi fayllari yetishmayapti: " + ', '.join(yoq),
         hint="static/img/qalamdon/ va media/xarita/qalamdon/ ni tekshiring.",
         id='home.W003',
+    )]
+
+
+def _xonqizi_fayllari(app_configs, **kwargs):
+    """«Xon qizi» xaritasining rasm va videolari joyidami — W003 bilan bir xil sabab."""
+    from . import xonqizi
+    yoq = xonqizi.yetishmagan_fayllar()
+    if not yoq:
+        return []
+    return [Warning(
+        "«Xon qizi» xaritasi fayllari yetishmayapti: " + ', '.join(yoq),
+        hint="static/img/xonqizi/ va media/xarita/xonqizi/ ni tekshiring.",
+        id='home.W004',
     )]

@@ -38,23 +38,24 @@
             </div>
 
             {% comment %}
-                Guruhsiz interaktiv sahifa (Xarita bo'limidagi «Qalamdon») —
-                materiallardan yuqorida turadi. Ko'rinishi guruh ichidagi
+                Guruhsiz interaktiv sahifalar (Xarita bo'limidagi «Qalamdon»
+                va «Xon qizi» xaritalari) — materiallardan yuqorida turadi,
+                bir nechtasi bo'lishi mumkin. Ko'rinishi guruh ichidagi
                 `.guruh-ilova` bilan bir xil.
             {% endcomment %}
-            {% if bolim_ilova %}
-                <a class="guruh-ilova bolim-ilova" href="{{ bolim_ilova.url }}">
+            {% for ilova in bolim_ilova %}
+                <a class="guruh-ilova bolim-ilova" href="{{ ilova.url }}">
                     <svg class="motif" aria-hidden="true"><use href="#orama"/></svg>
                     <span class="guruh-ilova-matn">
-                        <b>{{ bolim_ilova.sarlavha }}</b>
-                        <span>{{ bolim_ilova.tavsif }}</span>
+                        <b>{{ ilova.sarlavha }}</b>
+                        <span>{{ ilova.tavsif }}</span>
                     </span>
                     <span class="guruh-ilova-tugma">
-                        {{ bolim_ilova.tugma }}
+                        {{ ilova.tugma }}
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                     </span>
                 </a>
-            {% endif %}
+            {% endfor %}
 
             {% comment %} Kichik bo'limga tegishli bo'lmagan materiallar — oddiy ro'yxat. {% endcomment %}
             {% if materiallar %}

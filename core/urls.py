@@ -36,6 +36,7 @@ urlpatterns = [
     path('topshiriq/diktantlar', views.diktant_sahifa, name='diktant'),
     path('xarita', views.xarita, name='xarita'),
     path('xarita/qalamdon', views.qalamdon_sahifa, name='qalamdon'),
+    path('xarita/xonqizi', views.xonqizi_sahifa, name='xonqizi'),
     path('ishlanma', views.ishlanma, name='ishlanma'),
 
     # Auth
