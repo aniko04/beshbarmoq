@@ -1,4 +1,4 @@
-"""«Xon qizi» — applikatsiya usulida xon qizi (qo'ng'izcha) yasashning
+"""«Xonqizi» — applikatsiya usulida xonqizi (qo'ng'izcha) yasashning
 instruksion texnologik xaritasi. Tuzilishi «Qalamdon» bilan bir xil
 (`home/qalamdon.py` ga qarang) — farqlari shu izohda sanab o'tilgan.
 
@@ -55,13 +55,13 @@ RASM_VERSIYA = 1         # rasm o'sha nom bilan almashtirilsa oshiriladi (brauze
 RASM_KATALOG = Path(__file__).resolve().parent.parent / 'static' / 'img' / 'xonqizi'
 VIDEO_KATALOG = Path(__file__).resolve().parent.parent / 'media' / 'xarita' / 'xonqizi'
 
-SARLAVHA = 'Applikatsiya «Xon qizi»'
+SARLAVHA = 'Applikatsiya «Xonqizi»'
 TAVSIF = (
-    "Rangli qogʻozdan applikatsiya usulida «Xon qizi» yasash bosqichlari va "
+    "Rangli qogʻozdan applikatsiya usulida «Xonqizi» yasash bosqichlari va "
     "instruksion texnologik xaritasi."
 )
 XULOSA = (
-    "Xon qizi applikatsiyasini tayyorlash jarayonida oʻquvchilarda qogʻoz bilan "
+    "Xonqizi applikatsiyasini tayyorlash jarayonida oʻquvchilarda qogʻoz bilan "
     "ishlash, geometrik shakllarni aniq chizish va qirqish, detallarni simmetrik "
     "joylashtirish hamda yopishtirish koʻnikmalari rivojlanadi. Bu amaliy faoliyat "
     "oʻquvchilarning mayda motorikasi, ijodiy fikrlashi, diqqat-eʼtibori, estetik "
@@ -109,7 +109,7 @@ _XOM = [
         "qolipi yordamida bir xil oʻlchamdagi ikkita doira chiziladi. Kerakli "
         "qoʻshimcha doira shakllari ham belgilanib, chiziqlar boʻylab "
         "ehtiyotkorlik bilan qirqib olinadi.", True),
-    (3, "Qora rangli tana qismlarini tayyorlash. Qora rangli qogʻozga xon qizining "
+    (3, "Qora rangli tana qismlarini tayyorlash. Qora rangli qogʻozga xonqizining "
         "tana va bosh qismlari uchun zarur boʻlgan katta va kichik doiralar "
         "belgilanadi. Belgilangan shakllar qaychi yordamida aniq qirqib olinadi.", True),
     (4, "Qanotlarni buklash va tana qismiga biriktirish. Tayyorlangan ikkita qizil "
@@ -122,31 +122,31 @@ _XOM = [
         "yordamida ehtiyotkorlik bilan biriktiriladi.", True),
     (6, "Koʻz va moʻylovlarni tayyorlash. Oq rangli qogʻozdan koʻzlar uchun kichik "
         "doiralar qirqib olinadi yoki tayyor koʻzchalar tanlanadi. Koʻzlar bosh "
-        "qismiga simmetrik joylashtiriladi. Qora qogʻozdan xon qizining ikki "
+        "qismiga simmetrik joylashtiriladi. Qora qogʻozdan xonqizining ikki "
         "tomonlama moʻylovlari tayyorlanadi.", True),
     (7, "Qanotlarni qora nuqtalar bilan bezash. Qora rangli qogʻozdan bir xil yoki "
         "yaqin oʻlchamdagi kichik doirachalar tayyorlanadi. Ular qizil qanotlarning "
         "yuzasiga tartibli va simmetrik ravishda joylashtirilib, yelim yordamida "
         "yopishtiriladi.", True),
-    (8, "Asosiy kompozitsiyani tekshirish. Tayyorlangan xon qizi aplikatsiyasining "
+    (8, "Asosiy kompozitsiyani tekshirish. Tayyorlangan xonqizi aplikatsiyasining "
         "tana, qanot va bezak qismlari oʻzaro mosligi tekshiriladi. Qanotlarning "
         "simmetrik joylashuvi, qora nuqtalarning tartibi va detallarining "
         "mustahkamligi nazorat qilinadi.", True),
     (9, "Moʻylov shaklini chizish. Qora rangli qogʻoz ikkiga buklanadi. Buklangan "
-        "qogʻozning bir tomoniga xon qizining moʻylovi uchun egri, yoy shaklidagi "
+        "qogʻozning bir tomoniga xonqizining moʻylovi uchun egri, yoy shaklidagi "
         "kontur chiziladi. Buklama usulidan foydalanish natijasida ikki tomonlama, "
         "bir xil va simmetrik moʻylov shakli hosil qilinadi.", True),
     (10, "Moʻylovlarni qirqib olish. Buklangan qora qogʻozda chizilgan moʻylov "
          "konturi boʻylab qaychi bilan ehtiyotkorlik bilan qirqiladi. Qogʻoz "
          "ochilganda oʻlchami va shakli bir xil boʻlgan ikkita simmetrik moʻylov "
          "hosil qilinadi.", True),
-    (11, "Moʻylovlarni xon qiziga biriktirish. Tayyorlangan ikkita qora moʻylov xon "
-         "qizining bosh qismiga ikki tomondan simmetrik joylashtiriladi. Ularning "
+    (11, "Moʻylovlarni xonqiziga biriktirish. Tayyorlangan ikkita qora moʻylov "
+         "xonqizining bosh qismiga ikki tomondan simmetrik joylashtiriladi. Ularning "
          "yoʻnalishi bir xil boʻlishiga eʼtibor berilib, yelim yordamida mustahkam "
          "biriktiriladi.", True),
     (12, "Koʻzchalarni joylashtirish va ishni yakunlash. Tayyor koʻzchalar bosh "
          "qismiga oʻzaro teng masofada va simmetrik tarzda yopishtiriladi. Barcha "
-         "detallar tekshiriladi, ortiqcha yelim izlari tozalanadi va tayyor xon qizi "
+         "detallar tekshiriladi, ortiqcha yelim izlari tozalanadi va tayyor xonqizi "
          "aplikatsiyasining estetik koʻrinishi baholanadi.", True),
 ]
 

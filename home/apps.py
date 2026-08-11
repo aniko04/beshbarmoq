@@ -66,13 +66,13 @@ def _qalamdon_fayllari(app_configs, **kwargs):
 
 
 def _xonqizi_fayllari(app_configs, **kwargs):
-    """«Xon qizi» xaritasining rasm va videolari joyidami — W003 bilan bir xil sabab."""
+    """«Xonqizi» xaritasining rasm va videolari joyidami — W003 bilan bir xil sabab."""
     from . import xonqizi
     yoq = xonqizi.yetishmagan_fayllar()
     if not yoq:
         return []
     return [Warning(
-        "«Xon qizi» xaritasi fayllari yetishmayapti: " + ', '.join(yoq),
+        "«Xonqizi» xaritasi fayllari yetishmayapti: " + ', '.join(yoq),
         hint="static/img/xonqizi/ va media/xarita/xonqizi/ ni tekshiring.",
         id='home.W004',
     )]

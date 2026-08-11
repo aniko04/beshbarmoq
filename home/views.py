@@ -97,7 +97,7 @@ def _bolim(request, section, nomi, lede, sarlavha, guruhlash=None, ilova=None,
     boshida turadi (Xarita bo'limidagi xaritalar shunday). Xarita guruhlarga
     bo'linmagani uchun `ilova` dagi kalit tizimi bu yerda ish bermaydi.
     Bu — RO'YXAT: bo'limda bir nechta interaktiv sahifa bo'lishi mumkin
-    (hozir Qalamdon va Xon qizi).
+    (hozir Qalamdon va Xonqizi).
     """
     hammasi = list(Material.objects.filter(section=section, is_published=True))
     guruhlar = []
@@ -271,7 +271,7 @@ def qalamdon_sahifa(request):
 
 
 def xonqizi_sahifa(request):
-    """«Applikatsiya "Xon qizi"» — Xarita bo'limining ikkinchi to'liq xaritasi.
+    """«Applikatsiya "Xonqizi"» — Xarita bo'limining ikkinchi to'liq xaritasi.
 
     Tuzilishi `qalamdon_sahifa` bilan bir xil; ma'lumot `home/xonqizi.py` da.
     Farqi: 1-bosqichda video yo'q (mijozning ko'rsatmasi), qolgan 11 bosqichga

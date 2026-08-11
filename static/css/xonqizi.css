@@ -14,7 +14,7 @@
 /* Qatorlarning navbatlashuvchi foni. Saytdagi OLTINCHI juftlik — oldingilari
    band: Metodika --limon/--yashil, Maqola --gulnor/--nilufar, Rasmli test
    --osmon/--binafsha, Diktant --shaftoli/--pudina, Qalamdon --sadaf/--qumoq.
-   Bu ikkisi buyumning o'z ranglaridan: xon qizi qizil-qora, shuning uchun
+   Bu ikkisi buyumning o'z ranglaridan: xonqizi qizil-qora, shuning uchun
    anorning eng ochi va siyohning eng ochi olindi — ikkalasi ham platformaning
    asosiy palitrasidan, begona ko'rinmaydi. */
 :root {
@@ -147,7 +147,7 @@
     position: relative;
     /* Rasm markazda, TO'LIQ ko'rinadi — mijozning talabi: kattalashtirmasdan
        ham butun surat ko'rinsin. Shu sababdan `cover` emas (u chetlarini
-       qirqib, masalan xon qizining mo'ylovini kesib qo'yardi). */
+       qirqib, masalan xonqizining mo'ylovini kesib qo'yardi). */
     display: flex;
     align-items: center;
     justify-content: center;
