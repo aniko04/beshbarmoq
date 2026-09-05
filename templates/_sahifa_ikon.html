@@ -1,0 +1,30 @@
+{% comment %}
+    Sahifa sarlavhasining o'ng tomonidagi bo'lim ikonkasi — bosh
+    sahifadagi beshta doiraning kattasi. Rangi `--tus` dan (body
+    sinfi `sahifa-{{ active }}`), belgisi `active` bo'yicha tanlanadi.
+    Ko'rinishi platform.css → `.sb-ikon`. Har `.page-head .wrap` ning
+    birinchi bolasi sifatida qo'yiladi; joylashuvi absolute, shuning
+    uchun sarlavha matnining oqimiga ta'sir qilmaydi.
+{% endcomment %}
+<span class="sb-ikon" aria-hidden="true">
+    <svg class="sb-barg" viewBox="0 0 48 48" fill="none"><path d="M42 42C42 20 28 6 4 6c0 24 14 38 38 36Z" fill="#7CC242"/><path d="M38 40 8 10" stroke="#4CA33B" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        {% if active == 'haqida' %}
+            <circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/>
+        {% elif active == 'metodika' %}
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+        {% elif active == 'maqola' %}
+            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0V7h4"/><path d="M10 6h8M10 10h8M10 14h5"/>
+        {% elif active == 'multimediya' %}
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 8 5 3-5 3V8ZM8 21h8M12 17v4"/>
+        {% elif active == 'topshiriq' %}
+            <circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/>
+        {% elif active == 'xarita' %}
+            <path d="M3 21h6v-5h6v-5h6V5"/><path d="M17 5h4v4"/>
+        {% elif active == 'ishlanma' %}
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>
+        {% else %}
+            <circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/>
+        {% endif %}
+    </svg>
+</span>

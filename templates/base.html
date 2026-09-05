@@ -13,7 +13,7 @@
         stilni tahrirlaganda ham manzil o'zgarmaydi va brauzer eski nusxada
         qolib ketadi. platform.css ni o'zgartirsangiz raqamni oshiring.
     {% endcomment %}
-    <link rel="stylesheet" href="/static/css/platform.css?v=4">
+    <link rel="stylesheet" href="/static/css/platform.css?v=48">
     {% comment %}
         Shriftlar bloklamasdan yuklanadi: `media="print"` bo'lgani uchun
         brauzer uni kutmaydi, yuklangach `onload` bilan `all` ga o'tadi.
@@ -23,13 +23,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" media="print" onload="this.media='all'"
-          href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Karla:wght@400;500;600;700;800&display=swap">
+          href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap">
     <noscript>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Karla:wght@400;500;600;700;800&display=swap">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap">
     </noscript>
     {% block head %}{% endblock %}
 </head>
-<body class="pf">
+{% comment %}
+        `sahifa-{{ active }}` — har bo'limning rang tusi shu sinfdan
+        keladi (platform.css dagi "BO'LIM TUSLARI" ga qarang).
+        Uni olib tashlasangiz hamma sahifa bir xil ko'k bo'lib qoladi.
+    {% endcomment %}
+<body class="pf sahifa-{{ active }}">
     <a class="skip-link" href="#main">Asosiy mazmunga o'tish</a>
 
     {# ===== Imzo motivi: suzani palagi va kvilling o'rami ===== #}
@@ -99,7 +104,10 @@
                     <span class="nav-user">{{ user.first_name|default:user.username }}</span>
                     <a href="/logout" class="btn-nav ghost">Chiqish</a>
                 {% else %}
-                    <a href="/login" class="btn-nav">Kirish</a>
+                    <a href="/login" class="btn-nav">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                        Kirish
+                    </a>
                 {% endif %}
             </div>
         </div>

@@ -8,12 +8,13 @@
     `?v=` — kesh buzg'unchi. Statik fayllar hashlanmaydi, shuning uchun
     CSS ni tahrirlaganda bu raqamni oshiring (base.html dagi izohga qarang).
 {% endcomment %}
-<link rel="stylesheet" href="/static/css/qalamdon.css?v=6">
+<link rel="stylesheet" href="/static/css/qalamdon.css?v=7">
 {% endblock %}
 
 {% block content %}
 <section class="page-head ql-head">
     <div class="wrap">
+        {% include "_sahifa_ikon.html" %}
         <nav class="crumbs" aria-label="Yo'l">
             <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span>
             <a href="/xarita">Instruksion texnologik xarita</a> <span aria-hidden="true">&rsaquo;</span>

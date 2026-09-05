@@ -461,3 +461,71 @@
     .ql-jadval tbody tr { break-inside: avoid; }
     .ql-tugma { display: none; }
 }
+
+/* =========================================================
+   YORQIN USLUB
+   =========================================================
+   Sayt yorqin uslubga o'tkazildi; bu blok shu sahifani ham
+   o'shanga keltiradi. Fayl OXIRIDA turadi va yuqoridagi
+   qoidalarni bir xil kuchdagi selektorlar bilan yengadi.
+
+   TEGILMAYDIGAN NARSALAR (CLAUDE.md dagi shartlar):
+     - rasm qutilari sof oq bo'lib qoladi
+     - jadval sarlavhasiga `position: sticky` qo'yilmaydi
+     - parda `backdrop-filter` bilan xiralashadi
+   ========================================================= */
+
+/* Sarlavha ostidagi faktlar qatori.
+
+   NEGA TUZATILDI: bu qoidalar to'q ko'k sarlavha lentasi uchun
+   yozilgandi — oq matn, shaffof oq fon. Lenta yorqin uslubda och
+   bo'lgani uchun matn ko'rinmay qoldi (footer havolalari bilan bir
+   xil xato). Endi oq tabletka, siyoh matn, ko'k raqam. */
+.ql-fakt li {
+    background: #fff;
+    border: 1px solid #DCE9F6;
+    color: #50688A;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+}
+
+.ql-fakt b {
+    color: #2E7DE0;
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+}
+
+/* Jadval sarlavhasi: to'rtta ustun, to'rtta rang.
+   Ketma-ketlik yorqin palitradan — ko'k, moviy, yashil, to'q sariq.
+   To'q sariq yorug', shuning uchun undagi matn siyoh rangda:
+   oq bo'lsa kontrast yetmaydi. */
+.ql-th1, .ql-th1 { background: #2E7DE0; }
+.ql-th2, .ql-th2 { background: #2E9BE0; }
+.ql-th3, .ql-th3 { background: #43A047; }
+.ql-th4, .ql-th4 { background: #F5920B; color: #22384F; }
+
+.ql-jadval thead th {
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+}
+
+/* Qatorlar navbatlashuvi — pale ko'k va pale to'q sariq.
+   Rasm qutilari baribir oq bo'lgani uchun ular ajralib turadi. */
+:root {
+    --sadaf:  #EAF4FB;
+    --qumoq:  #FEF4E6;
+    --marjon: #FDECEA;
+    --zangori:#E9F1FB;
+}
+
+.ql-tugma {
+    border-radius: 999px;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 800;
+}
+
+.ql-qadam-raqam {
+    background: #2E7DE0;
+    color: #fff;
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+}

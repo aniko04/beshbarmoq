@@ -5,112 +5,131 @@
 
 {% block head %}
 <style>
-    /* ===== MULTIMEDIYA — bolalar uchun jonli kartalar ===== */
+    /* =========================================================
+       MULTIMEDIYA — 10 ta interaktiv topshiriq
+       =========================================================
+       Bu sahifa bolalar mashqlariga kirish eshigi, shuning uchun
+       saytdagi eng quvnoq joy. Lekin quvnoqlik "har karta boshqa
+       rangda" degani emas.
+
+       NIMA O'ZGARDI VA NEGA
+       ---------------------------------------------------------
+       Ilgari har karta to'liq to'yingan gradient bilan bo'yalar,
+       matni oq edi — o'ntasi yonma-yon turganda ko'z qayerga
+       qarashni bilmasdi va ranglar hech qanday ma'no bermasdi.
+
+       Endi karta OQ, rang esa faqat ikki joyda: tepadagi chiziq
+       va ikonka kvadrati. Natijada:
+         - matn qora fonda emas, oq fonda o'qiladi (kontrast yuqori)
+         - o'nta karta bitta tizim bo'lib ko'rinadi
+         - rang topshiriqni AJRATADI, uni bo'yamaydi
+
+       Ranglar beshtalik aylanada takrorlanadi (1-5 va 6-10) —
+       bu tasodif emas: 1-5 interaktiv o'yinlar, 6-10 esa
+       video->test->krossvord oqimi, ya'ni ikki turkum.
+       ========================================================= */
     .mm-section {
-        padding: 64px 0 86px;
-        background:
-            radial-gradient(ellipse 80% 50% at 50% 0%, rgba(227, 160, 60, 0.16), transparent 70%),
-            var(--stone);
+        padding: 54px 0 76px;
+        background: linear-gradient(180deg, #F3F9FF 0%, #EAF4FE 100%);
     }
 
     .mm-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(212px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(218px, 1fr));
+        gap: 18px;
     }
 
     .mm-card {
         position: relative;
         display: flex;
         flex-direction: column;
-        padding: 22px 20px 20px;
-        background: var(--accent);
-        border-radius: 22px;
+        padding: 20px 18px 18px;
+        background: #fff;
+        border: 1px solid #DCE9F6;
+        border-top: 4px solid var(--mm-rang);
+        border-radius: 20px;
+        color: #22384F;
         text-decoration: none;
-        color: #fff;
-        overflow: hidden;
-        box-shadow: 0 14px 30px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.32);
-        transition: transform 0.26s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.26s ease;
+        box-shadow: 0 2px 4px rgba(20, 40, 80, .05), 0 8px 20px rgba(20, 40, 80, .07);
+        transition: transform .22s cubic-bezier(.34, 1.4, .64, 1), box-shadow .22s ease;
     }
-    .mm-card::before {
-        content: '';
-        position: absolute;
-        inset: 0 0 auto 0;
-        height: 46%;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), transparent);
-        pointer-events: none;
-    }
+
+    /* Eski yaltiroq parda kerak emas — karta endi oq. */
+    .mm-card::before { content: none; }
+
     .mm-card:hover {
-        transform: translateY(-7px);
-        box-shadow: 0 24px 46px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+        transform: translateY(-6px);
+        box-shadow: 0 6px 12px rgba(20, 40, 80, .07), 0 18px 40px rgba(20, 40, 80, .13);
     }
 
     .mm-top {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 14px;
-        position: relative;
-        z-index: 1;
+        margin-bottom: 12px;
     }
+
     .mm-icon {
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.26);
-        border: 1.5px solid rgba(255, 255, 255, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.45rem;
-        transition: transform 0.3s;
+        width: 50px;
+        height: 50px;
+        border-radius: 15px;
+        background: var(--mm-pale);
+        border: 0;
+        font-size: 1.5rem;
+        transition: transform .3s;
     }
-    .mm-card:hover .mm-icon { transform: scale(1.1) rotate(-8deg); }
+
+    .mm-card:hover .mm-icon { transform: scale(1.08) rotate(-8deg); }
+
     .mm-num {
-        font-family: var(--font-display);
-        font-size: 2.3rem;
-        font-weight: 800;
-        color: #fff;
-        opacity: 0.42;
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: 2.1rem;
+        font-weight: 600;
         line-height: 1;
+        color: var(--mm-rang);
+        opacity: .28;
     }
 
     .mm-card h3 {
+        margin-bottom: 5px;
+        font-family: 'Fredoka', 'Nunito', sans-serif;
         font-size: 1.06rem;
-        font-weight: 700;
-        margin-bottom: 6px;
-        color: #fff;
-        position: relative;
-        z-index: 1;
-        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.20);
+        font-weight: 600;
+        color: #22384F;
+        text-shadow: none;
     }
+
     .mm-card p {
-        font-size: 0.86rem;
-        line-height: 1.45;
-        color: rgba(255, 255, 255, 0.94);
         margin: 0 0 16px;
         flex-grow: 1;
-        position: relative;
-        z-index: 1;
+        font-family: 'Nunito', sans-serif;
+        font-size: .87rem;
+        line-height: 1.45;
+        color: #50688A;
     }
+
     .mm-go {
         display: inline-flex;
         align-items: center;
         gap: 7px;
         align-self: flex-start;
-        padding: 8px 16px;
+        padding: 9px 18px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.22);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        font-size: 0.82rem;
-        font-weight: 700;
+        background: var(--mm-rang);
+        border: 0;
         color: #fff;
-        position: relative;
-        z-index: 1;
-        transition: background-color 0.26s;
+        font-family: 'Nunito', sans-serif;
+        font-size: .82rem;
+        font-weight: 800;
+        box-shadow: 0 3px 0 rgba(0, 0, 0, .16);
+        transition: box-shadow .22s;
     }
-    .mm-go svg { width: 14px; height: 14px; transition: transform 0.26s; }
-    .mm-card:hover .mm-go { background: rgba(255, 255, 255, 0.34); }
+
+    .mm-go svg { width: 14px; height: 14px; transition: transform .26s; }
+    .mm-card:hover .mm-go { box-shadow: 0 5px 0 rgba(0, 0, 0, .18); }
     .mm-card:hover .mm-go svg { transform: translateX(4px); }
 
     /* Bosqichlar izohi */
@@ -118,42 +137,63 @@
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-bottom: 34px;
+        margin-bottom: 30px;
     }
+
     .mm-step {
         display: inline-flex;
         align-items: center;
         gap: 9px;
         padding: 9px 18px;
         border-radius: 999px;
-        background: var(--paper);
-        border: 1px solid var(--line);
-        font-size: 0.87rem;
-        font-weight: 600;
-        color: var(--ink-2);
-    }
-    .mm-step b {
-        font-family: var(--font-display);
-        color: var(--anor);
-        font-size: 0.78rem;
+        background: #fff;
+        border: 1px solid #DCE9F6;
+        font-family: 'Nunito', sans-serif;
+        font-size: .87rem;
+        font-weight: 700;
+        color: #50688A;
     }
 
-    /* Ranglar — oq matn o'qilishi uchun to'yingan, to'qroq gradientlar */
-    .mm-1  { --accent: linear-gradient(135deg, #c2410c, #ea580c); --glow: rgba(234, 88, 12, 0.32); }
-    .mm-2  { --accent: linear-gradient(135deg, #6d28d9, #8b5cf6); --glow: rgba(124, 58, 237, 0.32); }
-    .mm-3  { --accent: linear-gradient(135deg, #be185d, #db2777); --glow: rgba(219, 39, 119, 0.32); }
-    .mm-4  { --accent: linear-gradient(135deg, #0f766e, #0d9488); --glow: rgba(13, 148, 136, 0.32); }
-    .mm-5  { --accent: linear-gradient(135deg, #b45309, #d97706); --glow: rgba(217, 119, 6, 0.32); }
-    .mm-6  { --accent: linear-gradient(135deg, #1d4ed8, #2563eb); --glow: rgba(37, 99, 235, 0.32); }
-    .mm-7  { --accent: linear-gradient(135deg, #be123c, #e11d48); --glow: rgba(225, 29, 72, 0.32); }
-    .mm-8  { --accent: linear-gradient(135deg, #4338ca, #4f46e5); --glow: rgba(79, 70, 229, 0.32); }
-    .mm-9  { --accent: linear-gradient(135deg, #b91c1c, #dc2626); --glow: rgba(220, 38, 38, 0.32); }
-    .mm-10 { --accent: linear-gradient(135deg, #047857, #059669); --glow: rgba(5, 150, 105, 0.32); }
+    .mm-step b {
+        font-family: 'Fredoka', 'Nunito', sans-serif;
+        font-size: .82rem;
+        font-weight: 600;
+        color: #2E7DE0;
+    }
+
+    /* Beshta rang, ikki turkumda takrorlanadi:
+       1-5 interaktiv o'yinlar, 6-10 video->test->krossvord. */
+    .mm-1, .mm-6  { --mm-rang: #43A047; --mm-pale: #E6F4E7; }
+    .mm-2, .mm-7  { --mm-rang: #EC5C9D; --mm-pale: #FDEAF3; }
+    .mm-3, .mm-8  { --mm-rang: #F5920B; --mm-pale: #FEF1DE; }
+    .mm-4, .mm-9  { --mm-rang: #2E9BE0; --mm-pale: #E4F2FC; }
+    .mm-5, .mm-10 { --mm-rang: #8B5CF6; --mm-pale: #EFE9FE; }
 
     @media (max-width: 660px) {
         .mm-grid { grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 14px; }
-        .mm-card { padding: 18px 16px 16px; }
-        .mm-num { font-size: 1.9rem; }
+        .mm-card { padding: 16px 14px 14px; }
+        .mm-icon { width: 42px; height: 42px; border-radius: 13px; font-size: 1.25rem; }
+        .mm-num { font-size: 1.7rem; }
+    }
+
+    /* ---- Yorqin uslub 2 (2026-09-05): bosh sahifa doiralari kabi ----
+       Karta 26px yumaloq, ikonka rangli DOIRA, tugma ostida qattiq soya. */
+    .mm-section { padding: 26px 0 80px; background: none; }
+    .mm-card { padding: 22px 20px 20px; border: 2px solid #E3EDF8; border-top: 2px solid #E3EDF8; border-radius: 26px; }
+    .mm-card:hover { border-color: color-mix(in srgb, var(--mm-rang) 45%, #fff); }
+    .mm-icon {
+        width: 60px; height: 60px; border-radius: 50%;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--mm-rang) 74%, #fff) 0%, var(--mm-rang) 62%);
+        box-shadow: 0 5px 0 color-mix(in srgb, var(--mm-rang) 72%, #000), 0 10px 20px rgba(20, 40, 80, .14);
+        font-size: 1.6rem;
+    }
+    .mm-num { font-size: 2.4rem; opacity: .32; }
+    .mm-card h3 { font-size: 1.15rem; }
+    .mm-go { padding: 10px 20px; font-size: .86rem; box-shadow: 0 4px 0 color-mix(in srgb, var(--mm-rang) 72%, #000); }
+    .mm-card:hover .mm-go { box-shadow: 0 6px 0 color-mix(in srgb, var(--mm-rang) 72%, #000); }
+    .mm-step { padding: 10px 18px; border: 2px solid #E3EDF8; box-shadow: 0 3px 0 #E3EDF8; }
+    @media (max-width: 660px) {
+        .mm-icon { width: 46px; height: 46px; border-radius: 50%; font-size: 1.3rem; }
     }
 </style>
 {% endblock %}
@@ -161,6 +201,7 @@
 {% block content %}
 <section class="page-head">
     <div class="wrap">
+        {% include "_sahifa_ikon.html" %}
         <nav class="crumbs" aria-label="Yo'l">
             <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span> <span>Multimediya</span>
         </nav>

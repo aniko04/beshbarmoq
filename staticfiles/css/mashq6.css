@@ -1,274 +1,312 @@
-/* ===== MASHQ 6 — VIDEO ===== */
+/* =========================================================
+   6–10 MASHQLAR: VIDEO -> TEST -> KROSSVORD
+   =========================================================
+   Bu fayl `style.css` dan KEYIN yuklanadi, ya'ni bir xil
+   kuchdagi selektorlarda shu yerdagisi g'olib chiqadi.
+   Tokenlar (--siyoh, --barg, --anor ...) `style.css` da
+   e'lon qilingan — bu yerda faqat ishlatiladi.
+
+   `style.css` dagi asosiy qoida shu yerda ham amal qiladi:
+
+       RANG FAQAT HOLAT BILDIRADI.
+
+   Ilgari A/B/C/D variantlari to'rt xil rangda edi (ko'k,
+   to'q sariq, binafsha, pushti). Bu bolaga hech narsa
+   o'rgatmasdi — harflar allaqachon farqlanib turibdi —
+   lekin javob tekshirilganda ustiga tushgan yashil/qizil
+   o'sha ranglar bilan urishib, natija o'qilmay qolardi.
+   Endi to'rttasi bir xil, farqni faqat holat beradi.
+   ========================================================= */
+
+/* ===== VIDEO SAHIFASI ===== */
 .mashq6-card {
-    max-width: 900px;
-    padding: 28px;
+    max-width: 940px;
+    padding: 30px;
 }
 
+/* `style.css` dagi `.video-wrapper` ni to'ldiradi: video qora
+   fonda, shuning uchun ichki radius ham kerak. */
 .video-wrapper {
     width: 100%;
-    border-radius: var(--r-md);
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(61, 52, 80, 0.18);
-    border: 3px solid var(--line);
     background: #000;
+    overflow: hidden;
 }
 
 .video-wrapper video {
-    width: 100%;
     display: block;
+    width: 100%;
 }
 
-/* ===== MASHQ 6B — TEST ===== */
+/* ===== TEST SAHIFASI ===== */
 .progress-bar {
     width: 100%;
     height: 10px;
-    background: var(--line-2);
-    border-radius: 10px;
-    overflow: hidden;
     margin-bottom: 8px;
     flex-shrink: 0;
+    background: #EDE7DA;
+    border-radius: 999px;
+    overflow: hidden;
 }
 
 .progress-fill {
-    height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--grape), var(--berry));
-    border-radius: 10px;
-    transition: width 0.4s ease;
+    height: 100%;
+    background: var(--mavzu);
+    border-radius: 999px;
+    transition: width .4s ease;
 }
 
+/* Ilgari bu oq matn edi (`rgba(255,255,255,.95)`) — plita
+   rangli bo'lgani uchun. Plita endi och qog'oz, shuning uchun
+   oq matn ko'rinmay qolgandi. */
 .progress-text {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.95);
-    font-size: 0.85rem;
-    font-weight: 800;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
     flex-shrink: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
+    text-align: center;
+    color: var(--ink-2);
+    font-size: .92rem;
+    font-weight: 700;
+    text-shadow: none;
+    font-variant-numeric: tabular-nums;
 }
 
 .test-questions {
     display: flex;
     flex-direction: column;
-    gap: 24px;
-    margin-bottom: 28px;
+    gap: 18px;
+    margin-bottom: 26px;
 }
 
 .test-question {
-    background: var(--paper-soft);
-    border: 2px solid var(--line);
+    padding: 22px 24px;
+    background: var(--paper);
+    border: 2px solid var(--line-2);
     border-radius: var(--r-md);
-    padding: 20px;
 }
 
 .question-title {
+    margin-bottom: 15px;
     color: var(--ink);
     font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 60, 'WONK' 1;
     font-size: 1.1rem;
-    font-weight: 700;
-    margin-bottom: 14px;
-    line-height: 1.5;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
 .question-options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
 }
 
+/* To'rtala variant bir xil. Ilgari har biri o'z rangida edi. */
 .option-btn {
+    position: relative;          /* `.selected::after` belgisi uchun */
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 13px;
     width: 100%;
-    padding: 14px 18px;
-    background: var(--opt-bg, #fff);
-    border: 2px solid var(--opt-bd, var(--line));
+    padding: 13px 44px 13px 17px;
+    background: var(--paper);
+    border: 2px solid var(--line-3);
     border-radius: var(--r-sm);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    font-family: var(--font-body);
     color: var(--ink);
-    position: relative;
+    font-family: var(--font-body);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
 }
 
-/* Variantlar rang bilan ajraladi (A/B/C/D) */
-.option-btn:nth-child(1) { --opt-bg: #e8f1ff; --opt-bd: #8fbcff; --opt-solid: #2f7df0; }
-.option-btn:nth-child(2) { --opt-bg: #fff2e0; --opt-bd: #ffc25e; --opt-solid: #f08c1a; }
-.option-btn:nth-child(3) { --opt-bg: #f3ebff; --opt-bd: #bfa3ff; --opt-solid: #7c3aed; }
-.option-btn:nth-child(4) { --opt-bg: #ffe8f2; --opt-bd: #ff97c4; --opt-solid: #e1377f; }
-
 .option-btn:hover {
-    transform: translateX(3px) scale(1.01);
-    box-shadow: 0 6px 16px rgba(61, 52, 80, 0.16);
-    filter: saturate(1.12);
+    border-color: var(--zafaron);
+    background: #FFFCF5;
 }
 
 .option-letter {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: var(--opt-solid, var(--line-2));
-    color: #fff;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1rem;
     flex-shrink: 0;
-    transition: all 0.2s ease;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.14);
+    width: 32px;
+    height: 32px;
+    border-radius: var(--r-sm);
+    background: var(--qogoz);
+    border: 1.5px solid var(--line-3);
+    color: var(--ink-2);
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: .94rem;
+    box-shadow: none;
+    transition: background .15s, color .15s, border-color .15s;
 }
 
 .option-text {
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1.4;
 }
 
-/* Tanlangan (tekshirishdan oldin) — o'z rangiga to'lib, belgi bilan ajraladi */
+/* --- Tanlangan (hali tekshirilmagan) --- */
 .option-btn.selected:not(.disabled) {
-    background: var(--opt-solid, var(--grape));
-    border-color: rgba(255, 255, 255, 0.7);
-    color: #fff;
-    font-weight: 800;
-    transform: scale(1.025);
-    box-shadow: 0 12px 28px var(--opt-bd, rgba(124, 58, 237, 0.35)), 0 0 0 3px var(--opt-bg, #eee);
-    padding-right: 48px;
+    background: var(--tanlangan-fon);
+    border-color: var(--siyoh);
+    color: var(--ink);
+    padding-right: 44px;
+    transform: none;
+    box-shadow: none;
 }
 
-.option-btn.selected:not(.disabled) .option-text {
-    color: #fff;
-}
+.option-btn.selected:not(.disabled) .option-text { color: var(--ink); font-weight: 700; }
 
 .option-btn.selected:not(.disabled) .option-letter {
-    background: #fff;
-    color: var(--opt-solid, var(--grape));
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+    background: var(--siyoh);
+    border-color: var(--siyoh);
+    color: #fff;
 }
 
+/* Belgini o'chirmaymiz — tanlanganini ikki yo'l bilan ko'rsatish
+   (rang + belgi) rang ajratolmaydigan bola uchun ham ishlaydi. */
 .option-btn.selected:not(.disabled)::after {
     content: '\2713';
     position: absolute;
-    right: 14px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #fff;
-    color: var(--opt-solid, var(--grape));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--siyoh);
     font-weight: 900;
-    font-size: 1rem;
-    box-shadow: 0 3px 9px rgba(0, 0, 0, 0.25);
+    font-size: 1.05rem;
+    background: none;
+    box-shadow: none;
+    width: auto;
+    height: auto;
 }
 
-/* To'g'ri javob */
+/* --- To'g'ri --- */
 .option-btn.correct {
-    background: #f0fdf4;
-    border-color: var(--ok-d);
-    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.2);
+    background: var(--togri-fon);
+    border-color: var(--barg);
+    box-shadow: none;
 }
 
 .option-btn.correct .option-letter {
-    background: linear-gradient(135deg, var(--grass-d), var(--grass));
+    background: var(--barg);
+    border-color: var(--barg);
     color: #fff;
-    box-shadow: 0 2px 10px rgba(34, 197, 94, 0.4);
+    box-shadow: none;
 }
 
-/* Noto'g'ri javob */
+/* --- Xato --- */
 .option-btn.wrong {
-    background: #fef2f2;
-    border-color: var(--bad-d);
-    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.2);
-    animation: optionShake 0.4s ease;
+    background: var(--xato-fon);
+    border-color: var(--anor);
+    box-shadow: none;
+    animation: optionShake .32s ease;
 }
 
 .option-btn.wrong .option-letter {
-    background: linear-gradient(135deg, var(--tomato), #fb7185);
+    background: var(--anor);
+    border-color: var(--anor);
     color: #fff;
-    box-shadow: 0 2px 10px rgba(239, 68, 68, 0.4);
+    box-shadow: none;
 }
 
+/* Silkinish — bolaning bosishiga javob, shuning uchun qoladi;
+   lekin avvalgidan yumshoqroq. */
 @keyframes optionShake {
     0%, 100% { transform: none; }
-    20% { transform: translateX(-4px); }
-    40% { transform: translateX(4px); }
-    60% { transform: translateX(-2px); }
-    80% { transform: translateX(2px); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
 }
 
-/* Tekshirilgandan keyin */
+@media (prefers-reduced-motion: reduce) {
+    .option-btn.wrong { animation: none; }
+}
+
 .option-btn.disabled {
     cursor: default;
     pointer-events: none;
 }
 
-/* Keyingi bosqich tugmasi */
+/* ===== KEYINGI BOSQICH =====
+   `display:none` — JS uni test tugagach ko'rsatadi; shuni
+   o'zgartirmang, aks holda tugma boshidanoq chiqib turadi.
+   Ko'rinishi `style.css` dagi `.next-btn` bilan bir xil. */
 .next-btn {
     display: none;
-    padding: 17px 56px;
-    font-size: 1.25rem;
-    font-family: var(--font-display);
-    background: linear-gradient(135deg, var(--sky), #06b6d4);
-    color: #fff;
-    border: none;
-    border-radius: var(--r-md);
-    cursor: pointer;
-    font-weight: 700;
-    box-shadow: 0 6px 0 var(--sky-d), 0 12px 22px rgba(14, 165, 233, 0.28);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-    letter-spacing: 0.5px;
-    text-decoration: none;
+    padding: 15px 34px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--zafaron);
+    color: var(--siyoh);
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    font-weight: 800;
     text-align: center;
+    text-decoration: none;
+    letter-spacing: 0;
+    cursor: pointer;
+    box-shadow: 0 2px 0 var(--zafaron-d), 0 8px 20px rgba(227, 160, 60, .34);
+    transition: transform .12s, box-shadow .12s;
 }
 
 .next-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 0 var(--sky-d), 0 16px 28px rgba(14, 165, 233, 0.34);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 var(--zafaron-d), 0 12px 26px rgba(227, 160, 60, .40);
 }
 
 .next-btn:active {
-    transform: translateY(3px);
-    box-shadow: 0 3px 0 var(--sky-d), 0 8px 14px rgba(14, 165, 233, 0.3);
+    transform: translateY(2px);
+    box-shadow: 0 0 0 var(--zafaron-d), 0 4px 10px rgba(227, 160, 60, .30);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
-    .mashq6-card {
-        padding: 16px 10px;
-    }
-
-    .test-question {
-        padding: 14px;
-    }
-
-    .question-title {
-        font-size: 1rem;
-    }
-
-    .option-btn {
-        padding: 10px 14px;
-        gap: 10px;
-    }
-
-    .option-letter {
-        width: 30px;
-        height: 30px;
-        font-size: 0.85rem;
-    }
-
-    .option-text {
-        font-size: 0.9rem;
-    }
-
-    .next-btn {
-        padding: 14px 36px;
-        font-size: 1.05rem;
-    }
+    .mashq6-card { padding: 18px 12px; }
+    .test-question { padding: 16px 14px; }
+    .question-title { font-size: 1rem; }
+    .option-btn { padding: 11px 14px; gap: 11px; }
+    .option-letter { width: 29px; height: 29px; font-size: .86rem; }
+    .option-text { font-size: .94rem; }
+    .next-btn { width: 100%; padding: 14px 24px; font-size: 1.02rem; }
 }
+
+
+/* =========================================================
+   YORQIN USLUB
+   =========================================================
+   Bu fayl `style.css` dan KEYIN yuklanadi, ya'ni bir xil
+   kuchdagi selektorlarda shu yerdagisi g'olib chiqadi —
+   shuning uchun yorqin uslubning bir nechta qiymati bu
+   yerda takrorlanishi SHART, aks holda eski qumrang qoladi.
+   ========================================================= */
+.progress-bar { background: #E4EEF9; }
+.progress-fill { background: var(--mavzu, #2E7DE0); }
+.progress-text { color: #50688A; }
+
+.test-question {
+    background: #fff;
+    border: 1px solid #DCE9F6;
+    border-radius: 16px;
+}
+
+.question-title { font-family: 'Fredoka', 'Nunito', sans-serif; font-weight: 600; color: #22384F; }
+
+.option-btn { border-color: #E4EEF9; }
+.option-btn:hover { border-color: var(--mavzu, #2E7DE0); background: #F7FBFF; }
+.option-letter { background: #F3F9FF; border-color: #E4EEF9; color: #50688A; }
+.option-text { font-family: 'Nunito', sans-serif; }
+
+/* Tugma yashil — sayt bo'ylab "davom et" rangi. */
+.next-btn {
+    background: #43A047;
+    border-radius: 999px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    box-shadow: 0 4px 0 #2E7D32, 0 10px 22px rgba(67, 160, 71, .28);
+}
+
+.next-btn:hover { box-shadow: 0 6px 0 #2E7D32, 0 14px 26px rgba(67, 160, 71, .34); }
+.next-btn:active { box-shadow: 0 1px 0 #2E7D32; }
+
+.mashq6-card { border-radius: 24px; }

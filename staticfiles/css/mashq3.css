@@ -838,25 +838,38 @@
     }
 }
 
-/* ===== Topshiriqqa biriktirilgan rang (vivid, body .t-* dan) ===== */
+/* =========================================================
+   O'YIN PANELLARI
+   ---------------------------------------------------------
+   Ilgari bu panellar `var(--card-accent)` — ya'ni `.t-*`
+   sinflari beradigan rangli gradient — bilan bo'yalar,
+   matni esa oq edi.
+
+   `--card-accent` olib tashlandi (10 ta mashq 10 xil gradientda
+   bo'lishi aynan «qo'pol» ko'rinishning sababi edi), shuning
+   uchun `var(--card-accent, var(--paper))` endi OQ ga tushardi
+   va `color:#fff` bilan birga matn oq fonda oq bo'lib qolgandi —
+   sahifa o'qib bo'lmas holga kelgandi.
+
+   Endi panellar ham qolgan sayt kabi qog'oz plita: och fon,
+   siyoh matn. Soya va matn soyasi olib tashlandi.
+   ========================================================= */
 .m3-start-box,
 .m3-hud,
 .m3-riddle-panel,
 .m3-summary-box {
-    background: var(--card-accent, var(--paper));
-    border: 1.5px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 24px 54px var(--card-glow, rgba(61, 52, 80, 0.12)),
-        inset 0 1.5px 0 rgba(255, 255, 255, 0.4);
-    color: #fff;
+    background: var(--paper);
+    border: 2px solid var(--line-2);
+    box-shadow: var(--qat-1);
+    color: var(--ink);
 }
 
-/* Panel ustidagi to'g'ridan-to'g'ri matnlar oq bo'lsin */
 .m3-title {
     background: none;
-    -webkit-text-fill-color: #fff;
-    color: #fff;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+    -webkit-text-fill-color: var(--ink);
+    color: var(--ink);
+    text-shadow: none;
+    font-variation-settings: 'SOFT' 90, 'WONK' 1;
 }
 
 .m3-subtitle,
@@ -865,6 +878,61 @@
 .m3-summary-title,
 .m3-summary-label,
 .m3-summary-value {
+    color: var(--ink);
+    text-shadow: none;
+}
+
+.m3-subtitle,
+.m3-summary-label { color: var(--ink-2); }
+
+/* Qoidalar ro'yxati — oldin oq matnli shaffof "shisha" edi
+   (rangli panel uchun mo'ljallangan), och fonda ko'rinmasdi. */
+.m3-rule {
+    color: var(--ink);
+    background: var(--qogoz);
+    border: 1.5px solid var(--line-3);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    text-shadow: none;
+    font-weight: 600;
+}
+
+.m3-rule-num {
+    background: var(--siyoh);
     color: #fff;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+/* Boshlash tugmasi — saytdagi hamma amal tugmasi kabi zafaron. */
+.m3-start-btn,
+.m3-confirm-btn,
+.m3-replay-btn {
+    background: var(--zafaron);
+    color: var(--siyoh);
+    border: 0;
+    box-shadow: 0 2px 0 var(--zafaron-d), 0 8px 20px rgba(227, 160, 60, .34);
+    text-shadow: none;
+}
+
+.m3-start-btn:hover,
+.m3-confirm-btn:hover,
+.m3-replay-btn:hover {
+    box-shadow: 0 3px 0 var(--zafaron-d), 0 12px 26px rgba(227, 160, 60, .40);
+}
+
+/* Yordamchi tugmalar amal emas — ikkilamchi ko'rinishda. */
+.m3-hint-btn,
+.m3-home-btn,
+.m3-discover-btn {
+    background: var(--paper);
+    color: var(--ink-2);
+    border: 2px solid var(--line-2);
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.m3-hint-btn:hover,
+.m3-home-btn:hover,
+.m3-discover-btn:hover {
+    border-color: var(--siyoh-3);
+    color: var(--siyoh);
 }

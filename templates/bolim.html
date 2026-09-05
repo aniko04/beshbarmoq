@@ -6,6 +6,7 @@
 {% block content %}
 <section class="page-head">
     <div class="wrap">
+        {% include "_sahifa_ikon.html" %}
         <nav class="crumbs" aria-label="Yo'l">
             <a href="/">Bosh sahifa</a> <span aria-hidden="true">&rsaquo;</span> <span>{{ bolim_nomi }}</span>
         </nav>
@@ -71,11 +72,27 @@
                 <div class="guruhlar">
                     {% for g in guruhlar %}
                         {% comment %} id — navbardagi menyu shu yerga olib keladi (/topshiriq#rasmli_test). {% endcomment %}
-                        <details class="guruh" id="{{ g.kalit }}"{% if forloop.first %} open{% endif %}>
+                        {% comment %}
+                            Guruh ochiq keladi, agar u birinchi bo'lsa YOKI
+                            ichida interaktiv sahifa bo'lsa. Ilgari faqat
+                            birinchisi ochilardi va «Texnologik diktantlar»
+                            yopiq holda, yonida «0» bilan turardi — ya'ni
+                            to'liq 4 bosqichli diktant borligi bilinmasdi.
+                        {% endcomment %}
+                        <details class="guruh" id="{{ g.kalit }}"{% if forloop.first or g.ilova %} open{% endif %}>
                             <summary>
                                 <svg class="motif" aria-hidden="true"><use href="#palak"/></svg>
                                 <span class="guruh-nomi">{{ g.nomi }}</span>
-                                <span class="guruh-son">{{ g.materiallar|length }}</span>
+                                {% comment %}
+                                    Hisoblagich FAYLLARNI sanaydi. Guruhda fayl
+                                    yo'q, lekin interaktiv sahifa bor bo'lsa,
+                                    «0» yozuv guruhni bo'sh ko'rsatib qo'yadi —
+                                    shuning uchun bunday holatda nishon umuman
+                                    chiqmaydi.
+                                {% endcomment %}
+                                {% if g.materiallar or not g.ilova %}
+                                    <span class="guruh-son">{{ g.materiallar|length }}</span>
+                                {% endif %}
                                 <svg class="guruh-strelka" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
                             </summary>
                             <div class="guruh-ichi">

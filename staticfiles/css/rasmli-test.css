@@ -514,3 +514,75 @@ button.rt-variant:disabled { cursor: default; }
     .rt-savol { break-inside: avoid; box-shadow: none; }
     .rt-head { background: none; color: var(--ink); }
 }
+
+/* =========================================================
+   YORQIN USLUB
+   =========================================================
+   Sayt yorqin uslubga o'tkazildi; bu blok shu sahifani ham
+   o'shanga keltiradi. Fayl OXIRIDA turadi va yuqoridagi
+   qoidalarni bir xil kuchdagi selektorlar bilan yengadi.
+
+   TEGILMAYDIGAN NARSALAR (CLAUDE.md dagi shartlar):
+     - rasm qutilari sof oq bo'lib qoladi
+     - jadval sarlavhasiga `position: sticky` qo'yilmaydi
+     - parda `backdrop-filter` bilan xiralashadi
+   ========================================================= */
+
+/* Sarlavha ostidagi faktlar qatori.
+
+   NEGA TUZATILDI: bu qoidalar to'q ko'k sarlavha lentasi uchun
+   yozilgandi — oq matn, shaffof oq fon. Lenta yorqin uslubda och
+   bo'lgani uchun matn ko'rinmay qoldi (footer havolalari bilan bir
+   xil xato). Endi oq tabletka, siyoh matn, ko'k raqam. */
+.rt-fakt li {
+    background: #fff;
+    border: 1px solid #DCE9F6;
+    color: #50688A;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+}
+
+.rt-fakt b {
+    color: #2E7DE0;
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    font-weight: 600;
+}
+
+/* Boshlash pardasi va tugmalar */
+.rt-boshla {
+    border-radius: 24px;
+    border: 1px solid #DCE9F6;
+}
+
+.rt-boshla h2 { font-family: 'Fredoka', 'Nunito', system-ui, sans-serif; font-weight: 600; }
+
+.rt-boshla-tugma,
+.rt-tekshir,
+.rt-natija-tugma {
+    border-radius: 999px;
+    background: #2E7DE0;
+    border-color: #2E7DE0;
+    color: #fff;
+    font-family: 'Nunito', system-ui, sans-serif;
+    font-weight: 800;
+    box-shadow: 0 4px 0 #1F5FAF;
+}
+
+.rt-boshla-tugma:hover,
+.rt-tekshir:hover,
+.rt-natija-tugma:hover {
+    background: #1F5FAF;
+    border-color: #1F5FAF;
+    box-shadow: 0 6px 0 #17497F;
+}
+
+.rt-boshla-tugma:active,
+.rt-tekshir:active,
+.rt-natija-tugma:active { box-shadow: 0 1px 0 #1F5FAF; }
+
+/* Karta juftligi ham yorqin registrda. Ichkaridagi rasm
+   qutilari SOF OQ bo'lib qoladi — ularga tegilmaydi. */
+:root {
+    --osmon: #E4F0FC;
+    --binafsha: #EFE9FE;
+}

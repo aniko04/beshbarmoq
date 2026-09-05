@@ -4,8 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mashq 7 - Krossvord</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/static/css/mashq6.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {% comment %}
+        Shriftlar bloklamasdan yuklanadi. CSS `@import` BO'LMASIN: u
+        render-blocking, ya'ni Google Fonts sekinlashsa sahifadagi
+        inline <script> lar ishga tushmay, test/krossvord qotib qoladi.
+    {% endcomment %}
+    <link rel="stylesheet" media="print" onload="this.media='all'"
+          href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+    </noscript>
+    <link rel="stylesheet" href="/static/css/style.css?v=2">
+    <link rel="stylesheet" href="/static/css/mashq6.css?v=2">
     <style>
         .mashq7c-card{max-width:100%;width:100%;padding:36px}
         .main-layout{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start}
