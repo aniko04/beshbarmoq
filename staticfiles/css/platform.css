@@ -1779,6 +1779,11 @@ button.btn-sm { font-family: inherit; cursor: pointer; }
 }
 
 .nav-menu-ichi a { color: #35506F; }
+/* `.nav .nav-menu a:hover` (0,3,1) — yuqoridagi TO'Q navbar qoidasi —
+   `.nav-menu-ichi a:hover` (0,2,1) dan kuchli va oq fonga OQ matn berardi:
+   «Rasmli test» sichqoncha ostida g'oyib bo'lardi. Shu kuchda qayta beriladi. */
+.nav .nav-menu a:hover,
+.nav .nav-menu a:focus-visible,
 .nav-menu-ichi a:hover { background: #F1F7FE; color: #2E7DE0; }
 .nav-menu-ichi .motif { color: #2E7DE0; opacity: .7; }
 
@@ -2390,12 +2395,24 @@ body.pf {
     border-radius: 0;
     opacity: 1;
     z-index: -1;
+    /* Uch qatlam, tepadan pastga:
+         1. oq parda — CHAPDAN o'ngga so'nadi. Sarlavha chapda turadi,
+            shuning uchun u yerda parda quyuq va matn har qanday foto
+            ustida o'qiladi; o'ngda esa foto ochiq ko'rinadi.
+         2. bo'lim fotosi — `--bolim-rasm`, quyida har bo'limga berilgan.
+         3. zaxira gradient — fotosi yo'q sahifalar uchun (masalan
+            bosh sahifa yoki yangi bo'lim). */
     background-image:
-        var(--bulut-rasm),
-        var(--bulut-rasm),
+        linear-gradient(97deg,
+            rgba(255, 255, 255, .96) 0%,
+            rgba(255, 255, 255, .92) 32%,
+            rgba(255, 255, 255, .58) 54%,
+            rgba(255, 255, 255, .14) 76%,
+            rgba(255, 255, 255, .02) 100%),
+        var(--bolim-rasm, none),
         linear-gradient(180deg, color-mix(in srgb, var(--tus-pale) 45%, #C9E3FA) 0%, #DAEBFB 62%, #E6F2FD 100%);
-    background-size: 220px 132px, 132px 79px, 100% 100%;
-    background-position: 4% 100%, 57% 8%, 0 0;
+    background-size: cover, cover, cover;
+    background-position: center, center 42%, center;
     background-repeat: no-repeat;
     -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V360C1090 392 960 398 800 380S520 342 360 360 110 398 0 364Z'/%3E%3C/svg%3E");
             mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400' preserveAspectRatio='none'%3E%3Cpath d='M0 0H1200V360C1090 392 960 398 800 380S520 342 360 360 110 398 0 364Z'/%3E%3C/svg%3E");
@@ -2403,6 +2420,38 @@ body.pf {
             mask-size: 100% 100%;
     -webkit-mask-repeat: no-repeat;
             mask-repeat: no-repeat;
+}
+
+/* Har bo'limning o'z fotosi. Rasmlar Pixabay dan olingan (Pixabay
+   Content License: tijorat uchun ham bepul, muallif ko'rsatish shart
+   emas) va 1500x560 ga kesilgan. Manba havolalari va kesish kodi —
+   `scratchpad/bolim_rasm.py`. Rasmni almashtirish uchun shu faylni
+   tahrirlab qayta ishga tushiring. */
+.sahifa-haqida      { --bolim-rasm: url('/static/img/bolim/haqida.jpg'); }
+.sahifa-metodika    { --bolim-rasm: url('/static/img/bolim/metodika.jpg'); }
+.sahifa-maqola      { --bolim-rasm: url('/static/img/bolim/maqola.jpg'); }
+.sahifa-multimediya { --bolim-rasm: url('/static/img/bolim/multimediya.jpg'); }
+.sahifa-topshiriq   { --bolim-rasm: url('/static/img/bolim/topshiriq.jpg'); }
+.sahifa-xarita      { --bolim-rasm: url('/static/img/bolim/xarita.jpg'); }
+.sahifa-ishlanma    { --bolim-rasm: url('/static/img/bolim/ishlanma.jpg'); }
+
+/* Foto ko'rinsin deb lenta balandroq. */
+.pf .page-head { padding: 52px 0 104px; }
+
+/* Tor ekranda sarlavha butun kenglikni egallaydi, shuning uchun parda
+   chapdan emas, TEPADAN pastga so'nadi — aks holda matn fotoning
+   o'ng yarmiga chiqib, o'qilmay qoladi. */
+@media (max-width: 900px) {
+    .pf .page-head::before {
+        background-image:
+            linear-gradient(180deg,
+                rgba(255, 255, 255, .93) 0%,
+                rgba(255, 255, 255, .88) 60%,
+                rgba(255, 255, 255, .78) 100%),
+            var(--bolim-rasm, none),
+            linear-gradient(180deg, color-mix(in srgb, var(--tus-pale) 45%, #C9E3FA) 0%, #DAEBFB 100%);
+    }
+    .pf .page-head { padding: 34px 0 78px; }
 }
 
 /* Eski so'ngan doira bezagi kerak emas — endi ikonka bor. */
@@ -2828,9 +2877,169 @@ body.pf {
     .page-head .wrap { padding-right: 20px; }
     .sb-ikon { display: none; }
     /* Yuqoridagi kichik bulut tor ekranda yo'l tabletkasi ostiga tushadi. */
-    .pf .page-head::before { background-size: 220px 132px, 0 0, 100% 100%; }
+    /* Bu yerda ilgari bulut o'lchamlari turardi (`220px 132px, 0 0, ...`).
+       Qatlamlar o'zgargach — endi ular oq parda, bo'lim fotosi va zaxira
+       gradient — o'sha o'lchamlar pardani 220x132 li OQ TO'RTBURCHAK qilib,
+       fotoni esa `0 0` bilan butunlay yo'q qilib qo'ygandi. Uchalasi ham
+       to'ldirib turishi kerak. */
+    .pf .page-head::before { background-size: cover, cover, cover; }
     .material { padding: 18px 16px; border-radius: 22px; }
     .guruh { border-radius: 22px; }
     .guruh > summary .motif { display: grid; width: 38px; height: 38px; padding: 9px; }
     .bolim-card { border-radius: 24px; }
 }
+
+
+/* =========================================================
+   YON BEZAKLAR — platforma sahifalari
+   =========================================================
+   Mijoz butun saytni "juda ochiq" dedi. Bolalar sahifalarida
+   to'liq sahna qo'yildi (style.css); o'qituvchi sahifalari
+   jiddiyroq bo'lgani uchun bu yerda faqat yon bo'shliqqa
+   so'ngan anjomlar qo'yiladi. Mazmun kengligi 1200px,
+   shuning uchun bezaklar 1400px dan keng ekranda ko'rinadi.
+
+   `:not(.auth-page)` — kirish/ro'yxat sahifasining o'z
+   bulutlari va quyoshi bor (auth.css), ikkitasi qo'shilsa
+   sahifa g'ala-g'ovur bo'lardi.
+
+   Rasmli test va diktant sahifalari `body.pf::before` ni o'z
+   CSS lari bilan QAYTA belgilaydi (ular platform.css dan keyin
+   yuklanadi) — u yerda to'liq sahna bor.
+   ========================================================= */
+body.pf:not(.auth-page)::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .55;
+    background-image:
+        url('/static/img/sahna/anjom/qaychi.svg'),
+        url('/static/img/sahna/anjom/qogoz.svg'),
+        url('/static/img/sahna/anjom/qalam.svg'),
+        url('/static/img/sahna/anjom/yulduz.svg');
+    background-repeat: no-repeat;
+    background-size: 96px, 86px, 92px, 72px;
+    /* Boshlanish 32% emas, 48%: `.page-head` shaffof emas va undan
+       yuqoridagi anjom yarmidan qirqilib ko'rinardi. */
+    background-position:
+        left 26px top 48%,
+        left 54px top 78%,
+        right 28px top 54%,
+        right 58px top 84%;
+    animation: pf-anjom 11s ease-in-out infinite alternate;
+}
+
+@keyframes pf-anjom {
+    from { background-position: left 26px top 48%, left 54px top 78%,
+                                right 28px top 54%, right 58px top 84%; }
+    to   { background-position: left 34px top 50%, left 46px top 75%,
+                                right 36px top 52%, right 50px top 87%; }
+}
+
+@media (max-width: 1400px) {
+    body.pf:not(.auth-page)::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.pf:not(.auth-page)::before { animation: none; }
+}
+
+
+/* =========================================================
+   RANGLI KARTALAR — platforma sahifalari
+   =========================================================
+   Mijozning talabi: kartalar oq bo'lib turmasin, hammasi
+   rangli bo'lsin. Ilgari faqat ikki tus navbatlashardi
+   (oq va bo'lim tusining eng och pardasi) va ro'yxat bir
+   xil oq devor bo'lib ko'rinardi.
+
+   Endi BESHTA rang aylanma bo'lib takrorlanadi. Beshta —
+   tasodifiy son emas: mashq kartalari (multimediya) ham
+   beshtalik aylanada, shuning uchun sayt bo'ylab bitta
+   ritm chiqadi.
+
+   Har kartada bitta o'zgaruvchi — `--kart` — uchta joyni
+   boshqaradi: chap chekka, fayl nishoni va «Ko'rish»
+   tugmasi. «Yuklab olish» yashil, «Manbaga o'tish» ko'k
+   bo'lib qoladi: ular AMAL bildiradi, bo'lim emas.
+   ========================================================= */
+.material-list .material:nth-child(5n+1) { --kart: #43A047; --kart-och: #E9F7EC; }
+.material-list .material:nth-child(5n+2) { --kart: #2E7DE0; --kart-och: #E6F1FD; }
+.material-list .material:nth-child(5n+3) { --kart: #F5920B; --kart-och: #FEF3E0; }
+.material-list .material:nth-child(5n+4) { --kart: #EC5C9D; --kart-och: #FDEBF3; }
+.material-list .material:nth-child(5n+5) { --kart: #8B5CF6; --kart-och: #EFE9FE; }
+
+/* Eski oq/tus juftligini bekor qiladi — bir xil kuchdagi
+   selektor bilan yozilishi shart. */
+.bolim-metodika .material-list .material,
+.bolim-maqola   .material-list .material,
+.bolim-ishlanma .material-list .material,
+.material-list .material {
+    background: var(--kart-och, #fff);
+    border: 2px solid color-mix(in srgb, var(--kart, #2E7DE0) 22%, #fff);
+    border-left: 7px solid var(--kart, #2E7DE0);
+}
+
+.material-list .material:hover {
+    border-color: color-mix(in srgb, var(--kart, #2E7DE0) 55%, #fff);
+    border-left-color: var(--kart, #2E7DE0);
+}
+
+.material-list .material .material-tag {
+    background: var(--kart, #2E7DE0);
+    color: #fff;
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--kart, #2E7DE0) 70%, #000);
+}
+
+/* «Ko'rish» — kartaning rangida. Atributi bor tugmalar
+   (yuklab olish / manba) o'z rangini saqlaydi. */
+.material-list .material .btn-sm:not([download]):not([target]) {
+    background: var(--kart, #2E7DE0);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--kart, #2E7DE0) 70%, #000);
+}
+
+.material-list .material .btn-sm:not([download]):not([target]):hover {
+    box-shadow: 0 5px 0 color-mix(in srgb, var(--kart, #2E7DE0) 70%, #000);
+}
+
+/* Muqova oq fonda qoladi: kitob rasmi karta tusiga singib
+   ketmasligi kerak. */
+.material-list .material .material-muqova { background: #fff; }
+
+/* ---------------------------------------------------------
+   BOSH SAHIFA — yetti bo'lim kartasi
+   Ilgari hammasi oq edi, rang faqat tepadagi chiziqda.
+   Endi karta ham o'z bo'limining och tusida.
+   --------------------------------------------------------- */
+.tone-1 { background: #E7F0FC; }
+.tone-2 { background: #E9F7EC; }
+.tone-3 { background: #E4F2FC; }
+.tone-4 { background: #EFE9FE; }
+.tone-5 { background: #FEF3E0; }
+.tone-6 { background: #FDEBF3; }
+.tone-7 { background: #FCEAE9; }
+
+.bolim-card { border-color: color-mix(in srgb, var(--kt) 24%, #fff); }
+.bolim-card p { color: #46586F; }
+
+/* Nishon oq fonda — kartaning tusi ustida yo'qolib ketmasin. */
+.bolim-num { background: #fff; }
+
+/* ---------------------------------------------------------
+   KICHIK BO'LIMLAR — ochiladigan guruh sarlavhasi rangli
+   --------------------------------------------------------- */
+.guruh { border-color: color-mix(in srgb, var(--tus) 26%, #fff); }
+
+.guruh > summary {
+    background: color-mix(in srgb, var(--tus-pale) 70%, #fff);
+}
+
+.guruh > summary:hover { background: var(--tus-pale); }
+.guruh[open] > summary { border-bottom-color: color-mix(in srgb, var(--tus) 22%, #fff); }
+
+/* ---------------------------------------------------------
+   BO'SH HOLAT va YON KARTA
+   --------------------------------------------------------- */
+.empty { background: color-mix(in srgb, var(--tus-pale) 55%, #fff); }

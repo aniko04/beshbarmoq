@@ -58,9 +58,12 @@ cover/
 # Django stuff:
 *.log
 local_settings.py
-# db.sqlite3
-# db.sqlite3-journal
-# Note: Database files are included in git for this project
+# Baza git'ga KIRMAYDI (2026-09-05): ichida foydalanuvchi parollari (hash) va shaxsiy ma'lumot bor.
+# Serverga baza qo'lda (scp) ko'chiriladi; zaxira nusxalar malumotlar/ da.
+db.sqlite3
+db.sqlite3-journal
+db.sqlite3-wal
+db.sqlite3-shm
 
 # Flask stuff:
 instance/

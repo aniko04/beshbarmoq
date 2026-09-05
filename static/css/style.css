@@ -1110,3 +1110,443 @@ h1.mashq-title { color: var(--ink); }
     border-radius: var(--r-lg);
     box-shadow: 0 6px 18px rgba(20, 40, 80, .10);
 }
+/* =========================================================
+   SAHNA — mashq sahifalarining to'liq ekranli manzarasi
+   =========================================================
+   Mijoz "sayt juda ochiq va bo'sh" dedi va hamkasbining
+   taqdimotini namuna qilib berdi: u yerda har bir topshiriq
+   to'liq illyustratsiya ustida turadi. Shu blok o'sha ishni
+   qiladi.
+
+   NEGA SHU YERDA VA NEGA BITTA BLOK
+   ---------------------------------------------------------
+   O'ttiz yettita mashq sahifasi (mashq1..10c va oquvchi/*)
+   HTML jihatdan alohida fayl, lekin hammasi shu `style.css`
+   ni yuklaydi va hammasining `<body>` sida `t-*` mavzu sinfi
+   bor. Ya'ni bitta joydan hammasini bezash mumkin —
+   37 ta faylni qo'lda tahrirlash shart emas.
+
+   QATLAMLAR (pastdan yuqoriga)
+   ---------------------------------------------------------
+     1. `body` foni      — sahna SVG si, `fixed`, `cover`
+     2. `body::before`   — oq parda: matn o'qilishi uchun
+     3. sahifa mazmuni   — karta, sarlavha, tugmalar
+     4. `body::after`    — burchakdagi bolalar (mijozning
+                           o'z rasmi, `media/bolalar.png`)
+
+   `body::before` ning `z-index: -1` i ATAYLAB: psevdo-element
+   `body` ning fonidan YUQORIDA, lekin mazmundan PASTDA
+   chiziladi. Fon esa canvas ga ko'chadi, shuning uchun tartib
+   buzilmaydi.
+
+   SAHNALAR
+   ---------------------------------------------------------
+   Uchta manzara bor (`static/img/sahna/`), ular
+   `scratchpad/sahna_yasa.py` bilan yasalgan — qo'lda chizilgan
+   SVG, litsenziyasi toza va vektor bo'lgani uchun har qanday
+   ekranda tiniq. Har mavzuga bittasi biriktirilgan, shunda
+   ketma-ket mashqlar bir xil ko'rinmaydi.
+
+   YANGI SVG QO'SHSANGIZ: server QAYTA ISHGA TUSHIRILADI —
+   WhiteNoise fayllar ro'yxatini faqat ishga tushganda o'qiydi,
+   aks holda yangi rasm 404 beradi.
+   ========================================================= */
+
+body {
+    --sahna: url('/static/img/sahna/bogh.svg');
+    background-color: #DCEEFB;
+    background-image: var(--sahna);
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.t-orange, .t-amber   { --sahna: url('/static/img/sahna/tong.svg'); }
+.t-blue,   .t-indigo  { --sahna: url('/static/img/sahna/orzu.svg'); }
+.t-teal,   .t-emerald { --sahna: url('/static/img/sahna/bogh.svg'); }
+.t-rose,   .t-coral   { --sahna: url('/static/img/sahna/tong.svg'); }
+.t-pink,   .t-purple  { --sahna: url('/static/img/sahna/orzu.svg'); }
+
+/* Oq parda: sahna ko'rinib tursin, lekin matn o'qilsin.
+   Yuqorida va pastda shaffofroq (manzara ochiq qoladi),
+   o'rtada quyuqroq (mazmun shu yerda turadi). */
+body::before {
+    content: '';
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    /* `opacity: 1` SHART. Fayl boshidagi eski "qog'oz tolasi" qoidasi
+       shu psevdo-elementga `opacity: .5` bergan va u meros bo'lib
+       qolardi: parda ham, ustidagi anjomlar ham yarim xira chiqardi
+       (ko'k qaychi kulrangga aylangandi). */
+    opacity: 1;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, .06) 0%,
+        rgba(255, 255, 255, .32) 22%,
+        rgba(255, 255, 255, .36) 78%,
+        rgba(255, 255, 255, .10) 100%);
+    pointer-events: none;
+}
+
+/* Burchakdagi bolalar — mijozning o'z illyustratsiyasi.
+   `fixed`, ya'ni sahifa aylantirilganda ham joyida qoladi va
+   sahnaning bir bo'lagidek ko'rinadi. Mazmun kengligi 1060px,
+   shuning uchun tor ekranda yashiriladi: aks holda kartaning
+   ustiga chiqadi. */
+body::after {
+    content: '';
+    position: fixed;
+    left: 18px;
+    bottom: 0;
+    /* `-1` — parda bilan bir xil qatlam, lekin ::after keyin
+       chizilgani uchun pardadan yuqorida. Mazmun esa ikkalasidan
+       yuqorida, ya'ni keng krossvordda bolalar kartaning ORQASIGA
+       kirib ketadi va matnni to'smaydi. */
+    z-index: -1;
+    width: 215px;
+    height: 300px;
+    /* Oq foni kesilgan nusxa. `media/bolalar.png` da alfa yo'q edi
+       va sahna ustida oq to'rtburchak bo'lib chiqardi. */
+    background: url('/static/img/sahna/bolalar.png') no-repeat left bottom / contain;
+    filter: drop-shadow(0 8px 14px rgba(20, 50, 90, .22));
+    pointer-events: none;
+}
+
+/* Tor ekranda umuman ko'rsatilmaydi: u yerda karta deyarli butun
+   ekranni egallaydi va bolalar baribir ko'rinmaydi. */
+@media (max-width: 1180px) {
+    body::after { display: none; }
+}
+
+/* ---------------------------------------------------------
+   SARLAVHA — rangli lavha
+   Ilgari oddiy to'q matn edi va sahna ustida yo'qolib ketardi.
+   Endi mavzu rangidagi lavha: oq kontur, qattiq soya.
+   --------------------------------------------------------- */
+h1.mashq-title {
+    display: block;
+    width: fit-content;
+    max-width: min(1060px, calc(100% - 44px));
+    margin: 20px auto 4px;
+    padding: 14px 40px 16px;
+    border: 4px solid #fff;
+    border-radius: 999px;
+    background: linear-gradient(180deg,
+        color-mix(in srgb, var(--mavzu, #2E7DE0) 78%, #fff) 0%,
+        var(--mavzu, #2E7DE0) 62%);
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.6vw, 1.95rem);
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, .16);
+    box-shadow:
+        inset 0 4px 0 rgba(255, 255, 255, .26),
+        0 6px 0 color-mix(in srgb, var(--mavzu, #2E7DE0) 66%, #000),
+        0 12px 20px rgba(20, 50, 90, .18);
+}
+
+/* ---------------------------------------------------------
+   ASOSIY PLITA — sahna ustidagi "doska"
+   Chegara qalin va mavzu rangida: karta manzaradan ajralib
+   tursin. Oq fon shart — ichkarida holat ranglari bor
+   (to'g'ri/xato) va ular faqat oq ustida to'g'ri o'qiladi.
+   --------------------------------------------------------- */
+.quiz-card {
+    position: relative;
+    z-index: 1;
+    border: 5px solid #fff;
+    border-top: 5px solid #fff;
+    border-radius: 34px;
+    background: #fff;
+    box-shadow:
+        0 0 0 4px color-mix(in srgb, var(--mavzu, #2E7DE0) 55%, #fff),
+        0 10px 0 rgba(20, 50, 90, .06),
+        0 26px 50px rgba(20, 50, 90, .18);
+}
+
+/* Kartaning tepasidagi til ATAYLAB yo'q: u chetdan chiqib turardi
+   va sarlavha lavhasi ostidan "nuqson" bo'lib ko'rinardi. Mavzu
+   rangi kartaning atrofidagi halqada (yuqoridagi `box-shadow`) va
+   sarlavha lavhasida allaqachon bor. */
+.quiz-card::after { content: none; }
+
+/* ---------------------------------------------------------
+   ORQAGA — rangli tabletka
+   --------------------------------------------------------- */
+.back-link {
+    position: relative;
+    z-index: 2;
+    border: 3px solid #fff;
+    background: var(--mavzu, #2E7DE0);
+    color: #fff;
+    font-weight: 800;
+    box-shadow:
+        0 4px 0 color-mix(in srgb, var(--mavzu, #2E7DE0) 68%, #000),
+        0 10px 20px rgba(20, 50, 90, .2);
+}
+
+.back-link:hover {
+    background: var(--mavzu, #2E7DE0);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 0 color-mix(in srgb, var(--mavzu, #2E7DE0) 68%, #000),
+        0 14px 24px rgba(20, 50, 90, .26);
+}
+
+/* ---------------------------------------------------------
+   VIDEO va boshqa ichki qutilar sahna ustida ham aniq tursin
+   --------------------------------------------------------- */
+.video-wrapper { border-width: 3px; box-shadow: 0 10px 24px rgba(20, 50, 90, .16); }
+
+/* ---------------------------------------------------------
+   TOR EKRAN
+   Telefonda sahna baribir ko'rinadi, lekin parda quyuqroq:
+   ekran kichik, mazmun esa deyarli butun ekranni egallaydi.
+   --------------------------------------------------------- */
+@media (max-width: 700px) {
+    body::before {
+        background: linear-gradient(180deg,
+            rgba(255, 255, 255, .12) 0%,
+            rgba(255, 255, 255, .46) 18%,
+            rgba(255, 255, 255, .50) 82%,
+            rgba(255, 255, 255, .16) 100%);
+    }
+    h1.mashq-title { padding: 11px 22px 13px; border-width: 3px; border-radius: 26px; }
+    .quiz-card { border-radius: 24px; border-width: 4px; }
+    .quiz-card::after { width: 120px; }
+}
+
+/* ---------------------------------------------------------
+   YON BEZAKLAR — hunarmandchilik anjomlari
+   Mazmun kengligi 1060px, shuning uchun keng ekranda ikki yonda
+   ~270px bo'sh joy qoladi. Mijoz aynan shu bo'shliqni "juda
+   ochiq" degandi. Anjomlar shu yerga qo'yiladi.
+
+   NEGA FON QATLAMI, ELEMENT EMAS
+   O'ttiz yettita mashq sahifasi alohida HTML fayl; ularning
+   hech biriga tegmasdan bezak qo'shishning yagona yo'li —
+   mavjud psevdo-elementning fon qatlamlari. `body::before`
+   allaqachon parda uchun ishlatilyapti, unga to'rtta rasm
+   qo'shiladi. Ro'yxatda BIRINCHI turgan qatlam TEPADA
+   chiziladi, shuning uchun parda gradienti eng oxirida.
+
+   Har mavzuning o'z to'plami bor: ketma-ket mashqlar bir xil
+   ko'rinmasin. `--a1..--a4` — shu to'rtta rasm.
+   --------------------------------------------------------- */
+body {
+    --a1: url('/static/img/sahna/anjom/qaychi.svg');
+    --a2: url('/static/img/sahna/anjom/qogoz.svg');
+    --a3: url('/static/img/sahna/anjom/qalam.svg');
+    --a4: url('/static/img/sahna/anjom/yulduz.svg');
+}
+
+.t-orange, .t-amber {
+    --a1: url('/static/img/sahna/anjom/qaychi.svg');
+    --a2: url('/static/img/sahna/anjom/qogoz.svg');
+    --a3: url('/static/img/sahna/anjom/yelim.svg');
+    --a4: url('/static/img/sahna/anjom/yulduz.svg');
+}
+
+.t-blue, .t-indigo {
+    --a1: url('/static/img/sahna/anjom/turna.svg');
+    --a2: url('/static/img/sahna/anjom/chizgich.svg');
+    --a3: url('/static/img/sahna/anjom/qalam.svg');
+    --a4: url('/static/img/sahna/anjom/kubik.svg');
+}
+
+.t-teal, .t-emerald {
+    --a1: url('/static/img/sahna/anjom/palitra.svg');
+    --a2: url('/static/img/sahna/anjom/kuza.svg');
+    --a3: url('/static/img/sahna/anjom/moyqalam.svg');
+    --a4: url('/static/img/sahna/anjom/yulduz.svg');
+}
+
+.t-rose, .t-coral {
+    --a1: url('/static/img/sahna/anjom/ip.svg');
+    --a2: url('/static/img/sahna/anjom/qogoz.svg');
+    --a3: url('/static/img/sahna/anjom/qaychi.svg');
+    --a4: url('/static/img/sahna/anjom/yulduz.svg');
+}
+
+.t-pink, .t-purple {
+    --a1: url('/static/img/sahna/anjom/moyqalam.svg');
+    --a2: url('/static/img/sahna/anjom/palitra.svg');
+    --a3: url('/static/img/sahna/anjom/turna.svg');
+    --a4: url('/static/img/sahna/anjom/kubik.svg');
+}
+
+body::before {
+    background-image:
+        var(--a1), var(--a2), var(--a3), var(--a4),
+        linear-gradient(180deg,
+            rgba(255, 255, 255, .06) 0%,
+            rgba(255, 255, 255, .32) 22%,
+            rgba(255, 255, 255, .36) 78%,
+            rgba(255, 255, 255, .10) 100%);
+    background-repeat: no-repeat;
+    /* SVG lar atrofida soya uchun 10 birlik zaxira bor (140 birlik
+       quti ichida 120 birlik shakl), shuning uchun o'lchamlar shunga
+       mos kattaroq olingan. */
+    background-size: 124px, 108px, 117px, 91px, cover;
+    background-position:
+        left 42px top 20%,
+        left 74px top 63%,
+        right 46px top 27%,
+        right 78px top 70%,
+        center;
+    /* Sekin tebranish: bezaklar "suzib" turadi. Faqat fon
+       joylashuvi o'zgaradi, shuning uchun sahifa qayta
+       hisoblanmaydi va sekinlashmaydi. */
+    animation: anjom-suzsin 9s ease-in-out infinite alternate;
+}
+
+@keyframes anjom-suzsin {
+    from {
+        background-position:
+            left 42px top 20%, left 74px top 63%,
+            right 46px top 27%, right 78px top 70%, center;
+    }
+    to {
+        background-position:
+            left 52px top 22%, left 64px top 60%,
+            right 56px top 25%, right 68px top 73%, center;
+    }
+}
+
+/* Bolalar ham sekin nafas oladi. */
+body::after { animation: bola-tebransin 6s ease-in-out infinite alternate; }
+
+@keyframes bola-tebransin {
+    from { transform: translateY(0)     rotate(0deg); }
+    to   { transform: translateY(-10px) rotate(-1.2deg); }
+}
+
+/* Tor ekranda yon bo'shliq yo'q — bezaklar kartaning ustiga
+   chiqib ketmasligi uchun faqat parda qoladi. */
+@media (max-width: 1300px) {
+    body::before {
+        background-image: linear-gradient(180deg,
+            rgba(255, 255, 255, .06) 0%,
+            rgba(255, 255, 255, .32) 22%,
+            rgba(255, 255, 255, .36) 78%,
+            rgba(255, 255, 255, .10) 100%);
+        background-size: cover;
+        background-position: center;
+        animation: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::before, body::after { animation: none; }
+}
+
+
+/* =========================================================
+   RANGLI KARTALAR — mashq sahifalari
+   =========================================================
+   Mijoz: "har bir topshiriqni, savolni, kartani rangli qil".
+   Sahna qo'yilgach kartalar oq bo'lib qolgandi va sahifa
+   yana "quruq" ko'rinardi.
+
+   BITTA QOIDA SAQLANADI: rang HOLAT bildirganda hammasidan
+   ustun turadi. To'g'ri javob yashil, xato qizil, tanlangan
+   ko'k — ular quyidagi bezak ranglarini YENGISHI kerak,
+   shuning uchun bu blok holat qoidalaridan OLDIN emas,
+   keyin turadi va holat selektorlari ikki sinfli
+   (`.option-btn.correct`) bo'lgani uchun baribir g'olib.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   TEST SAVOLLARI (6–10 mashqlar)
+   Beshta rang aylanma bo'lib takrorlanadi.
+   --------------------------------------------------------- */
+.test-questions .test-question:nth-child(5n+1) { --sv: #43A047; --sv-och: #E9F7EC; }
+.test-questions .test-question:nth-child(5n+2) { --sv: #2E7DE0; --sv-och: #E6F1FD; }
+.test-questions .test-question:nth-child(5n+3) { --sv: #F5920B; --sv-och: #FEF3E0; }
+.test-questions .test-question:nth-child(5n+4) { --sv: #EC5C9D; --sv-och: #FDEBF3; }
+.test-questions .test-question:nth-child(5n+5) { --sv: #8B5CF6; --sv-och: #EFE9FE; }
+
+.test-questions .test-question {
+    background: var(--sv-och, #fff);
+    border: 2px solid color-mix(in srgb, var(--sv, #2E7DE0) 24%, #fff);
+    border-left: 7px solid var(--sv, #2E7DE0);
+    border-radius: 20px;
+}
+
+.test-questions .question-title { color: #1F3448; }
+
+/* Variantlar: oq emas, engil shaffof oq — savol kartasining
+   rangi ostidan bilinib turadi, lekin matn baribir aniq. */
+.test-questions .option-btn {
+    background: rgba(255, 255, 255, .72);
+    border: 2px solid rgba(255, 255, 255, .9);
+    border-radius: 14px;
+}
+
+.test-questions .option-btn:hover {
+    background: #fff;
+    border-color: var(--sv, #2E7DE0);
+}
+
+/* A/B/C/D nishonlari — to'rt xil rangda. Bu eski uslubdan
+   qaytarilgan: bola javobni harf bilan emas, RANG bilan
+   eslab qoladi va tanlash tezlashadi. */
+.test-questions .option-btn:nth-child(1) .option-letter { background: #2E7DE0; color: #fff; }
+.test-questions .option-btn:nth-child(2) .option-letter { background: #F5920B; color: #fff; }
+.test-questions .option-btn:nth-child(3) .option-letter { background: #8B5CF6; color: #fff; }
+.test-questions .option-btn:nth-child(4) .option-letter { background: #EC5C9D; color: #fff; }
+
+/* Holat ranglari nishonni ham bo'yaydi — ikki sinfli
+   selektor bo'lgani uchun yuqoridagilardan kuchli. */
+.test-questions .option-btn.correct .option-letter { background: var(--barg); color: #fff; }
+.test-questions .option-btn.wrong .option-letter   { background: var(--anor); color: #fff; }
+
+/* ---------------------------------------------------------
+   KROSSVORD IZOHLARI
+   --------------------------------------------------------- */
+.clues-col .clue-item:nth-child(5n+1) { --iz: #43A047; --iz-och: #E9F7EC; }
+.clues-col .clue-item:nth-child(5n+2) { --iz: #2E7DE0; --iz-och: #E6F1FD; }
+.clues-col .clue-item:nth-child(5n+3) { --iz: #F5920B; --iz-och: #FEF3E0; }
+.clues-col .clue-item:nth-child(5n+4) { --iz: #EC5C9D; --iz-och: #FDEBF3; }
+.clues-col .clue-item:nth-child(5n+5) { --iz: #8B5CF6; --iz-och: #EFE9FE; }
+
+.quiz-card .clues-col .clue-item,
+.quiz-card .clues-col.clues-right .clue-item {
+    background: var(--iz-och, #fff);
+    border: 2px solid color-mix(in srgb, var(--iz, #2E7DE0) 24%, #fff);
+    border-left: 6px solid var(--iz, #2E7DE0);
+    border-right: 2px solid color-mix(in srgb, var(--iz, #2E7DE0) 24%, #fff);
+    border-radius: 14px;
+}
+
+/* ---------------------------------------------------------
+   BELGILASH QATORLARI (1–5 mashqlar)
+   --------------------------------------------------------- */
+.options-column .option-row:nth-child(5n+1) { --qt: #43A047; --qt-och: #E9F7EC; }
+.options-column .option-row:nth-child(5n+2) { --qt: #2E7DE0; --qt-och: #E6F1FD; }
+.options-column .option-row:nth-child(5n+3) { --qt: #F5920B; --qt-och: #FEF3E0; }
+.options-column .option-row:nth-child(5n+4) { --qt: #EC5C9D; --qt-och: #FDEBF3; }
+.options-column .option-row:nth-child(5n+5) { --qt: #8B5CF6; --qt-och: #EFE9FE; }
+
+.options-column .option-row {
+    background: var(--qt-och, #fff);
+    border: 2px solid color-mix(in srgb, var(--qt, #2E7DE0) 26%, #fff);
+    border-radius: 16px;
+}
+
+.options-column .option-row:hover { border-color: var(--qt, #2E7DE0); }
+
+/* Belgilash katagi ham qator rangida — bo'sh holatda. Bosilgach
+   holat ranglari (ko'k/yashil/qizil) ustun keladi. */
+.options-column .option-row .checkbox-btn { border-color: var(--qt, #2E7DE0); }
+
+/* Tanlangan / to'g'ri / xato holatlari bezakdan kuchliroq
+   bo'lishi uchun qatorning foni ham qaytariladi. */
+.options-column .option-row:has(.checkbox-btn.checked) { background: var(--tanlangan-fon); border-color: var(--siyoh); }
+.options-column .option-row:has(.checkbox-btn.correct) { background: var(--togri-fon);     border-color: var(--barg); }
+.options-column .option-row:has(.checkbox-btn.wrong)   { background: var(--xato-fon);      border-color: var(--anor); }

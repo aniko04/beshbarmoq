@@ -358,3 +358,37 @@
 
 .error-msg { border: 2px solid #F5C2BE; border-radius: 16px; background: #FDECEA; color: #C23328; }
 .back-home:hover { color: #2E7DE0; }
+
+
+/* ---------- Parol ko'z tugmasi ----------
+   Maydon o'ng tomonida dumaloq tugma; bosilganda `type` almashadi
+   (login.html / register.html dagi kichik skript) va ikonka
+   ochiq/yopiq ko'zga o'zgaradi. */
+.parol-quti { position: relative; }
+.parol-quti input { padding-right: 52px; }
+
+.parol-koz {
+    position: absolute;
+    right: 7px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #8597AE;
+    cursor: pointer;
+    transition: background-color .16s, color .16s;
+}
+
+.parol-koz:hover { background: #EAF2FB; color: #2E7DE0; }
+.parol-koz:focus-visible { outline: 3px solid rgba(46, 125, 224, .35); outline-offset: 1px; }
+.parol-koz svg { width: 22px; height: 22px; }
+.parol-koz .koz-yopiq { display: none; }
+.parol-koz.ochiq .koz-ochiq { display: none; }
+.parol-koz.ochiq .koz-yopiq { display: block; }
+.parol-koz.ochiq { color: #2E7DE0; }

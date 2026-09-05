@@ -62,12 +62,8 @@
         box-shadow: 0 6px 12px rgba(20, 40, 80, .07), 0 18px 40px rgba(20, 40, 80, .13);
     }
 
-    .mm-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 12px;
-    }
+    /* `.mm-top` va `.mm-icon` endi ishlatilmaydi — ularning o'rnini
+       `.mm-bosh` egalladi. Qoidalar o'chirildi. */
 
     .mm-icon {
         display: flex;
@@ -132,6 +128,47 @@
     .mm-card:hover .mm-go { box-shadow: 0 5px 0 rgba(0, 0, 0, .18); }
     .mm-card:hover .mm-go svg { transform: translateX(4px); }
 
+    /* ---- Karta boshligi: rangli lavha va mavzu rasmi (2026-09-05) ----
+       Mijoz "kartalar juda bo'sh" dedi. Endi har kartaning tepasida
+       o'z mavzusidagi rasm turadi: qaychi, origami turnasi, oshpaz
+       qalpog'i va hokazo (static/img/sahna/anjom/).
+
+       Rasm SVG — har qanday ekranda tiniq va hammasi bitta uslubda.
+       Fotosuratlar aralashtirilmadi: ular uch xil manbadan olingan
+       (skaner, klipart, foto) va yonma-yon turganda karta to'ri
+       tarqoq ko'rinardi. */
+    .mm-bosh {
+        position: relative;
+        display: grid;
+        place-items: center;
+        height: 118px;
+        margin: -20px -18px 14px;
+        border-radius: 24px 24px 0 0;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 18% 82%, rgba(255, 255, 255, .55) 0 26px, transparent 27px),
+            radial-gradient(circle at 84% 22%, rgba(255, 255, 255, .45) 0 18px, transparent 19px),
+            linear-gradient(150deg,
+                color-mix(in srgb, var(--mm-rang) 26%, #fff) 0%,
+                color-mix(in srgb, var(--mm-rang) 12%, #fff) 100%);
+    }
+
+    .mm-rasm {
+        width: 88px;
+        height: 88px;
+        transition: transform .3s cubic-bezier(.34, 1.4, .64, 1);
+    }
+
+    .mm-card:hover .mm-rasm { transform: scale(1.12) rotate(-7deg); }
+
+    .mm-bosh .mm-num {
+        position: absolute;
+        right: 12px;
+        top: 6px;
+        font-size: 1.9rem;
+        opacity: .5;
+    }
+
     /* Bosqichlar izohi */
     .mm-steps {
         display: flex;
@@ -195,6 +232,17 @@
     @media (max-width: 660px) {
         .mm-icon { width: 46px; height: 46px; border-radius: 50%; font-size: 1.3rem; }
     }
+
+    /* O'nta karta ikki qatorda, 5 tadan (mijoz so'radi). Konteyner navbar
+       kengligiga (1320px) chiqariladi, aks holda beshta karta 1200px ga
+       siqilib qoladi. 1000px dan tor ekranda avvalgi auto-fill ishlaydi. */
+    @media (min-width: 1000px) {
+        .mm-section .wrap { max-width: 1320px; }
+        .mm-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; }
+        .mm-card { padding: 20px 16px 18px; }
+        .mm-card h3 { font-size: 1.08rem; }
+        .mm-num { font-size: 2.1rem; }
+    }
 </style>
 {% endblock %}
 
@@ -224,10 +272,10 @@
 
         <div class="mm-grid">
             <a href="/m1" class="mm-card mm-1">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x2702;&#xFE0F;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/qogoz.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">01</span>
-                </div>
+                </span>
                 <h3>Applikatsiya turlari</h3>
                 <p>Applikatsiya turlarini ajratib ko'rsating</p>
                 <span class="mm-go">Boshlash
@@ -236,10 +284,10 @@
             </a>
 
             <a href="/m2" class="mm-card mm-2">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F4DC;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/turna.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">02</span>
-                </div>
+                </span>
                 <h3>Origami shakllari</h3>
                 <p>Origami o'yinchoqlarni to'rtburchak yoki kvadrat shaklga ajrating</p>
                 <span class="mm-go">Boshlash
@@ -248,10 +296,10 @@
             </a>
 
             <a href="/m3" class="mm-card mm-3">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F477;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/kasb.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">03</span>
-                </div>
+                </span>
                 <h3>Kasblar</h3>
                 <p>Rasmdagi kasb egalarini aniqlang</p>
                 <span class="mm-go">Boshlash
@@ -260,10 +308,10 @@
             </a>
 
             <a href="/m4" class="mm-card mm-4">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F9F5;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/ip.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">04</span>
-                </div>
+                </span>
                 <h3>Hunarlar</h3>
                 <p>Hunarlarni mosini qo'yib belgilang</p>
                 <span class="mm-go">Boshlash
@@ -272,10 +320,10 @@
             </a>
 
             <a href="/m5" class="mm-card mm-5">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F527;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/asbob.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">05</span>
-                </div>
+                </span>
                 <h3>Ish qurollari</h3>
                 <p>Kasb egalarini va ularning ish qurollarini to'g'ri tanlang</p>
                 <span class="mm-go">Boshlash
@@ -284,10 +332,10 @@
             </a>
 
             <a href="{% if show_advanced %}/m6a{% else %}/o6a{% endif %}" class="mm-card mm-6">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F3AC;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/qaychi.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">06</span>
-                </div>
+                </span>
                 <h3>Applikatsiya bilan ishlash</h3>
                 <p>Video &rarr; test &rarr; krossvord</p>
                 <span class="mm-go">Boshlash
@@ -296,10 +344,10 @@
             </a>
 
             <a href="{% if show_advanced %}/m7a{% else %}/o7a{% endif %}" class="mm-card mm-7">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F3A5;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/turna.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">07</span>
-                </div>
+                </span>
                 <h3>Origami bilan ishlash</h3>
                 <p>Video &rarr; test &rarr; krossvord</p>
                 <span class="mm-go">Boshlash
@@ -308,10 +356,10 @@
             </a>
 
             <a href="{% if show_advanced %}/m8a{% else %}/o8a{% endif %}" class="mm-card mm-8">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F9F6;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/fetr.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">08</span>
-                </div>
+                </span>
                 <h3>Fetr bilan ishlash</h3>
                 <p>Video &rarr; test &rarr; krossvord</p>
                 <span class="mm-go">Boshlash
@@ -320,10 +368,10 @@
             </a>
 
             <a href="{% if show_advanced %}/m9a{% else %}/o9a{% endif %}" class="mm-card mm-9">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F338;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/kvilling.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">09</span>
-                </div>
+                </span>
                 <h3>Kvilling bilan ishlash</h3>
                 <p>Video &rarr; test &rarr; krossvord</p>
                 <span class="mm-go">Boshlash
@@ -332,10 +380,10 @@
             </a>
 
             <a href="{% if show_advanced %}/m10a{% else %}/o10a{% endif %}" class="mm-card mm-10">
-                <div class="mm-top">
-                    <span class="mm-icon">&#x1F3A8;</span>
+                <span class="mm-bosh">
+                    <img class="mm-rasm" src="/static/img/sahna/anjom/loy.svg" alt="" width="140" height="140" loading="lazy">
                     <span class="mm-num">10</span>
-                </div>
+                </span>
                 <h3>Loy va plastilin bilan ishlash</h3>
                 <p>Video &rarr; test &rarr; krossvord</p>
                 <span class="mm-go">Boshlash

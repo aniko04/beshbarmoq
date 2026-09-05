@@ -509,9 +509,13 @@
 
 .dk-boshla h2 { font-family: 'Fredoka', 'Nunito', system-ui, sans-serif; font-weight: 600; }
 
-.dk-boshla-tugma,
+/* DIQQAT: `.dk-boshla-tugma` — tugma emas, tugmalar turadigan flex KONTEYNER
+   (yuqorida `display:flex` bilan). Tugmaning o'zi `#dk-boshla-tugma` (id). Ilgari
+   konteyner bo'yalib, ikkala tugma ostida ko'k tabletka chiqib qolgan edi. */
+#dk-boshla-tugma,
 .dk-tekshir,
-.dk-natija-tugma {
+/* `.dk-natija-tugma` ham konteyner — ichidagi asosiy tugma bo'yaladi. */
+.dk-natija-tugma .btn-solid {
     border-radius: 999px;
     background: #2E7DE0;
     border-color: #2E7DE0;
@@ -521,17 +525,17 @@
     box-shadow: 0 4px 0 #1F5FAF;
 }
 
-.dk-boshla-tugma:hover,
+#dk-boshla-tugma:hover,
 .dk-tekshir:hover,
-.dk-natija-tugma:hover {
+.dk-natija-tugma .btn-solid:hover {
     background: #1F5FAF;
     border-color: #1F5FAF;
     box-shadow: 0 6px 0 #17497F;
 }
 
-.dk-boshla-tugma:active,
+#dk-boshla-tugma:active,
 .dk-tekshir:active,
-.dk-natija-tugma:active { box-shadow: 0 1px 0 #1F5FAF; }
+.dk-natija-tugma .btn-solid:active { box-shadow: 0 1px 0 #1F5FAF; }
 
 /* Karta juftligi ham yorqin registrda. Ichkaridagi rasm
    qutilari SOF OQ bo'lib qoladi — ularga tegilmaydi. */
@@ -539,3 +543,130 @@
     --shaftoli: #FEF3E2;
     --pudina: #E6F4E7;
 }
+
+
+/* =========================================================
+   SAHNA — Texnologik diktant
+   =========================================================
+   Mijoz sahifalar "juda ochiq va bo'sh" dedi. Mashq sahifalarida
+   (style.css) sahna allaqachon bor; bu blok shu sahifani ham
+   o'sha ko'rinishga keltiradi.
+
+   QATLAMLAR: body foni (sahna) -> body::before (parda + yon
+   anjomlar) -> sahifa mazmuni -> body::after (bolalar).
+   Navbar va footer shaffof emas, shuning uchun ular sahnani
+   yopib turadi va o'z ko'rinishini saqlaydi.
+   ========================================================= */
+body.pf {
+    background-color: #DCEEFB;
+    background-image: url('/static/img/sahna/tong.svg');
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+body.pf::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    opacity: 1;
+    pointer-events: none;
+    background-image:
+        url('/static/img/sahna/anjom/chizgich.svg'),
+        url('/static/img/sahna/anjom/turna.svg'),
+        url('/static/img/sahna/anjom/ip.svg'),
+        url('/static/img/sahna/anjom/kubik.svg'),
+        linear-gradient(180deg,
+            rgba(255, 255, 255, .08) 0%,
+            rgba(255, 255, 255, .40) 20%,
+            rgba(255, 255, 255, .44) 80%,
+            rgba(255, 255, 255, .12) 100%);
+    background-repeat: no-repeat;
+    background-size: 118px, 102px, 112px, 88px, cover;
+    background-position:
+        left 34px top 26%,
+        left 66px top 68%,
+        right 38px top 32%,
+        right 70px top 74%,
+        center;
+    animation: dk-suzsin 9s ease-in-out infinite alternate;
+}
+
+@keyframes dk-suzsin {
+    from { background-position: left 34px top 26%, left 66px top 68%,
+                                 right 38px top 32%, right 70px top 74%, center; }
+    to   { background-position: left 44px top 28%, left 56px top 65%,
+                                 right 48px top 30%, right 60px top 77%, center; }
+}
+
+/* Burchakdagi bolalar — mijozning o'z illyustratsiyasi, oq foni
+   kesilgan nusxa. `z-index: -1` bo'lgani uchun mazmun kartalari
+   uning ustidan o'tadi va matnni to'smaydi. */
+body.pf::after {
+    content: '';
+    position: fixed;
+    left: 16px;
+    bottom: 0;
+    z-index: -1;
+    width: 200px;
+    height: 282px;
+    background: url('/static/img/sahna/bolalar.png') no-repeat left bottom / contain;
+    filter: drop-shadow(0 8px 14px rgba(20, 50, 90, .22));
+    pointer-events: none;
+    animation: dk-bola 6s ease-in-out infinite alternate;
+}
+
+@keyframes dk-bola {
+    from { transform: translateY(0)     rotate(0deg); }
+    to   { transform: translateY(-10px) rotate(-1.2deg); }
+}
+
+/* Sahna ustida turgan mazmun aniq ko'rinishi uchun sarlavha
+   lentasi va kartalar allaqachon shaffof emas — ularga tegilmaydi. */
+
+@media (max-width: 1300px) {
+    body.pf::before {
+        background-image: linear-gradient(180deg,
+            rgba(255, 255, 255, .08) 0%,
+            rgba(255, 255, 255, .48) 20%,
+            rgba(255, 255, 255, .52) 80%,
+            rgba(255, 255, 255, .14) 100%);
+        background-size: cover;
+        background-position: center;
+        animation: none;
+    }
+    body.pf::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body.pf::before, body.pf::after { animation: none; }
+}
+
+@media print {
+    body.pf { background: #fff; }
+    body.pf::before, body.pf::after { display: none; }
+}
+
+
+/* =========================================================
+   BESH RANGLI SAVOL KARTALARI
+   =========================================================
+   Ilgari ikki tus navbatlashardi. Mijoz butun sayt bo'ylab
+   kartalar rangli bo'lishini so'radi, shuning uchun bu yerda
+   ham beshtalik aylana — sayt qolgan qismidagi bilan bir xil
+   ritm (material kartalari, test savollari, krossvord izohlari).
+
+   IKKI CHEKLOV SAQLANADI:
+     - ichkaridagi rasm qutisi SOF OQ bo'lib qoladi (rasmlar
+       oq fonga tekislangan, boshqa tus atrofida oq ramka
+       chiqarib yuboradi);
+     - variant/qator fonlari `rgba(255,255,255,...)` — ular
+       kartaning rangidan ochroq bo'lib ko'rinadi.
+   ========================================================= */
+.dk-savol:nth-of-type(5n+1) { background: #E9F7EC; }
+.dk-savol:nth-of-type(5n+2) { background: #E6F1FD; }
+.dk-savol:nth-of-type(5n+3) { background: #FEF3E0; }
+.dk-savol:nth-of-type(5n+4) { background: #FDEBF3; }
+.dk-savol:nth-of-type(5n+5) { background: #EFE9FE; }
